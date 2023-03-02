@@ -1,16 +1,16 @@
 public class Coin {
     
     int idCoin;
-    double x;
-    double y;
+    double cx;
+    double cy;
 
     double distance(Coin c){
-        return Math.sqrt(Math.pow(Math.abs(x - c.x), 2) + Math.pow(Math.abs(y - c.y), 2));
+        return Math.sqrt(Math.pow(Math.abs(cx - c.cx), 2) + Math.pow(Math.abs(cy - c.cy), 2));
     };
 
-    Coin(int id, int x, int y){
-        this.x = x;
-        this.y = y;
+    Coin(int id, double x, double y){
+        this.cx = x;
+        this.cy = y;
         this.idCoin = id;
     }
 
