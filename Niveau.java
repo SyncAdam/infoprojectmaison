@@ -3,10 +3,10 @@ public class Niveau {
     int idNiveau;
     Appartement[] appartements;
 
-    public Niveau (){
-
+    Niveau(int id, Appartement[] apps)
+    {
+        this.idNiveau = id;
+        this.appartements = apps;
     }
-public double devisNiveau (){
-    return (0);
-}
+
 }
