@@ -4,6 +4,7 @@ public class Mur {
     Coin debut;     //Point de départ du mur
     Coin fin;     //Point de fin du mur
     int idMur;
+    double hauteur = 2.3;
 
     Mur(int id, Coin c1, Coin c2){
         this.debut = c1;
@@ -22,8 +23,9 @@ public class Mur {
     }
     double surface()
     {
-        return 0;
+        return longueur() *hauteur;
     }
-    void dessiner(){}
+    void dessiner()
+    {}
     
 }

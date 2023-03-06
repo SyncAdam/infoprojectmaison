@@ -2,7 +2,7 @@ public class Piece {
     
     Sol sol;
     Plafond plafond;
-
+  
     Coin[] coins = new Coin[4];   //Coins sont definies de bas-gauche, haut-gauche, haut-droite, bas droite, indexes respectivement entre 0 et 3
     Mur[] murs = new Mur[4];     //Murs sont definies des coins 12, 23, 34, 41, indexes respectivement entre 0 et 3
 
