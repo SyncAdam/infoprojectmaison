@@ -12,13 +12,16 @@ public class Mur {
     }
 
     //Methods
-    public String toString(){
+    public String toString()
+    {
         return this.debut + " + " + this.fin + "i";
     }
-    double longueur(){
-        return debut.distance(fin);
+    double longueur()
+    {
+        return Math.sqrt(Math.pow(Math.abs(this.debut.cx - this.fin.cx), 2) + Math.pow(Math.abs(this.debut.cy - this.fin.cy), 2));
     }
-    double surface(){
+    double surface()
+    {
         return 0;
     }
     void dessiner(){}

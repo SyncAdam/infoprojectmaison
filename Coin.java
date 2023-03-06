@@ -22,12 +22,6 @@ public class Coin {
         this.idCoin = id;
     }
 
-    double distance(Coin c)
-    {
-        //quick maths
-        return Math.sqrt(Math.pow(Math.abs(cx - c.cx), 2) + Math.pow(Math.abs(cy - c.cy), 2));  
-    }
-
     public String toString()
     {
         return("Le coin " + this.idCoin + " a pour abscisse : " + this.cx + " et ordonnée : " +  this.cy);

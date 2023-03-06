@@ -1,3 +1,4 @@
-public class Revetement {
-
+abstract class Revetement {
+    protected int prix;
+    abstract double montant();
 }
