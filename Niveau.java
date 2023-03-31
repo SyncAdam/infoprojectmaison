@@ -1,28 +1,26 @@
-public class Niveau {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Niveau implements Serializable{
     
     int idNiveau;
-    Appartement[] appartements;
-
-    Niveau(int id, Appartement[] apps)
-    {
-        this.idNiveau = id;
-        this.appartements = apps;
-    }
+    ArrayList<Appartement> appartements;
 
     Niveau(int id, int nbreApps)
     {
         this.idNiveau = id;
-        Appartement []apps = new Appartement[nbreApps];
+        appartements = new ArrayList<Appartement>(nbreApps);
+
+        Appartement foobar;
 
         for(int i = 0; i < nbreApps; i++)
         {
-            System.out.println("Donnez le nombre de piece de l'appartement" + (i+1));
-            int n = Lire.i();
-            apps[i] = new Appartement(i, n);
+            foobar = new Appartement(i, idNiveau);
+            appartements.add(foobar);
         }
 
-        this.appartements = apps;
-
     }
+
+    //A verifier si les appartements coincident
 
 }

@@ -1,36 +1,116 @@
-public class Piece {
+import java.io.Serializable;
+
+import java.util.ArrayList;
+
+public class Piece implements Serializable{
+
+    public int idPiece;
+    public ArrayList<Mur> murs;
+    public boolean pieceValide;
+
+    //Object oriented programming is overly complicated IMO!
+
+    Piece(int id)
+    {
+        this.idPiece = id;
+        this.murs = new ArrayList<Mur>();
+
+        Mur pm = new Mur(1);
+        murs.add(pm);
+        int iterator = 2;
+
+        try{
+            //Illisible mais comment optimiser mieux?????
+            while(!murs.get(0).getDebut().equals(murs.get(murs.size()-1).getFin()))   
+            {
+                Mur mur = new Mur(iterator, murs.get(murs.size()-1).getFin());
+                murs.add(mur);
+                iterator++;
+            }
+
+            Coin foobar = murs.get(murs.size()-1).getDebut();
+            murs.remove(murs.size()-1);
+            Mur mur = new Mur(iterator-1, foobar, murs.get(0).getDebut());
+            murs.add(mur);
+            this.pieceValide = true;
+            
+            System.out.println("Piece creee");
+        }
+        catch(RuntimeException e)
+        {
+            System.out.println("Erreur pendant la creation de votre piece");
+        }
+        
+    }
+
+    public void deleteMur(int idMur)
+    {
+        this.murs.remove(idMur);
+        this.pieceValide = false;
+    }
+
+    public boolean pieceIntegre()
+    {
+        try
+        {
+            //D'abord parcourir les murs, voir s'ils forment un cycle eulerien
+            //L'illisibilité je ne fais pas expres c'est la nature de POO
+            if(!this.murs.get(0).getDebut().equals(this.murs.get(this.murs.size()-1).getFin()))
+            {
+                this.pieceValide = false;
+                return false;
+            }
+            for(int i = 1; i < murs.size()-1; i++)
+            {
+                if(!this.murs.get(i).getDebut().equals(this.murs.get(i-1).getFin()) || !this.murs.get(i).getFin().equals(this.murs.get(i+1).getDebut()))
+                {
+                    this.pieceValide = false;
+                    return false;
+                } 
+            }
+
+            //Voir si les murs s'intersectent les un des autres
+            for(int i = 0; i < murs.size(); i++)
+            {
+                for(int j = i+1; j < murs.size()-i; j++)
+                {
+                    if(Mur.murIntersect(murs.get(i), murs.get(j)))
+                    {
+                        this.pieceValide = false;
+                        return false;
+                    }
+                }
+            }
+
+            //En tout cas le surface ne doit etre inferier a 0
+            if(this.surface() <= 0)
+            {
+                this.pieceValide = false;
+                return false;  
+            }
+
+            this.pieceValide = true;
+            return true;
+        }
+        catch(RuntimeException e)
+        {
+            System.out.println("Impossible de verifier l'integrite de votre piece");
+        }
+        return false;
+    }
+
+    public double surface()
+    {
+        double r = 0;
+        double dx;
+        double dy;
+        for(int i = 0; i < this.murs.size(); i++)
+        {
+            dx = this.murs.get(i).getFin().getX() - this.murs.get(i).getDebut().getX();
+            dy = (this.murs.get(i).getFin().getY() + this.murs.get(i).getDebut().getY())/2;
+            r += dx*dy;
+        }
+        return r;
+    }
     
-    Sol sol;
-    Plafond plafond;
-  
-    Coin[] coins = new Coin[4];   //Coins sont definies de bas-gauche, haut-gauche, haut-droite, bas droite, indexes respectivement entre 0 et 3
-    Mur[] murs = new Mur[4];     //Murs sont definies des coins 12, 23, 34, 41, indexes respectivement entre 0 et 3
-
-    Piece(Coin c1, Coin c2)     //On defini une piece a partir de 2 coins le coin de gauche en bas, et le coin de haut a droite      
-    {                       
-        //Creation des coins      
-        this.coins[0] = c1;  //le premier coin est bas-gauche
-        this.coins[1] = new Coin(2, c1.cx, c2.cy);  //deuxieme est défini
-        this.coins[2] = c2;  //troisieme est haut a droite
-        this.coins[3] = new Coin(4, c2.cx, c1.cy);  //le reste
-
-        //définition des murs a partir des coins definis en haut
-        this.murs[0] = new Mur(0, coins[0], coins[1]);  
-        this.murs[1] = new Mur(1, coins[1], coins[2]);
-        this.murs[2] = new Mur(2, coins[2], coins[3]);
-        this.murs[3] = new Mur(3, coins[3], coins[0]);
-    };
-
-    double surface()
-    {   
-        return 0;
-    }
-
-    int devisPiece(){
-        return 0;
-    }
-
-    void dessiner(){
-
-    }
 }

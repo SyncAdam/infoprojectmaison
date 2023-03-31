@@ -1,9 +1,9 @@
+import java.io.*;
+
 public class App {
     public static void main(String[]args)
-    {
-        Appartement App1 = new Appartement(0, 3);
-        System.out.println(App1);
-        System.out.println(App1.pieces[1].coins[0]);
-        
+    {   
+        Niveau n0 = new Niveau(0, 3);
+        System.out.println(n0.appartements.get(0).pieces.get(0).surface());
     }
 }

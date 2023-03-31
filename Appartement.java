@@ -1,33 +1,39 @@
-public class Appartement {
-    
-    int idAppartement;  //nombre identifiant l'appartement
-    int nbrePieces;     //nombre de pieces de l'appartement
-    Piece[] pieces;     //les pieces
+import java.io.Serializable;
 
-    //constructeur avec identifiant et nombre de pieces fournit
-    Appartement(int id, int nbrePieces)
+import java.util.ArrayList;
+
+public class Appartement implements Serializable{
+    
+    private int idAppartement;
+    private int niveauAppartement;
+    ArrayList<Piece> pieces;
+
+    Appartement(int id, int niv)
     {
         this.idAppartement = id;
-        this.nbrePieces = nbrePieces;
+        this.niveauAppartement = niv;
 
-        this.pieces = new Piece[this.nbrePieces];
+        System.out.println("================================================");
+        System.out.println("Combien de pieces voulez vous pour l'appartement " + this.idAppartement);
 
-        //vue qu'on a pas les pieces pour cette constructeur, on cree des coins pour definir les pieces
-        Coin[] coins= new Coin[this.nbrePieces * 2];    //selon le constructeur des pieces on a besoin de 2 coins par pieces pour les definir
-        for(int i = 0; i < nbrePieces*2; i++)
+        int n = Lire.i();
+        while(n <= 0)
         {
-            coins[i] = new Coin(i);
+            System.out.println("Nombre de pieces inacceptable pour l'appartement " + (this.idAppartement));
+            n = Lire.i();
+        }
+        pieces = new ArrayList<Piece>(n);
+
+        for(int i = 0; i < n; i++)
+        {
+            Piece p = new Piece(i+1);
+            pieces.add(p);
         }
 
-        //prenant chaque coin, on defini des pieces, on les associe a l'objet en creation
-        for(int i = 0; i < nbrePieces; i++)
-        {
-            this.pieces[i] = new Piece(coins[i*2], coins[(i*2)+1]); 
-        }
+        System.out.println("Appartement " + this.idAppartement + " creee");
+        
     }
 
-    public String toString(){
-        return "L'appartement " + this.idAppartement + " a " + this.nbrePieces + " pieces";
-    }
-
+    //Á Verifier s'il y a des pieces coincidents
+    
 }

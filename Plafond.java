@@ -1,4 +1,6 @@
-public class Plafond {
+import java.io.*;
+
+public class Plafond implements Serializable{
     Coin c1,c2;
     double surface;
     //Constructeur
@@ -9,6 +11,7 @@ public class Plafond {
     }
 public double surface(){
 
+surface = Math.sqrt(Math.pow((c1.cx-c2.cx),2))*Math.sqrt(Math.pow((c1.cy-c2.cy),2));
 
     return(surface);
 }
