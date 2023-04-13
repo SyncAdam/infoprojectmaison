@@ -1,3 +1,4 @@
+package Bati;
 import java.io.Serializable;
 
 public class Coin implements Serializable{

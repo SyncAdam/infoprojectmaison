@@ -1,3 +1,4 @@
+package Bati;
 public class Maison extends Batiment{
     int idMaison;
 

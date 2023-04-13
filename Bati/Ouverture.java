@@ -1,3 +1,4 @@
+package Bati;
 public class Ouverture {
     int idOuverture;
     double dimX;
@@ -6,8 +7,9 @@ public class Ouverture {
     public void afficher(){
 
     }
+    @Override
     public String toString(){
-
+        return "";
     }
     double surface(){
         return(0);

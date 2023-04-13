@@ -1,10 +1,11 @@
+package Bati;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Niveau implements Serializable{
     
-    int idNiveau;
-    ArrayList<Appartement> appartements;
+    public int idNiveau;
+    public ArrayList<Appartement> appartements;
 
     Niveau(int id, int nbreApps)
     {

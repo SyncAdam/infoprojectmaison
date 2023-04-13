@@ -1,4 +1,6 @@
+package Bati;
 import java.io.Serializable;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -8,8 +10,8 @@ import java.io.IOException;
 
 public class Immeuble extends Batiment implements Serializable{
 
-    int idImmeuble;
-    Niveau[] niveau;
+    public int idImmeuble;
+    public Niveau[] niveau;
     
     public Immeuble(int idImmeuble, int nbrNiveau){
 

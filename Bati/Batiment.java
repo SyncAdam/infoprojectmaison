@@ -1,3 +1,4 @@
+package Bati;
 abstract class Batiment {
     
     int idBatiment;

@@ -1,3 +1,4 @@
+package Bati;
 public class Porte extends Ouverture {
     public int idPorte;
     public double largeur;

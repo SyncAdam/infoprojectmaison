@@ -1,3 +1,4 @@
+package Bati;
 import java.io.Serializable;
 
 public class Mur implements Serializable{

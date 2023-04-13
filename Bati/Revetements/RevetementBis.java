@@ -1,3 +1,5 @@
+/*
+package Bati.Revetements;
 import java.io.*;
 
 public class RevetementBis {
@@ -32,6 +34,6 @@ double montant(double surface){
  return this.prixUnitaire * surface;
 }
 
-
-
 }
+
+*/

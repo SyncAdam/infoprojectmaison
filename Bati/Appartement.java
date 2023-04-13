@@ -1,3 +1,4 @@
+package Bati;
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -6,7 +7,7 @@ public class Appartement implements Serializable{
     
     private int idAppartement;
     private int niveauAppartement;
-    ArrayList<Piece> pieces;
+    public ArrayList<Piece> pieces;
 
     Appartement(int id, int niv)
     {

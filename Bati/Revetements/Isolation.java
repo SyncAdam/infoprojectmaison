@@ -1,3 +1,6 @@
+/*
+
+package Bati.Revetements;
 public class Isolation extends Revetement {
     public String idIsolation;
     public double prix;
@@ -10,3 +13,6 @@ public class Isolation extends Revetement {
         return this.surface * prix;
     }
 }
+
+
+*/
