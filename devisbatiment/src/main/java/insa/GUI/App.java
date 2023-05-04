@@ -101,6 +101,8 @@ public class App extends Application {
        
         homeWindow.setWidth(1000);
         homeWindow.setHeight(700); //def de la hauteur de la fenetre 
+        homeWindow.setFullScreen(true); //plein écran
+        homeWindow.setFullScreenExitHint("Plein écran activé, veuillez faire votre devis");
         
         
         
