@@ -1,0 +1,5 @@
+Coin;idCoin;x;y
+Piece;idPiece;ListeCoins;
+Appartement;idAppartement;intNiveau;ListePiece;
+Niveau;idNiveau;AppartementList;
+Immeuble;idImmeuble;ListNiveau

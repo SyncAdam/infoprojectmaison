@@ -8,7 +8,8 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class Immeuble extends Batiment implements Serializable{
 
@@ -57,6 +58,41 @@ public class Immeuble extends Batiment implements Serializable{
         ois.close();
         fis.close();
         return b;
+    }
+
+    public static ArrayList<Immeuble> importImmeuble(String nomFichier) throws IOException, ClassNotFoundException
+    {
+        ArrayList<Immeuble> im = new ArrayList<>();
+        Immeuble i = new Immeuble(0, 0);
+        BufferedReader bure = new BufferedReader(new FileReader(nomFichier));
+        String line;
+
+        line = bure.readLine();
+
+        if(line != null)
+        {
+            ArrayList<Object> input = new ArrayList<>();
+
+            String[] mys = line.split(";", 2);
+            String[] reste;
+
+            reste = mys[1].split(";", 0);
+
+            switch(mys[0])
+            {
+                case "Coin":
+                    Coin c = new Coin(Integer.parseInt(reste[0]), Double.parseDouble(reste[1]), Double.parseDouble(reste[2]));
+                    input.add(c);
+                    break;
+                case "Piece":
+                    Piece p = new Piece(Integer.parseInt(reste[0]));
+            }   
+
+        }
+
+        
+
+        return im;
     }
 
 }

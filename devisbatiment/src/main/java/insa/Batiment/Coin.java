@@ -142,6 +142,19 @@ public class Coin extends App implements Serializable{
             circle1.setOnMouseExited(e -> { circle1.setFill(Color.BLACK); 
                 pointAlreadyExist = false;
                 System.out.println(pointAlreadyExist);}); 
+
+
+            circle1.setOnMouseClicked(e -> {
+                if (wallButtonState == true){
+                    selectedPoint.add(this);
+
+                }
+
+
+
+
+
+            });
         
 
     }

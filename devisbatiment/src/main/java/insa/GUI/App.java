@@ -53,6 +53,7 @@ public class App extends Application {
     ToolBar toolBar = new ToolBar();
     CheckBox autoWall = new CheckBox("autoWall");
     boolean autoWallState = false;
+    public boolean wallButtonState = false;
     Button buttonMur = new Button("Mur");
     Button buttonPoint = new Button("Point");
     Button buttonPorte = new Button("Porte");
@@ -77,6 +78,8 @@ public class App extends Application {
     public static ArrayList<Piece> pieceTab = new ArrayList<Piece>();
     public static ArrayList<Integer> iDOfSelectedWall = new ArrayList<Integer>();
     public static ArrayList<Porte> doorTab = new ArrayList<Porte>();
+
+    public static ArrayList<Coin> selectedPoint = new ArrayList<Coin>();
     protected Scene scene1 = new Scene(root, Color.GREY); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
     
     @Override
@@ -121,6 +124,22 @@ public class App extends Application {
         }
     });
        
+       buttonMur.setOnAction(e ->{
+        if (wallButtonState == false){
+            wallButtonState = true;
+            log.setTxt("Veuillez cliquer sur 2 points pour créer un mur");
+           // Mur mur = new Mur(idOfCurrentSelectedPoint, null, null);
+        }
+        
+
+
+
+
+
+
+
+
+       });
         
         root.setOnMouseClicked(e -> { //détection du clic + récup coords
             if (ctrlIsPressed == false){ //sert juste à ne pas crééer de nouveau éléments lorsqu'on veut juste selectionner un point/mur avec ctrl
