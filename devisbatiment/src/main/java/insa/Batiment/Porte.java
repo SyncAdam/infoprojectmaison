@@ -43,7 +43,7 @@ public class Porte extends App {
         double y2 = mur.getFin().getY();
      
 
-        l = 8.0; //a modifier au besoin
+        l = 8.0; //a modifier au besoin = épaisseur du trait qui sert à tracer le mur 
         L = 40.0; //largeur de l'ouverture
 
         //on va calculer les coords des 4 coins du rectangle qui sera affiché en blanc pour afficher la porte :(bcp de trigo et long....J'Y AI PASSÉ AU MOINS 3H!!!!)

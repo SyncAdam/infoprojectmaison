@@ -2,7 +2,15 @@ package insa.GUI;
 
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+
+
+/*Nouvelles méthodes : setTxt(String) : permet de changer le txt du log
+ * setColor(Color) : TRIVIAL
+ * setSize(int) : change la taille d'écriture.
+ */
 
 public class CustomLog  {
     
@@ -23,7 +31,20 @@ public class CustomLog  {
 
     }
 
-    public void setLogTxt(String txt){
+    public void setTxt(String txt){
        logTxt.setText(txt);
+    }
+
+    public void setColor(Color couleur){
+        logTxt.setFill(couleur);    
+    }
+
+    public void setSize(int taille){
+
+        logTxt.setFont(Font.font(taille));
+    }
+
+    public void clear(){
+        logTxt.setText("");
     }
 }

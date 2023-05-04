@@ -261,6 +261,7 @@ public class Mur extends App implements Surface, Serializable{
                     setColor(Color.GREENYELLOW);
                     iDOfSelectedWall.add(this.idMur);
                     isSelected = true;}
+                    log.setTxt("mur(s) selectionné(s)");
                     /*else{
                         setColor(Color.BLACK);
                         iDOfSelectedWall.remove(this.idMur);

@@ -135,6 +135,7 @@ public class Coin extends App implements Serializable{
             pointAlreadyExist = true;  //empeche de pouvoir placer un point au même eendroit (cf classe app)
             idOfCurrentSelectedPoint = idCoin; //on actualise cette variable avec l'id du point selectionné 
             System.out.println("L'id du point selectionné est" + idOfCurrentSelectedPoint);
+            log.setTxt("po");
             
         }); 
             //System.out.println("Point affiché");

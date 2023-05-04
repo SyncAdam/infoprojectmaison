@@ -3,10 +3,8 @@ package insa.Batiment;
 import java.util.ArrayList;
 
 import java.io.Serializable;
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
@@ -59,14 +57,6 @@ public class Immeuble extends Batiment implements Serializable{
         ois.close();
         fis.close();
         return b;
-    }
-
-    public static ArrayList<Immeuble> importImmeuble(String nomFichier) throws IOException, ClassNotFoundException
-    {
-        ArrayList<Immeuble> im = new ArrayList<>();
-        Immeuble i = new Immeuble(0, 0);
-        BufferedReader bure = new BufferedReader(new FileReader(nomFichier));
-        return im;
     }
 
 }

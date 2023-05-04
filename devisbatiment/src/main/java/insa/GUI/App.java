@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ToolBar;
-import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -24,7 +23,6 @@ import insa.Batiment.Coin;
 import insa.Batiment.Mur;
 import insa.Batiment.Piece;
 import insa.Batiment.Porte;
-import insa.Batiment.Immeuble;
 
 
 
@@ -45,6 +43,7 @@ public class App extends Application {
     protected static int idOfCurrentSelectedPoint = 999; //(default)
    // protected static int idOfCurrentSelectedWall = 999; //(default)
     protected static boolean ctrlIsPressed = false; 
+    MenuBar menuBar = Menus.createMenus();
     
 
     
@@ -59,19 +58,19 @@ public class App extends Application {
     Button buttonPorte = new Button("Porte");
     Button unselectButton = new Button("Unselect all");
 
-    TreeView iHierarchy = new TreeView<>();
-
 
     Group canva = new Group();
     protected  BorderPane root = new BorderPane(); //on créer un borderpane root
     BorderPane viewerLayout = new BorderPane();
-    CustomLog log = new CustomLog(root); //on créer le custom log
+    protected CustomLog log = new CustomLog(root); //on créer le custom log
     
+    public static String cataloguePath, projectPath;
+
+
+
     int i =1;
     int k=0; //ne sert plus à rien je crois
     //protected CustomLog log = new CustomLog(); 
-    public static ArrayList<Immeuble> immeubles = new ArrayList<>();
-
     public static ArrayList<Coin> coinTab = new ArrayList<Coin>(); //création du tableau dynamique qui contient tous les points placés graphiquement
     public static ArrayList<Mur> wallTab = new ArrayList<Mur>();
     public static ArrayList<ArrayList<Mur>> murArrayTab = new ArrayList<ArrayList<Mur>>(); //on créer une array liste qui contient des listes de mur, pour pouvoir envoyer dans le constructeur de pièce
@@ -79,24 +78,22 @@ public class App extends Application {
     public static ArrayList<Integer> iDOfSelectedWall = new ArrayList<Integer>();
     public static ArrayList<Porte> doorTab = new ArrayList<Porte>();
     protected Scene scene1 = new Scene(root, Color.GREY); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
-
+    
     @Override
     public void start(Stage homeWindow) throws IOException {
-
         root.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, new CornerRadii(0), Insets.EMPTY))); // j'ai pas trouvé plus simple pour changer la couleur de fond
+        log.Initialise(); //on ini le log
         
-        MenuBar menuBar = Menus.createMenus(homeWindow);
-
-
     
-        root.setLeft(iHierarchy);
+       
+         
         root.setRight(toolBar);
         root.setCenter(canva);
         root.setTop(menuBar);
         toolBar.setOrientation(Orientation.VERTICAL);
         toolBar.getItems().addAll(autoWall, buttonMur, buttonPoint, buttonPorte, unselectButton);
  
-        //log.Initialise();
+        
     
        
         homeWindow.setWidth(1000);
@@ -113,12 +110,14 @@ public class App extends Application {
             if(e.getCode()== KeyCode.CONTROL){
                 System.out.println("CTRL pressé");
                 ctrlIsPressed = true; //si ctrl est appuyé, on met la variable correspondante à true.
+                log.setTxt("Cliquer sur les éléments à selectionner en maintenant CTRL");
             }
         });
         scene1.setOnKeyReleased(e -> { //gestion de la detection du relachement de ctrl pour la sélection
         if(e.getCode()== KeyCode.CONTROL){
             System.out.println("CTRL relaché");
             ctrlIsPressed = false; //si ctrl est relaché, on met la variable correspondante à false.
+            log.setTxt("Appuyez sur CTRL pour selectionner des élements");
         }
     });
        
@@ -225,6 +224,8 @@ public class App extends Application {
                 }
                 
             }
+
+
         });
 
         homeWindow.setScene(scene1);

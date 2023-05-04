@@ -2,18 +2,16 @@ package insa.GUI;
 
 import java.io.File;
 
-import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
-import javafx.stage.Stage;
 
 
-public class Menus{
+public class Menus extends App{
 
-    public static MenuBar createMenus(Stage mainstage)
+    public static MenuBar createMenus()
     {
         MenuBar menuBar = new MenuBar(); //creation de la menubar
 
@@ -50,16 +48,33 @@ public class Menus{
             manualPoint.Initialise();
         });
 
-        ImportProj.setOnAction(e ->
-        {
-            FileChooser f = new FileChooser();
-            f.setInitialDirectory(new File(System.getProperty("user.home")));
-            File selectedFile = f.showOpenDialog(mainstage);
-            if (selectedFile != null) {
-                String fileName = selectedFile.getAbsolutePath();
-                
-            }
+
+        ImportCatalogue.setOnAction(e->{
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Materials catalogue selector");
+            File selectedFile = fileChooser.showOpenDialog(null);
+            
+            System.out.println("Dossier du catalogue selectionné : " +selectedFile.getPath());
+
+            cataloguePath = selectedFile.getPath(); //variable héritée de la classe App qui permet de récupérer le bon chemin
+
         });
+
+        ImportProj.setOnAction(e->{
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Project selector");
+            File selectedFile = fileChooser.showOpenDialog(null);
+            
+            System.out.println("Dossier du projet selectionné : " + selectedFile.getPath());
+
+            projectPath = selectedFile.getPath();
+
+        });
+
+
+
 
         return menuBar;
     }
