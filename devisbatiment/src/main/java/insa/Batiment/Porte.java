@@ -67,7 +67,7 @@ public class Porte extends App {
         rectangle.setFill(Color.WHITESMOKE); //temporaire pour visualiser la porte
 
         root.getChildren().add(rectangle); //on affiche le rectangle / porte
-        UnselectAll();
+        //UnselectAll();
 
 
 

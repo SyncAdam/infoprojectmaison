@@ -16,7 +16,7 @@ public class Immeuble extends Batiment implements Serializable{
     public int idImmeuble;
     public ArrayList<Niveau> niveau;
     
-    public Immeuble(int idImmeuble, int nbrNiveau){
+    Immeuble(int idImmeuble, int nbrNiveau){
 
         this.idImmeuble = idImmeuble;
         niveau = new ArrayList<Niveau>();
@@ -31,15 +31,22 @@ public class Immeuble extends Batiment implements Serializable{
   
     }
 
+    Immeuble(int idImmeuble, ArrayList<Niveau> nivs)
+    {
+        this.idImmeuble = idImmeuble;
+        this.niveau = nivs;
+    }
+
     public void afficher (){
 
     }
 
-    public static void saveImmeuble(Immeuble I, String nomFichier) throws IOException, ClassNotFoundException
+    public static void saveImmeuble(ArrayList<Immeuble> is, String nomFichier) throws IOException, ClassNotFoundException
     {
-        FileOutputStream fos = new FileOutputStream(nomFichier + ".txt");
+        FileOutputStream fos = new FileOutputStream(nomFichier);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(I);
+
+        oos.writeObject(is);
 
         System.out.println("Immeuble sauvguarde");
   
@@ -47,36 +54,38 @@ public class Immeuble extends Batiment implements Serializable{
         oos.close();
     }
 
-    public static Immeuble loadImmeuble(String nomFichier) throws IOException, ClassNotFoundException
+    public static ArrayList<Immeuble> loadImmeuble(String nomFichier) throws IOException, ClassNotFoundException
     {
-        FileInputStream fis = new FileInputStream(nomFichier + ".txt");
+        FileInputStream fis = new FileInputStream(nomFichier);
         ObjectInputStream ois = new ObjectInputStream(fis);
-        Immeuble b = (Immeuble)ois.readObject(); // down-casting object
-  
+
+        ArrayList<Immeuble> immeubles = (ArrayList<Immeuble>)ois.readObject();
+        
         System.out.println("Immeuble charge");
         
         ois.close();
         fis.close();
-        return b;
+        return immeubles;
     }
 
     public static ArrayList<Immeuble> importImmeuble(String nomFichier) throws IOException, ClassNotFoundException
     {
         ArrayList<Immeuble> im = new ArrayList<>();
-        Immeuble i = new Immeuble(0, 0);
         BufferedReader bure = new BufferedReader(new FileReader(nomFichier));
         String line;
 
+        ArrayList<Object> input = new ArrayList<>();
+
         line = bure.readLine();
 
-        if(line != null)
+        while(line != null)
         {
-            ArrayList<Object> input = new ArrayList<>();
+            
 
             String[] mys = line.split(";", 2);
             String[] reste;
 
-            reste = mys[1].split(";", 0);
+            reste = mys[1].split(";");
 
             switch(mys[0])
             {
@@ -84,15 +93,104 @@ public class Immeuble extends Batiment implements Serializable{
                     Coin c = new Coin(Integer.parseInt(reste[0]), Double.parseDouble(reste[1]), Double.parseDouble(reste[2]));
                     input.add(c);
                     break;
+
                 case "Piece":
-                    Piece p = new Piece(Integer.parseInt(reste[0]));
-            }   
+                    ArrayList<Coin> coins = new ArrayList<>();
+
+                    String[] splitted = reste[1].split(",");
+                    for(String mystring : splitted)
+                    {
+                        for(int i = 0; i < input.size() ; i++)
+                        {
+                            if(input.get(i) instanceof Coin && ((Coin) input.get(i)).getId() == Integer.parseInt(mystring))  //ne devrait pas jeter une exception
+                            {
+                                coins.add((Coin) input.get(i));
+                                input.remove(i);
+                                break;
+                            }
+                        }        
+                    }        
+
+                    Piece p = new Piece(Integer.parseInt(reste[0]), coins);
+                    input.add(p);
+                    break;
+
+                case "Appartement":
+                    ArrayList<Piece> pieces = new ArrayList<Piece>();
+                        
+                    String[] strings = reste[2].split(",");
+                    for(String mystring : strings)
+                    {
+                        for(int i = 0; i < input.size() ; i++)
+                        {
+                            if(input.get(i) instanceof Piece && ((Piece) input.get(i)).getPieceId() == Integer.parseInt(mystring))  //ne devrait pas jeter une exception
+                            {
+                                pieces.add((Piece) input.get(i));
+                                input.remove(i);
+                                break;
+                            }
+                        }        
+                    }
+
+                    Appartement myAppartement = new Appartement(Integer.parseInt(reste[0]), Integer.parseInt(reste[1]), pieces);
+                    input.add(myAppartement);
+                    break;
+
+                case "Niveau":
+                    ArrayList<Appartement> apparts = new ArrayList<>();
+
+                    String[] mystrings = reste[1].split(",");
+                    for(String mystring : mystrings)
+                    {
+                        for(int i = 0; i < input.size() ; i++)
+                        {
+                            if(input.get(i) instanceof Appartement && ((Appartement) input.get(i)).getAppartId() == Integer.parseInt(mystring))  //ne devrait pas jeter une exception
+                            {
+                                apparts.add((Appartement) input.get(i));
+                                input.remove(i);
+                                break;
+                            }
+                        } 
+                    }       
+
+                    Niveau n = new Niveau(Integer.parseInt(reste[0]), apparts);
+                    input.add(n);
+                    break;
+
+                case "Immeuble":
+                    ArrayList<Niveau> niveaux = new ArrayList<Niveau>();
+
+                    String[] mystrs = reste[1].split(",");
+                    for(String mystring : mystrs)
+                    {
+                        for(int i = 0; i < input.size() ; i++)
+                        {
+                            if(input.get(i) instanceof Niveau && ((Niveau) input.get(i)).getNivId() == Integer.parseInt(mystring))  //ne devrait pas jeter une exception
+                            {
+                                niveaux.add((Niveau) input.get(i));
+                                input.remove(i);
+                                break;
+                            }
+                        }        
+                    }                    
+
+                    Immeuble imm = new Immeuble(Integer.parseInt(reste[0]), niveaux);
+                    im.add(imm);
+                    break;
+
+                default:
+                    break;
+            }
+            line = bure.readLine();
 
         }
 
-        
+        System.out.println("Immeubles chargees avec succes");
 
+        bure.close();
         return im;
+
+
     }
 
 }

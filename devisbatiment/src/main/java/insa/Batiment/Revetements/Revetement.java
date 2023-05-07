@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-public class Revetement { // classe abstraite avec les diff attributs + methodes abstraites montant
+public class Revetement {
 
     int idRevetement;
     public boolean pourMur;
@@ -39,8 +41,9 @@ public class Revetement { // classe abstraite avec les diff attributs + methodes
         ArrayList<Revetement> rev = new ArrayList<Revetement>();
 
         try {
+            Path path = Paths.get("src", "main", "java", "insa", "Batiment", "Revetements", "revs.txt");
 
-            FileReader fileReader = new FileReader("Bati/Revetements/revs.txt");
+            FileReader fileReader = new FileReader(path.toString());
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
 

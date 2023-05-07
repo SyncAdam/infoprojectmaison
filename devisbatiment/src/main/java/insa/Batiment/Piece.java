@@ -10,6 +10,7 @@ public class Piece implements Serializable{
     public ArrayList<Mur> murs;
     public ArrayList<Surface> soletplafond;
     public boolean pieceValide;
+    public String Sfonction;
 
     //Object oriented programming is overly complicated IMO!
 
@@ -62,6 +63,35 @@ public class Piece implements Serializable{
         
     }
 
+    Piece(int idPiece, ArrayList<Coin> coins)
+    {
+        this.idPiece = idPiece;
+        this.murs = new ArrayList<Mur>();
+        this.soletplafond = new ArrayList<Surface>();
+        this.pieceValide = false;
+
+        for(int i = 0; i < coins.size(); i++)
+        {
+            if(i != coins.size()-1)
+            {
+                Mur m = new Mur(i, coins.get(i), coins.get(i+1));
+                murs.add(m);
+            }
+            else
+            {
+                Mur m = new Mur(i, coins.get(i), coins.get(0));
+                murs.add(m);
+            }
+        }
+
+        Sol sol = new Sol(murs);
+        Plafond plafond = new Plafond(murs);
+
+        this.soletplafond.add((Surface)sol);
+        this.soletplafond.add((Surface)plafond);
+    }
+
+
     /**
      * <p>En faisant appel a cette methode un mur sera effacee</p>
      * 
@@ -102,14 +132,25 @@ public class Piece implements Serializable{
             //D'abord parcourir les murs, voir s'ils forment un cycle eulerien
             //L'illisibilité je ne fais pas expres c'est la nature de POO
 
-            if(!this.murs.get(0).getDebut().equals(this.murs.get(this.murs.size()-1).getFin()))
+            /*
+            if(!this.murs.get(0).getDebut().equals(this.murs.get(this.murs.size()-1).getFin()) || !this.murs.get(0).getDebut().equals(this.murs.get(this.murs.size()-1).getDebut()))
             {
                 this.pieceValide = false;
                 return false;
             }
-            for(int i = 1; i < murs.size()-1; i++)
+            */
+
+            for(int i = 0; i < murs.size()-1; i++)
             {
-                if(!this.murs.get(i).getDebut().equals(this.murs.get(i-1).getFin()) || !this.murs.get(i).getFin().equals(this.murs.get(i+1).getDebut()))
+                if(i == murs.size()-1)
+                {
+                    if(!this.murs.get(i).getDebut().equals(this.murs.get(0).getFin()) || !this.murs.get(i).getFin().equals(this.murs.get(0).getDebut()))
+                    {
+                        this.pieceValide = false;
+                        return false;
+                    }
+                }
+                else if(!this.murs.get(i).getDebut().equals(this.murs.get(i+1).getFin()) || !this.murs.get(i).getFin().equals(this.murs.get(i+1).getDebut()))
                 {
                     this.pieceValide = false;
                     return false;
@@ -186,4 +227,8 @@ public class Piece implements Serializable{
         return r;
     }
     
+    public int getPieceId()
+    {
+        return this.idPiece;
+    }
 }

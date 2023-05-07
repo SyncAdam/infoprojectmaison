@@ -3,13 +3,7 @@ import java.io.Serializable;
 
 import insa.Batiment.Revetements.Revetement;
 
-import insa.GUI.App;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-
-public class Mur extends App implements Surface, Serializable{
+public class Mur implements Surface, Serializable{
     
     //Attributes
     private Coin debut;     //Point de départ du mur
@@ -18,9 +12,9 @@ public class Mur extends App implements Surface, Serializable{
     private int nmbrPortes;     //NON!!!!!!!!!
     private int nmbrFenetres;   //NON!!!!!!!!!
     Revetement revetement;
-    boolean superpositionState;
-    Line ligne = new Line();
-    boolean isSelected = false;
+    public boolean superpositionState;
+    
+    public boolean isSelected = false;
 
     //Constructors
 
@@ -235,6 +229,11 @@ public class Mur extends App implements Surface, Serializable{
         return fin.getId();
     }
 
+    public void setSelectedState(boolean state){
+        isSelected = state;
+    }
+
+    /*
 
     public void DisplayMur(BorderPane canva){
         debut.DisplayPoint(root);
@@ -267,7 +266,7 @@ public class Mur extends App implements Surface, Serializable{
                         iDOfSelectedWall.remove(this.idMur);
                         isSelected = false;
                         
-                    }*/
+                    }
                 } 
 
 
@@ -302,5 +301,7 @@ public class Mur extends App implements Surface, Serializable{
 
     }
 
-    public void setSelectedState(boolean state){isSelected = state;}
+    */
+
+    //public void setSelectedState(boolean state){isSelected = state;}
 }

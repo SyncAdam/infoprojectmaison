@@ -2,12 +2,7 @@ package insa.Batiment;
 
 import java.io.Serializable;
 
-import insa.GUI.App;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-
-public class Coin extends App implements Serializable{
+public class Coin implements Serializable{
     
     private int idCoin; //identificateur du coin
     private double cx;  //abscisse du coin
@@ -123,41 +118,5 @@ public class Coin extends App implements Serializable{
     {
         return("\nLe coin " + this.idCoin + " a pour abscisse : " + this.cx + " et ordonnée : " +  this.cy);
     }
-    
-    public void DisplayPoint(BorderPane canva){
-        
-        Circle circle1 = new Circle(cx, cy, 5);
-        canva.getChildren().add(circle1);
-        
-        circle1.setOnMouseEntered(e -> { //on détecte quand la souris passe sur un point (POUR PLUS TARD : EFFET MAGNET ?)
-      
-            circle1.setFill(Color.BLUE); 
-            pointAlreadyExist = true;  //empeche de pouvoir placer un point au même eendroit (cf classe app)
-            idOfCurrentSelectedPoint = idCoin; //on actualise cette variable avec l'id du point selectionné 
-            System.out.println("L'id du point selectionné est" + idOfCurrentSelectedPoint);
-            log.setTxt("po");
-            
-        }); 
-            //System.out.println("Point affiché");
-            circle1.setOnMouseExited(e -> { circle1.setFill(Color.BLACK); 
-                pointAlreadyExist = false;
-                System.out.println(pointAlreadyExist);}); 
-
-
-            circle1.setOnMouseClicked(e -> {
-                if (wallButtonState == true){
-                    selectedPoint.add(this);
-
-                }
-
-
-
-
-
-            });
-        
-
-    }
-    
     
 }
