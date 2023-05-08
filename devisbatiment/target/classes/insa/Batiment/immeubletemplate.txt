@@ -1,5 +1,6 @@
 Coin;idCoin;x;y
-Piece;idPiece;ListeCoins;
-Appartement;idAppartement;intNiveau;ListePiece;
-Niveau;idNiveau;AppartementList;
+Piece;idPiece;ListeCoins
+Revetement;idRevetement;pourMur;pourSol;pourPlafond;designation;prixUnitaire
+Appartement;idAppartement;intNiveau;ListePiece
+Niveau;idNiveau;AppartementList
 Immeuble;idImmeuble;ListNiveau

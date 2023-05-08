@@ -4,22 +4,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import insa.Batiment.Revetements.Revetement;
+import insa.Batiment.Revetements.RevetementException;
 
-public class Plafond implements Serializable, Surface{
+public class Plafond extends Surface implements Serializable{
 
     ArrayList<Mur> murs;
-    Revetement revetement;
 
     //Constructeur
     Plafond(ArrayList<Mur> murs)
     {
         this.murs = murs;
-        this.revetement = null;
+        this.revetements = new ArrayList<Revetement>();
     }
 
-    public void changeRevetement(Revetement rev)
+    public void addRevetement(Revetement rev) throws RevetementException
     {
-        if(rev.pourPlafond) this.revetement = rev;
+        if(rev.pourPlafond) this.revetements.add(rev);
+        else
+        {
+            throw new RevetementException();
+        }
     }
 
     public double surface(double h)

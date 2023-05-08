@@ -1,40 +1,26 @@
 package insa.GUI;
 
 import insa.Batiment.Immeuble;
-import insa.Batiment.Surface;
 import insa.Batiment.Revetements.Revetement;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 
-import java.util.Map;
-
 public class ImmeubleHierarchy extends TreeView{
-
-    private Map<TreeItem<String>, Object> objectMap;
 
     MainPane parentPane;
 
     ArrayList<Immeuble> loadedImmeubles;
-    ArrayList<Revetement> revetements;
+    public ArrayList<Revetement> revetements;
 
     ImmeubleHierarchy(MainPane parentPane)
     {
         this.parentPane = parentPane;
         this.loadedImmeubles = new ArrayList<Immeuble>();
-        this.revetements  = Revetement.readDef();
-        this.objectMap = new HashMap<>();
+        this.revetements  = Revetement.readDef();    
     }
 
     public void hierarchyRefresh()
@@ -48,16 +34,12 @@ public class ImmeubleHierarchy extends TreeView{
 
             TreeItem<String> item = new TreeItem<String> ("Immeuble " + this.loadedImmeubles.get(i).idImmeuble);
             item.setExpanded(true);
-            this.objectMap.put(item, this.loadedImmeubles.get(i));
-
             //chaque niveau
             for (int j = 0; j < this.loadedImmeubles.get(i).niveau.size(); j++){
 
                 TreeItem<String> nivitem = new TreeItem<String> ("Niveau " + this.loadedImmeubles.get(i).niveau.get(j).getNivId());
                 nivitem.setExpanded(true);
                 item.getChildren().add(nivitem);
-                this.objectMap.put(nivitem, this.loadedImmeubles.get(i).niveau.get(j));
-
                 //chaque appartement
                 for (int k = 0; k < this.loadedImmeubles.get(i).niveau.get(j).appartements.size(); k++)
                 {
@@ -74,30 +56,17 @@ public class ImmeubleHierarchy extends TreeView{
                         TreeItem<String> pieceitem = new TreeItem<String> ("Piece " + this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).getPieceId());
                         pieceitem.setExpanded(false);
                         aptitem.getChildren().add(pieceitem);
-                        this.objectMap.put(pieceitem, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l));
-
                         //chaque mur
                         for (int m = 0; m < this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).murs.size(); m++)
                         {                           
-                            ContextMenu cMenu = new ContextMenu();
-
-                            MenuItem m1 = new MenuItem("Changer revetement");
-    
-                            cMenu.getItems().addAll(m1);
-
                             TreeItem<String> muritem = new TreeItem<String> ("");
+                            HierarchySurfaceItemContext murMenu = new HierarchySurfaceItemContext(muritem, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).murs.get(m), this);
                             muritem.setGraphic(new Label("Mur " + this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).murs.get(m).getID()));
 
                             muritem.getGraphic().setOnContextMenuRequested(event -> {
 
-                                cMenu.show(muritem.getGraphic(), event.getScreenX(), event.getScreenY());
+                                murMenu.show(muritem.getGraphic(), event.getScreenX(), event.getScreenY());
 
-                            });
-
-                            this.objectMap.put(muritem, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).murs.get(m));
-
-                            m1.setOnAction(event -> {
-                                //revetementSelection(this.objectMap.get(muritem));
                             });
 
                             pieceitem.getChildren().add(muritem);
@@ -109,34 +78,19 @@ public class ImmeubleHierarchy extends TreeView{
                         TreeItem<String> solItem = new TreeItem<String> ("");
                         solItem.setGraphic(new Label("Sol"));
 
-                        ContextMenu cMenup = new ContextMenu();
-                        ContextMenu cMenus = new ContextMenu();
-
-                        MenuItem m1p = new MenuItem("Changer revetement");
-                        MenuItem m1s = new MenuItem("Changer revetement");
-
-                        /*
-                        m1p.setOnAction(event -> {
-                            revetementSelection(this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).soletplafond.get(1));
-                        });
-                        m1s.setOnAction(event -> {
-                            revetementSelection(this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).soletplafond.get(0));
-                        });
-                        */
-
-                        cMenup.getItems().addAll(m1p);
-                        cMenus.getItems().addAll(m1s);
+                        HierarchySurfaceItemContext plafondMenu = new HierarchySurfaceItemContext(plafondItem, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).soletplafond.get(1), this);
+                        HierarchySurfaceItemContext solMenu = new HierarchySurfaceItemContext(solItem, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).soletplafond.get(0), this);
 
                         plafondItem.getGraphic().setOnContextMenuRequested(event -> {
-                            cMenup.show(plafondItem.getGraphic(), event.getScreenX(), event.getScreenY());
-                        });
 
+                            plafondMenu.show(plafondItem.getGraphic(), event.getScreenX(), event.getScreenY());
+
+                        });
                         solItem.getGraphic().setOnContextMenuRequested(event -> {
-                            cMenus.show(solItem.getGraphic(), event.getScreenX(), event.getScreenY());
-                        });
 
-                        this.objectMap.put(solItem, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).soletplafond.get(0));
-                        this.objectMap.put(plafondItem, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).soletplafond.get(1));
+                            solMenu.show(solItem.getGraphic(), event.getScreenX(), event.getScreenY());
+
+                        });
 
                         pieceitem.getChildren().addAll(plafondItem, solItem);
                     }
@@ -147,27 +101,6 @@ public class ImmeubleHierarchy extends TreeView{
             rootItem.getChildren().add(item);
         }
         this.setRoot(rootItem);
-    }
-
-    private Revetement revetementSelection(Surface s) {
-        Stage selectionStage = new Stage();
-
-        // Create the selection scene
-        Button selectButton = new Button("Select");
-        selectButton.setOnAction(e -> selectionStage.close());
-        VBox selectionLayout = new VBox(selectButton);
-        selectionLayout.setSpacing(10);
-        selectionLayout.setPadding(new Insets(10));
-        Scene selectionScene = new Scene(selectionLayout, 200, 100);
-
-        selectionStage.setTitle("Revetements");
-        selectionStage.setScene(selectionScene);
-
-        Revetement r = new Revetement();
-
-        // Set the selection stage as a new window
-        selectionStage.showAndWait();
-        return r;
     }
 
 }

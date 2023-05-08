@@ -25,6 +25,7 @@ public class Menus extends MenuBar{
 
     Menu nouveau; //Sous Menus
     Menu importer;
+    Menu exporter;
     Menu sauver;
     Menu charger;
     
@@ -49,6 +50,8 @@ public class Menus extends MenuBar{
         this.importer = new Menu("Importer");
         this.sauver = new Menu("Sauvguarder");
         this.charger = new Menu("Charger");
+        this.exporter = new Menu("Exporter");
+
         
         this.NProjet = new MenuItem("Projet");  //Elements du menu fichier-->Nouveau
         this.NNiveau = new MenuItem("Niveau");
@@ -63,7 +66,7 @@ public class Menus extends MenuBar{
         this.getMenus().add(edition);
         //this.getMenus().add(view);
 
-        fichier.getItems().addAll(nouveau, charger, sauver, importer);
+        fichier.getItems().addAll(nouveau, sauver, charger, importer, exporter);
         //view.getItems().addAll(editeur, viewer);
 
         nouveau.getItems().addAll(NProjet, NPoint, NNiveau);

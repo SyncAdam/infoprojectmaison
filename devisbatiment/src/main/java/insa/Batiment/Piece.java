@@ -26,7 +26,8 @@ public class Piece implements Serializable{
         this.murs = new ArrayList<Mur>();
         this.soletplafond = new ArrayList<Surface>();
         this.pieceValide = false;
-
+        this.Sfonction = "";
+        
         Mur pm = new Mur(1);
         murs.add(pm);
         int iterator = 2;
@@ -69,6 +70,7 @@ public class Piece implements Serializable{
         this.murs = new ArrayList<Mur>();
         this.soletplafond = new ArrayList<Surface>();
         this.pieceValide = false;
+        this.Sfonction = "";
 
         for(int i = 0; i < coins.size(); i++)
         {
@@ -194,19 +196,19 @@ public class Piece implements Serializable{
         double res = 0;
         for(Mur mur : murs)
         {
-            res += mur.surface(h) * mur.revetement.prixUnitaire;
+            //res += mur.surface(h) * mur.revetement.prixUnitaire;
         }
         for(Surface s : soletplafond)
         {
             if(s instanceof Sol)
             {
                 Sol sol = (Sol) s;
-                res += sol.surface(h) * sol.revetement.prixUnitaire;
+                //res += sol.surface(h) * sol.revetement.prixUnitaire;
             }
             else if(s instanceof Plafond)
             {
                 Plafond plaf = (Plafond) s;
-                res += plaf.surface(h) * plaf.revetement.prixUnitaire;
+                //res += plaf.surface(h) * plaf.revetement.prixUnitaire;
             }
         }
 

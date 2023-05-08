@@ -1,9 +1,11 @@
 package insa.Batiment;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import insa.Batiment.Revetements.Revetement;
+import insa.Batiment.Revetements.RevetementException;
 
-public class Mur implements Surface, Serializable{
+public class Mur extends Surface implements Serializable{
     
     //Attributes
     private Coin debut;     //Point de départ du mur
@@ -11,7 +13,6 @@ public class Mur implements Surface, Serializable{
     private int idMur;
     private int nmbrPortes;     //NON!!!!!!!!!
     private int nmbrFenetres;   //NON!!!!!!!!!
-    Revetement revetement;
     public boolean superpositionState;
     
     public boolean isSelected = false;
@@ -32,7 +33,7 @@ public class Mur implements Surface, Serializable{
         this.idMur = id;
         this.nmbrFenetres = 0;
         this.nmbrPortes = 0;
-        this.revetement = null;
+        this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
     }
 
@@ -51,7 +52,7 @@ public class Mur implements Surface, Serializable{
         this.idMur = id;
         this.nmbrFenetres = 0;
         this.nmbrPortes = 0;
-        this.revetement = null;
+        this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
 
     }
@@ -72,7 +73,7 @@ public class Mur implements Surface, Serializable{
         this.idMur = id;
         this.nmbrFenetres = 0;
         this.nmbrPortes = 0;
-        this.revetement = null;
+        this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
 
     }
@@ -144,7 +145,7 @@ public class Mur implements Surface, Serializable{
     public String toString()
     {
         return "\nLe mur " + this.idMur + " a un coin pour debut en:\n\t" + this.debut.getX() + "x " + this.debut.getY() + "y"
-             +  "\net pour fin:\n\t" + this.fin.getX() + "x " + this.fin.getY() + "y\n" + "avec un revetement " + revetement;
+             +  "\net pour fin:\n\t" + this.fin.getX() + "x " + this.fin.getY() + "y\n";
     }
 
     /**
@@ -168,9 +169,13 @@ public class Mur implements Surface, Serializable{
         return this.longueur() * h;
     }
 
-    public void changeRevetement(Revetement rev)
+    public void addRevetement(Revetement rev) throws RevetementException
     {
-        if(rev.pourMur) this.revetement = rev;
+        if(rev.pourMur) this.revetements.add(rev);
+        else
+        {
+            throw new RevetementException();
+        }
     }
 
     void dessiner()

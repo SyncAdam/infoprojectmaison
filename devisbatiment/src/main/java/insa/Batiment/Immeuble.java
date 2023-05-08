@@ -115,6 +115,10 @@ public class Immeuble extends Batiment implements Serializable{
                     input.add(p);
                     break;
 
+                case "Revetement":
+                    //A faire
+                    break;
+
                 case "Appartement":
                     ArrayList<Piece> pieces = new ArrayList<Piece>();
                         
@@ -189,8 +193,11 @@ public class Immeuble extends Batiment implements Serializable{
 
         bure.close();
         return im;
+    }
 
-
+    public static void exportImmeubles(ArrayList<Immeuble> immeubles, String path) throws IOException, ClassNotFoundException
+    {
+        //a faire
     }
 
 }
