@@ -1,10 +1,16 @@
 package insa.Batiment;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import insa.Batiment.Revetements.Revetement;
+import insa.Batiment.Revetements.RevetementException;
 
-public interface Surface {
+public abstract class Surface implements Serializable{
 
-    abstract double surface(double h);
-    abstract void changeRevetement(Revetement rev);
+    public ArrayList<Revetement> revetements;
+
+    public abstract double surface(double h);
+    public abstract void addRevetement(Revetement rev) throws RevetementException;
     
 }

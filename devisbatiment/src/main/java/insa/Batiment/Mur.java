@@ -1,15 +1,11 @@
 package insa.Batiment;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import insa.Batiment.Revetements.Revetement;
+import insa.Batiment.Revetements.RevetementException;
 
-import insa.GUI.App;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-
-public class Mur extends App implements Surface, Serializable{
+public class Mur extends Surface implements Serializable{
     
     //Attributes
     private Coin debut;     //Point de départ du mur
@@ -17,10 +13,9 @@ public class Mur extends App implements Surface, Serializable{
     private int idMur;
     private int nmbrPortes;     //NON!!!!!!!!!
     private int nmbrFenetres;   //NON!!!!!!!!!
-    Revetement revetement;
-    boolean superpositionState;
-    Line ligne = new Line();
-    boolean isSelected = false;
+    public boolean superpositionState;
+    
+    public boolean isSelected = false;
 
     //Constructors
 
@@ -38,7 +33,7 @@ public class Mur extends App implements Surface, Serializable{
         this.idMur = id;
         this.nmbrFenetres = 0;
         this.nmbrPortes = 0;
-        this.revetement = null;
+        this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
     }
 
@@ -57,7 +52,7 @@ public class Mur extends App implements Surface, Serializable{
         this.idMur = id;
         this.nmbrFenetres = 0;
         this.nmbrPortes = 0;
-        this.revetement = null;
+        this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
 
     }
@@ -78,7 +73,7 @@ public class Mur extends App implements Surface, Serializable{
         this.idMur = id;
         this.nmbrFenetres = 0;
         this.nmbrPortes = 0;
-        this.revetement = null;
+        this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
 
     }
@@ -150,7 +145,7 @@ public class Mur extends App implements Surface, Serializable{
     public String toString()
     {
         return "\nLe mur " + this.idMur + " a un coin pour debut en:\n\t" + this.debut.getX() + "x " + this.debut.getY() + "y"
-             +  "\net pour fin:\n\t" + this.fin.getX() + "x " + this.fin.getY() + "y\n" + "avec un revetement " + revetement;
+             +  "\net pour fin:\n\t" + this.fin.getX() + "x " + this.fin.getY() + "y\n";
     }
 
     /**
@@ -174,9 +169,13 @@ public class Mur extends App implements Surface, Serializable{
         return this.longueur() * h;
     }
 
-    public void changeRevetement(Revetement rev)
+    public void addRevetement(Revetement rev) throws RevetementException
     {
-        if(rev.pourMur) this.revetement = rev;
+        if(rev.pourMur) this.revetements.add(rev);
+        else
+        {
+            throw new RevetementException();
+        }
     }
 
     void dessiner()
@@ -235,6 +234,11 @@ public class Mur extends App implements Surface, Serializable{
         return fin.getId();
     }
 
+    public void setSelectedState(boolean state){
+        isSelected = state;
+    }
+
+    /*
 
     public void DisplayMur(BorderPane canva){
         debut.DisplayPoint(root);
@@ -267,7 +271,7 @@ public class Mur extends App implements Surface, Serializable{
                         iDOfSelectedWall.remove(this.idMur);
                         isSelected = false;
                         
-                    }*/
+                    }
                 } 
 
 
@@ -302,5 +306,7 @@ public class Mur extends App implements Surface, Serializable{
 
     }
 
-    public void setSelectedState(boolean state){isSelected = state;}
+    */
+
+    //public void setSelectedState(boolean state){isSelected = state;}
 }

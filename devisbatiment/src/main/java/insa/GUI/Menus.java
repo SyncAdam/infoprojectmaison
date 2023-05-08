@@ -1,50 +1,80 @@
 package insa.GUI;
 
 import java.io.File;
+import java.io.IOException;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 
+import java.util.ArrayList;
 
-public class Menus extends App{
+import insa.Batiment.Immeuble;
 
-    public static MenuBar createMenus()
+
+public class Menus extends MenuBar{
+
+    MainPane parentPane;
+
+    MenuBar menuBar;
+
+    Menu fichier; //On def les menus principaux
+    Menu edition;
+    //Menu view;
+
+    Menu nouveau; //Sous Menus
+    Menu importer;
+    Menu exporter;
+    Menu sauver;
+    Menu charger;
+    
+    MenuItem NProjet;  //Elements du menu fichier-->Nouveau
+    MenuItem NNiveau;
+    MenuItem NPoint;
+    MenuItem ImportProj;
+    MenuItem ImportCatalogue ;
+
+    MenuItem editeur;     //Elements du menu viewer
+    MenuItem viewer;
+
+    Menus(MainPane parentPane)
     {
-        MenuBar menuBar = new MenuBar(); //creation de la menubar
+        this.parentPane = parentPane;
 
-        Menu fichier = new Menu("Fichier"); //On def les menus principaux
-        Menu edition = new Menu("Édition");
-        Menu view = new Menu("View");
+        fichier = new Menu("Fichier"); //On def les menus principaux
+        this.edition = new Menu("Édition");
+        //this.view = new Menu("View");
 
-        Menu nouveau = new Menu("Nouveau"); //Sous Menus
-        Menu importer = new Menu("Importer");
+        this.nouveau = new Menu("Nouveau"); //Sous Menus
+        this.importer = new Menu("Importer");
+        this.sauver = new Menu("Sauvguarder");
+        this.charger = new Menu("Charger");
+        this.exporter = new Menu("Exporter");
+
         
-        MenuItem NProjet = new MenuItem("Projet");  //Elements du menu fichier-->Nouveau
-        MenuItem NNiveau = new MenuItem("Niveau");
-        MenuItem NPoint = new MenuItem("Point");
-        MenuItem ImportProj = new MenuItem("Projet");
-        MenuItem ImportCatalogue = new MenuItem("Catalogue");
+        this.NProjet = new MenuItem("Projet");  //Elements du menu fichier-->Nouveau
+        this.NNiveau = new MenuItem("Niveau");
+        this.NPoint = new MenuItem("Point");
+        this.ImportProj = new MenuItem("Projet");
+        this.ImportCatalogue = new MenuItem("Catalogue");
 
-        MenuItem editeur = new MenuItem("Editeur");     //Elements du menu viewer
-        MenuItem viewer = new MenuItem("Viewer");
+        this.editeur = new MenuItem("Editeur");     //Elements du menu viewer
+        this.viewer = new MenuItem("Viewer");
 
-        menuBar.getMenus().add(fichier);        //on ajoute les menus principaux à la barre de menu
-        menuBar.getMenus().add(edition);
-        menuBar.getMenus().add(view);
+        this.getMenus().add(fichier);        //on ajoute les menus principaux à la barre de menu
+        this.getMenus().add(edition);
+        //this.getMenus().add(view);
 
-        fichier.getItems().add(nouveau);           //apres on ajoute les sous menus
-        fichier.getItems().add(importer);
-        view.getItems().addAll(editeur, viewer);
+        fichier.getItems().addAll(nouveau, sauver, charger, importer, exporter);
+        //view.getItems().addAll(editeur, viewer);
 
         nouveau.getItems().addAll(NProjet, NPoint, NNiveau);
 
         importer.getItems().addAll(ImportProj, ImportCatalogue);
           
         NPoint.setOnAction(e -> {
-            ManualPoint manualPoint = new ManualPoint();
+            ManualPoint manualPoint = new ManualPoint(this.parentPane);
             manualPoint.Initialise();
         });
 
@@ -57,7 +87,7 @@ public class Menus extends App{
             
             System.out.println("Dossier du catalogue selectionné : " +selectedFile.getPath());
 
-            cataloguePath = selectedFile.getPath(); //variable héritée de la classe App qui permet de récupérer le bon chemin
+            this.parentPane.cataloguePath = selectedFile.getPath(); //variable héritée de la classe App qui permet de récupérer le bon chemin
 
         });
 
@@ -65,18 +95,108 @@ public class Menus extends App{
 
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Project selector");
-            File selectedFile = fileChooser.showOpenDialog(null);
-            
-            System.out.println("Dossier du projet selectionné : " + selectedFile.getPath());
+            System.out.println("Opening project...");
 
-            projectPath = selectedFile.getPath();
+            var selectedFile = fileChooser.showOpenDialog(null);
 
+            if(selectedFile != null)
+            {
+                if(selectedFile.getPath() != null)
+                {
+                    this.parentPane.projectPath = selectedFile.getPath();
+                }
+                System.out.println("Nom de fichier selectionné : " + selectedFile.getPath());
+
+                try{
+                    ArrayList<Immeuble> ims = new ArrayList<>();
+
+                    ims = Immeuble.importImmeuble(selectedFile.getPath());
+
+                    for(int i = 0; i < parentPane.hierarchy.loadedImmeubles.size(); i++)
+                    {
+                        parentPane.hierarchy.loadedImmeubles.remove(i);
+                    }
+    
+                    for(Immeuble i : ims)
+                    {
+
+                        parentPane.hierarchy.loadedImmeubles.add(i);
+                    }
+                }
+                catch(IOException | ClassNotFoundException err)
+                {
+                    System.out.println("Impossible de charger le fichier");
+                } 
+
+            }
+            else
+            {
+                System.out.println("Aborting project selection");
+            }
+
+            this.parentPane.hierarchy.hierarchyRefresh();
+
+        });
+
+        sauver.setOnAction(event -> {
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Sauver");
+
+            var selectedFile = fileChooser.showSaveDialog(null);
+
+            if(selectedFile != null)
+            {
+                if(selectedFile.getPath() != null)
+                {
+                    try
+                    {
+                        Immeuble.saveImmeuble(this.parentPane.hierarchy.loadedImmeubles, selectedFile.getPath());
+                    }
+                    catch(IOException | ClassNotFoundException err)
+                    {
+                        System.out.println("Immeuble n'est pas sauve");
+                    }
+                }
+                System.out.println("Nom de fichier selectionné : " + selectedFile.getPath());
+
+            }
+            else
+            {
+                System.out.println("Aborting project selection");
+            }
+        });
+
+        charger.setOnAction(event -> {
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Project selector");
+            System.out.println("Opening project...");
+
+            var selectedFile = fileChooser.showOpenDialog(null);
+
+            if(selectedFile != null)
+            {
+                if(selectedFile.getPath() != null)
+                {
+                    try{
+                        for(int i = 0; i < parentPane.hierarchy.loadedImmeubles.size(); i++)
+                        {
+                            parentPane.hierarchy.loadedImmeubles.remove(i);
+                        }
+                        this.parentPane.hierarchy.loadedImmeubles = Immeuble.loadImmeuble(selectedFile.getPath());
+                        this.parentPane.hierarchy.hierarchyRefresh();
+                    }
+                    catch(IOException | ClassNotFoundException err)
+                    {
+                        err.printStackTrace();
+                    }
+                } 
+            }
         });
 
 
 
-
-        return menuBar;
     }
 
 }

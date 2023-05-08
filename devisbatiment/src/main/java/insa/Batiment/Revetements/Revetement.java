@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-public class Revetement { // classe abstraite avec les diff attributs + methodes abstraites montant
+public class Revetement implements Serializable{
 
-    int idRevetement;
+    public int idRevetement;
     public boolean pourMur;
     public boolean pourSol;
     public boolean pourPlafond;
-    String designation;
+    public String designation;
     public double prixUnitaire;
 
     public Revetement()
@@ -39,8 +42,9 @@ public class Revetement { // classe abstraite avec les diff attributs + methodes
         ArrayList<Revetement> rev = new ArrayList<Revetement>();
 
         try {
+            Path path = Paths.get("src", "main", "java", "insa", "Batiment", "Revetements", "revs.txt");
 
-            FileReader fileReader = new FileReader("Bati/Revetements/revs.txt");
+            FileReader fileReader = new FileReader(path.toString());
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
 
@@ -88,6 +92,68 @@ public class Revetement { // classe abstraite avec les diff attributs + methodes
     {
         return "\nRevetement " + this.idRevetement + " " + this.designation + " a un prix " + this.prixUnitaire;
     }
+
+        //This is the stupidest shit i've ever seen
+
+        public int getIdRevetement()
+        {
+            return this.idRevetement;
+        }
+        public void setIdRevetement()
+        {
+    
+        }
+        public boolean getPourMur()
+        {
+            return this.pourMur;
+        }
+        public void setpourMur()
+        {
+            
+        }
+        public boolean getPourSol()
+        {
+            return this.pourSol;
+        }
+        public void setpourSol()
+        {
+            
+        }
+        public boolean getPourPlafond()
+        {
+            return this.pourPlafond;
+        }
+        public void setpourPlafond()
+        {
+            
+        }
+        public String getDesignation()
+        {
+            return this.designation;
+        }
+        public void setdesignation()
+        {
+            
+        }
+        public double getPrixUnitaire()
+        {
+            return this.prixUnitaire;
+        }
+        public void setprixUnitaire()
+        {
+            
+        }
+
+        public static boolean equals(Revetement r1, Revetement r2)
+        {
+            if(r1.idRevetement == r2.idRevetement && r1.designation == r2.designation && r1.pourMur == r2.pourMur
+             && r1.pourSol == r2.pourSol && r1.pourPlafond == r2.pourPlafond && r1.prixUnitaire == r2.prixUnitaire)
+            return true;
+            else 
+            {
+                return false;
+            }
+        }
 
  
     

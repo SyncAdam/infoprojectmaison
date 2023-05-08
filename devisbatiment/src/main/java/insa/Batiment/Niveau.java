@@ -22,6 +22,17 @@ public class Niveau implements Serializable{
 
     }
 
+    Niveau(int id, ArrayList<Appartement> apparts)
+    {
+        this.idNiveau = id;
+        this.appartements = apparts;
+    }
+
+    public int getNivId()
+    {
+        return this.idNiveau;
+    }
+
     //A verifier si les appartements coincident
 
 }

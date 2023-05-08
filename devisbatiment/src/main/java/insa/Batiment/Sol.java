@@ -4,22 +4,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import insa.Batiment.Revetements.Revetement;
+import insa.Batiment.Revetements.RevetementException;
 
-public class Sol implements Serializable, Surface {
+public class Sol extends Surface implements Serializable {
 
     public ArrayList<Mur> murs;
-    Revetement revetement;
 
     //Constructeur
     Sol(ArrayList<Mur> murs)
     {
         this.murs = murs;
-        this.revetement = null;
+        this.revetements = new ArrayList<Revetement>();
     }
 
-    public void changeRevetement(Revetement rev)
+    public void addRevetement(Revetement rev) throws RevetementException
     {
-        if(rev.pourSol) this.revetement = rev;
+        if(rev.pourSol) this.revetements.add(rev);
+        else
+        {
+            throw new RevetementException();
+        }
     }
 
     //Répétition du code a cause du modele

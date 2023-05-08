@@ -35,6 +35,18 @@ public class Appartement implements Serializable{
         
     }
 
+    Appartement(int id, int niv, ArrayList<Piece> pieces)
+    {
+        this.idAppartement = id;
+        this.niveauAppartement = niv;
+        this.pieces = pieces;
+    }
+
+    public int getAppartId()
+    {
+        return this.idAppartement;
+    }
+
     //Á Verifier s'il y a des pieces coincidents
     
 }
