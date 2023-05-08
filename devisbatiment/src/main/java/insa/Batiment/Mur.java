@@ -1,11 +1,11 @@
 package insa.Batiment;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 
 import insa.Batiment.Revetements.Revetement;
 import insa.Batiment.Revetements.RevetementException;
 
-public class Mur extends Surface implements Serializable{
+public class Mur extends Surface{
     
     //Attributes
     private Coin debut;     //Point de départ du mur

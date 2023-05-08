@@ -1,7 +1,8 @@
-package insa.GUI;
+package insa.GUI.ImmeubleHierarchy;
 
 import insa.Batiment.Immeuble;
 import insa.Batiment.Revetements.Revetement;
+import insa.GUI.MainPane;
 
 import java.util.ArrayList;
 
@@ -9,14 +10,14 @@ import javafx.scene.control.TreeView;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 
-public class ImmeubleHierarchy extends TreeView{
+public class ImmeubleHierarchy extends TreeView<String>{
 
     MainPane parentPane;
 
-    ArrayList<Immeuble> loadedImmeubles;
+    public ArrayList<Immeuble> loadedImmeubles;
     public ArrayList<Revetement> revetements;
 
-    ImmeubleHierarchy(MainPane parentPane)
+    public ImmeubleHierarchy(MainPane parentPane)
     {
         this.parentPane = parentPane;
         this.loadedImmeubles = new ArrayList<Immeuble>();
@@ -37,7 +38,12 @@ public class ImmeubleHierarchy extends TreeView{
             //chaque niveau
             for (int j = 0; j < this.loadedImmeubles.get(i).niveau.size(); j++){
 
-                TreeItem<String> nivitem = new TreeItem<String> ("Niveau " + this.loadedImmeubles.get(i).niveau.get(j).getNivId());
+                TreeItem<String> nivitem = new TreeItem<String> ("");
+                HierarchyItemContext nivMenu = new HierarchyItemContext(nivitem, this.loadedImmeubles.get(i).niveau.get(j), this);
+                nivitem.setGraphic(new Label("Niveau " + this.loadedImmeubles.get(i).niveau.get(j).getNivId()));
+                nivitem.getGraphic().setOnContextMenuRequested(event -> {
+                    nivMenu.show(nivitem.getGraphic(), event.getScreenX(), event.getScreenY());
+                });
                 nivitem.setExpanded(true);
                 item.getChildren().add(nivitem);
                 //chaque appartement
@@ -45,17 +51,31 @@ public class ImmeubleHierarchy extends TreeView{
                 {
 
                     TreeItem<String> aptitem = new TreeItem<String> ("");
+                    HierarchyItemContext aptMenu = new HierarchyItemContext(aptitem, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k), this);
                     aptitem.setGraphic(new Label("Appartement " + this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).getAppartId()));
                     aptitem.setExpanded(false);
+
+                    aptitem.getGraphic().setOnContextMenuRequested(event -> {
+                        aptMenu.show(aptitem.getGraphic(), event.getScreenX(), event.getScreenY());
+                    });
+
                     nivitem.getChildren().add(aptitem);
 
                     //chaque piece
                     for (int l = 0; l < this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.size(); l++)
                     {
 
-                        TreeItem<String> pieceitem = new TreeItem<String> ("Piece " + this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).getPieceId());
+                        TreeItem<String> pieceitem = new TreeItem<String>("");
+                        HierarchyItemContext pieceMenu = new HierarchyItemContext(pieceitem, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l), this);
+
+                        pieceitem.setGraphic(new Label("Piece " + this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).getPieceId()));
                         pieceitem.setExpanded(false);
+                        pieceitem.getGraphic().setOnContextMenuRequested(event -> {
+                            pieceMenu.show(pieceitem.getGraphic(), event.getScreenX(), event.getScreenY());
+                        });
+
                         aptitem.getChildren().add(pieceitem);
+
                         //chaque mur
                         for (int m = 0; m < this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).murs.size(); m++)
                         {                           

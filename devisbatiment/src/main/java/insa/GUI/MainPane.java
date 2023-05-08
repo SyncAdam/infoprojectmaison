@@ -1,10 +1,10 @@
 package insa.GUI;
 
+import insa.GUI.ImmeubleHierarchy.ImmeubleHierarchy;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
@@ -12,9 +12,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import java.util.ArrayList;
 
-import insa.Batiment.Immeuble;
 
 public class MainPane extends BorderPane{
 
@@ -38,7 +36,7 @@ public class MainPane extends BorderPane{
     //Group canva;
     BorderPane viewerLayout = new BorderPane();
     protected CustomLog log; //on créer le custom log
-    DisplayCanvas canva;
+    public DisplayCanvas canva;
     
     public String cataloguePath, projectPath;
 

@@ -1,4 +1,4 @@
-package insa.GUI;
+package insa.GUI.ImmeubleHierarchy;
 
 import insa.Batiment.Surface;
 import insa.Batiment.Revetements.Revetement;
@@ -22,24 +22,25 @@ import javafx.stage.Stage;
 public class HierarchySurfaceItemContext extends ContextMenu {
 
     TreeItem<String> parentObject;
-    Surface targetObject;
     ImmeubleHierarchy fatherTree;
+    Surface targetObject;
 
-
-    HierarchySurfaceItemContext(TreeItem<String> parentObject, Surface s, ImmeubleHierarchy fatherTree) {
+    HierarchySurfaceItemContext(TreeItem<String> parentObject, Surface targetObject, ImmeubleHierarchy fatherTree)
+    {
         this.parentObject = parentObject;
-        this.targetObject = s;
         this.fatherTree = fatherTree;
+        this.targetObject = targetObject;
 
-        MenuItem m1 = new MenuItem("Rajouter revetement");
-        MenuItem m2 = new MenuItem("Voir revetements");
-        this.getItems().addAll(m1, m2);
+        MenuItem mi1 = new MenuItem("Ajouter un revetement");
+        MenuItem mi2 = new MenuItem("Revetements");
 
-        m1.setOnAction(event -> {
+        this.getItems().addAll(mi1, mi2);
+
+        mi1.setOnAction(event -> {
             revetementSelection(this.targetObject);
         });
 
-        m2.setOnAction(event -> {
+        mi2.setOnAction(event -> {
             showRevetements(this.targetObject);
         });
 

@@ -27,7 +27,7 @@ public class App extends Application {
 
         Scene myScene = new Scene(new MainPane(), Color.GREY);
         
-        homeWindow.setWidth(1000);
+        homeWindow.setWidth(1200);
         homeWindow.setHeight(700); //def de la hauteur de la fenetre 
         //homeWindow.setFullScreen(true); //plein écran
         homeWindow.setFullScreenExitHint("Plein écran activé, veuillez faire votre devis");

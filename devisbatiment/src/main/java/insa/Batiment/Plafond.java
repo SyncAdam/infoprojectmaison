@@ -1,12 +1,11 @@
 package insa.Batiment;
-import java.io.Serializable;
 
 import java.util.ArrayList;
 
 import insa.Batiment.Revetements.Revetement;
 import insa.Batiment.Revetements.RevetementException;
 
-public class Plafond extends Surface implements Serializable{
+public class Plafond extends Surface{
 
     ArrayList<Mur> murs;
 

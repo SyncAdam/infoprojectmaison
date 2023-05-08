@@ -7,8 +7,10 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
+import insa.Batiment.Appartement;
 import insa.Batiment.Coin;
 import insa.Batiment.Mur;
+import insa.Batiment.Niveau;
 import insa.Batiment.Piece;
 import insa.Batiment.Porte;
 
@@ -234,6 +236,51 @@ public class DisplayCanvas extends Pane{
         l.setStroke(couleur);
     }
 
-    
-}
+    public void DisplayPiece(Piece p)
+    {
+        for(int i = 0; i < p.murs.size(); i++)
+        {
+            DisplayMur(p.murs.get(i));
+        }
+    }
 
+    public void DisplayAppart(Appartement appart)
+    {
+        for(int i = 0; i < appart.pieces.size(); i++)
+        {
+            DisplayPiece(appart.pieces.get(i));
+        }
+    }
+
+    public void DisplayNiveau(Niveau niv)
+    {
+        for(int i = 0; i < niv.appartements.size(); i++)
+        {
+            DisplayAppart(niv.appartements.get(i));
+        }
+    }
+
+    public void DisplayObject(Object obj)
+    {
+        if(obj instanceof Coin)
+        {
+            DisplayCoin((Coin) obj);
+        }
+        else if(obj instanceof Mur)
+        {
+            DisplayMur((Mur) obj);
+        }
+        else if(obj instanceof Piece)
+        {   
+            DisplayPiece((Piece) obj);  
+        }
+        else if(obj instanceof Appartement)
+        {
+            DisplayAppart((Appartement) obj);
+        }
+        else if(obj instanceof Niveau)
+        {
+            DisplayNiveau((Niveau) obj);
+        }
+    }
+}
