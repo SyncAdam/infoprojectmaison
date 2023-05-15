@@ -27,7 +27,6 @@ public class DisplayCanvas extends Pane{
 
     public ArrayList<Coin> selectedPoint;
 
-
     DisplayCanvas(MainPane parentPane)
     {
         this.parentPane = parentPane;
@@ -109,15 +108,15 @@ public class DisplayCanvas extends Pane{
                         //Tout ca existe deja dans piece mais un peu plus efficacement
                         //==================================================
 
-                        /*
+                        
 
-                        i = wallTab.size()-2; // on va commencer par vérifier l'avant dernier mur, sinon la boucle while sort dès la première itération
+                        int i = wallTab.size()-2; // on va commencer par vérifier l'avant dernier mur, sinon la boucle while sort dès la première itération
                         int j =0;
                         
                         murArrayTab.add(new ArrayList<Mur>()); //on créer un arraylist de mur dans l'arraylist d'arraylist de mur
                         murArrayTab.get(murArrayTab.size()-1).add(wallTab.get(wallTab.size()-1)); //on ajoute le dernier mur crééé dans l'array liste de l'array liste d'array liste de mur, car il ne sera pas ajouté par la boucle while
                         try{
-                            while (wallTab.get(i).getIdDebut() != idOfCurrentSelectedPoint && wallTab.get(i).getIdFin() != idOfCurrentSelectedPoint){ //tant que les 2 coins du mur i sont différents du currentidpoint on continue
+                            while (wallTab.get(i).getIdDebut() != this.parentPane.idOfCurrentSelectedPoint && wallTab.get(i).getIdFin() != this.parentPane.idOfCurrentSelectedPoint){   //tant que les 2 coins du mur i sont différents du currentidpoint on continue
                                 
                                 murArrayTab.get(murArrayTab.size()-1).add(wallTab.get(i)); //on ajoute au tableau dans le tableau mur i de la pièce
                                 i--;
@@ -132,7 +131,7 @@ public class DisplayCanvas extends Pane{
                         catch(PieceNonFermeeException err){
                             System.out.println(err);
                         }
-                        */
+                        
                     }
 
                 }
@@ -243,6 +242,8 @@ public class DisplayCanvas extends Pane{
             DisplayMur(p.murs.get(i));
         }
     }
+
+    
 
     public void DisplayAppart(Appartement appart)
     {

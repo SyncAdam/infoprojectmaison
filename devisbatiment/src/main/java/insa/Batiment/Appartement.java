@@ -9,6 +9,12 @@ public class Appartement implements Serializable{
     private int niveauAppartement;
     public ArrayList<Piece> pieces;
 
+    /**
+     * 
+     * @param id
+     * @param niv
+     */
+
     Appartement(int id, int niv)
     {
         this.idAppartement = id;

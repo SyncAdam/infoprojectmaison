@@ -125,5 +125,10 @@ public class MainPane extends BorderPane{
         */
 
     }
+
+    public void resetCanva()
+    {
+        this.canva = new DisplayCanvas(this);
+    }
     
 }

@@ -33,9 +33,11 @@ public class ImmeubleHierarchy extends TreeView<String>{
         //pour chaque immeuble
         for (int i = 0; i < this.loadedImmeubles.size(); i++) {
 
-            TreeItem<String> item = new TreeItem<String> ("Immeuble " + this.loadedImmeubles.get(i).idImmeuble);
+            TreeItem<String> item = new TreeItem<String> ("");
+            item.setGraphic(new Label("Immeuble " + this.loadedImmeubles.get(i).idImmeuble));
             item.setExpanded(true);
             //chaque niveau
+
             for (int j = 0; j < this.loadedImmeubles.get(i).niveau.size(); j++){
 
                 TreeItem<String> nivitem = new TreeItem<String> ("");
@@ -47,6 +49,7 @@ public class ImmeubleHierarchy extends TreeView<String>{
                 nivitem.setExpanded(true);
                 item.getChildren().add(nivitem);
                 //chaque appartement
+                
                 for (int k = 0; k < this.loadedImmeubles.get(i).niveau.get(j).appartements.size(); k++)
                 {
 

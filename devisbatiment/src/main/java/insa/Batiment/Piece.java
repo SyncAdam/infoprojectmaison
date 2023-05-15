@@ -64,7 +64,7 @@ public class Piece implements Serializable{
         
     }
 
-    Piece(int idPiece, ArrayList<Coin> coins)
+    Piece(int idPiece, ArrayList<Object> objects)
     {
         this.idPiece = idPiece;
         this.murs = new ArrayList<Mur>();
@@ -72,17 +72,28 @@ public class Piece implements Serializable{
         this.pieceValide = false;
         this.Sfonction = "";
 
-        for(int i = 0; i < coins.size(); i++)
+        if(objects.get(0) instanceof Coin)
         {
-            if(i != coins.size()-1)
+            for(int i = 0; i < objects.size(); i++)
             {
-                Mur m = new Mur(i, coins.get(i), coins.get(i+1));
-                murs.add(m);
+                if(i != objects.size()-1)
+                {
+                    Mur m = new Mur(i, (Coin)objects.get(i), (Coin)objects.get(i+1));
+                    murs.add(m);
+                }
+                else
+                {
+                    Mur m = new Mur(i, (Coin)objects.get(i), (Coin)objects.get(0));
+                    murs.add(m);
+                }
             }
-            else
+        }
+
+        else if(objects.get(0) instanceof Mur)
+        {
+            for(int i = 0; i < objects.size(); i++)
             {
-                Mur m = new Mur(i, coins.get(i), coins.get(0));
-                murs.add(m);
+                murs.add((Mur)objects.get(i));
             }
         }
 
@@ -92,7 +103,6 @@ public class Piece implements Serializable{
         this.soletplafond.add((Surface)sol);
         this.soletplafond.add((Surface)plafond);
     }
-
 
     /**
      * <p>En faisant appel a cette methode un mur sera effacee</p>
@@ -214,6 +224,22 @@ public class Piece implements Serializable{
 
         return res;
     }
+
+    public double calculRevetement(double h)
+    {
+        double res = 0;
+        for(int i = 0; i < murs.size(); i++)
+        {
+            res += murs.get(i).calculRevetement(h);
+        }
+        for(int i = 0; i < soletplafond.size(); i++)
+        {
+            res += soletplafond.get(i).calculRevetement(h);
+        }
+
+        return res;
+    }
+
 
     public double surface()
     {
