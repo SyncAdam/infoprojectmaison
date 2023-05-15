@@ -9,7 +9,7 @@ public void afficher(){
 
 }
 public double surfaceRevetement (int idRevetement){
- return(0);
+    return(0);
 }
 public double devisBatiment (int idRevetement){
     return 0;
