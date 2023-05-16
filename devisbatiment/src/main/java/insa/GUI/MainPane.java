@@ -16,7 +16,10 @@ import javafx.scene.paint.Color;
 
 public class MainPane extends BorderPane{
 
-    boolean ctrlIsPressed;
+    boolean ctrlIsPressed; //variables pour quand on appuie sur clavier
+    boolean HIsPressed;
+    boolean VIsPressed;
+
     boolean pointAlreadyExist;
     boolean autoWallState;
     public boolean wallButtonState;
@@ -45,6 +48,7 @@ public class MainPane extends BorderPane{
     MainPane()
     {
         this.ctrlIsPressed = false;
+        this.HIsPressed =false;
         this.pointAlreadyExist = false;
         this.idOfCurrentSelectedPoint = 999;
         this.menuBar = new Menus(this);
@@ -73,20 +77,41 @@ public class MainPane extends BorderPane{
 
         log.Initialise(); //on ini le log
 
-        this.setOnKeyPressed(e -> { //gestion de la detection de l'appui pour la selection
-            if(e.getCode()== KeyCode.CONTROL){
+        this.setOnKeyPressed(e -> { //gestion de la detection des touches
+            if(e.getCode()== KeyCode.CONTROL){ //si CTRL est pressé
                 System.out.println("CTRL pressé");
                 ctrlIsPressed = true; //si ctrl est appuyé, on met la variable correspondante à true.
                 log.setTxt("Cliquer sur les éléments à selectionner en maintenant CTRL");
             }
+            if(e.getCode()== KeyCode.H){ //si h est pressé
+                System.out.println("H pressé");
+
+                if (HIsPressed == true){HIsPressed =false ;log.setTxt("Mode horizontal désactivé");//si on rappui sur H, on quitte l'outils
+                }else{ //Si H n'est pas pressé on entre dans l'outils 
+                    HIsPressed = true; //si h est appuyé, on met la variable correspondante à true.
+                    VIsPressed =false ; //evite de bugguer si V était encore activé
+                    log.setTxt("Mode horizontal activé");
+                }
+            }
+            if(e.getCode()== KeyCode.V){ //si V est pressé
+                System.out.println("V pressé");
+
+                if (VIsPressed == true){VIsPressed =false ;log.setTxt("Mode vertical désactivé");//si on rappui sur V, on quitte l'outils
+                }else{ //Si V n'est pas pressé on entre dans l'outils 
+                    VIsPressed = true; //si h est appuyé, on met la variable correspondante à true.
+                    HIsPressed =false ; //evite de bugguer si H était encore activé
+                    log.setTxt("Mode vertical activé");
+                }
+            }
         });
 
-        this.setOnKeyReleased(e -> { //gestion de la detection du relachement de ctrl pour la sélection
+        this.setOnKeyReleased(e -> { //gestion des actions clavier
             if(e.getCode()== KeyCode.CONTROL){
                 System.out.println("CTRL relaché");
                 ctrlIsPressed = false; //si ctrl est relaché, on met la variable correspondante à false.
                 log.setTxt("Appuyez sur CTRL pour selectionner des élements");
             }
+ 
         });
 
         buttonMur.setOnAction(e ->{
@@ -96,6 +121,10 @@ public class MainPane extends BorderPane{
                // Mur mur = new Mur(idOfCurrentSelectedPoint, null, null);
             }
         });
+
+        
+
+
 
         autoWall.setOnAction(e -> {
             autoWallState= autoWall.isSelected();
@@ -124,11 +153,6 @@ public class MainPane extends BorderPane{
 
         */
 
-    }
-
-    public void resetCanva()
-    {
-        this.canva = new DisplayCanvas(this);
     }
     
 }
