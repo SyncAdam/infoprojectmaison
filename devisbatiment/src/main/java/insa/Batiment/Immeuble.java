@@ -80,6 +80,7 @@ public class Immeuble extends Batiment implements Serializable{
 
         while(line != null)
         {
+            
 
             String[] mys = line.split(";", 2);
             String[] reste;
@@ -94,7 +95,7 @@ public class Immeuble extends Batiment implements Serializable{
                     break;
 
                 case "Piece":
-                    ArrayList<Object> coins = new ArrayList<>();
+                    ArrayList<Coin> coins = new ArrayList<>();
 
                     String[] splitted = reste[1].split(",");
                     for(String mystring : splitted)
@@ -103,7 +104,7 @@ public class Immeuble extends Batiment implements Serializable{
                         {
                             if(input.get(i) instanceof Coin && ((Coin) input.get(i)).getId() == Integer.parseInt(mystring))  //ne devrait pas jeter une exception
                             {
-                                coins.add(input.get(i));
+                                coins.add((Coin) input.get(i));
                                 input.remove(i);
                                 break;
                             }
@@ -197,25 +198,6 @@ public class Immeuble extends Batiment implements Serializable{
     public static void exportImmeubles(ArrayList<Immeuble> immeubles, String path) throws IOException, ClassNotFoundException
     {
         //a faire
-    }
-
-    public static double calculRevetement(Immeuble immeuble)
-    {
-
-        double res = 0;
-
-        for(int i = 0; i < immeuble.niveau.size(); i++)
-        {
-            for(int j = 0; j < immeuble.niveau.get(i).appartements.size(); j++)
-            {
-                for(int k = 0; k < immeuble.niveau.get(i).appartements.get(j).pieces.size(); k++)
-                {
-                    res += immeuble.niveau.get(i).appartements.get(j).pieces.get(k).calculrevetement(immeuble.niveau.get(i).getHeight());
-                }
-            }
-        }
-        
-        return res;
     }
 
 }

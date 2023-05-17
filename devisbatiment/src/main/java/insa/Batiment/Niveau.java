@@ -6,7 +6,6 @@ public class Niveau implements Serializable{
     
     public int idNiveau;
     public ArrayList<Appartement> appartements;
-    public double height;
 
     Niveau(int id, int nbreApps)
     {
@@ -32,11 +31,6 @@ public class Niveau implements Serializable{
     public int getNivId()
     {
         return this.idNiveau;
-    }
-
-    public double getHeight()
-    {
-        return this.height;
     }
 
     //A verifier si les appartements coincident

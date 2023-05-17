@@ -20,7 +20,9 @@ public class Piece implements Serializable{
      * @param id
      */
 
-    Piece(int id)
+     
+
+    public Piece(int id)
     {
         this.idPiece = id;
         this.murs = new ArrayList<Mur>();
@@ -64,7 +66,7 @@ public class Piece implements Serializable{
         
     }
 
-    Piece(int idPiece, ArrayList<Object> objects)
+    public Piece(int idPiece, ArrayList<Coin> coins)
     {
         this.idPiece = idPiece;
         this.murs = new ArrayList<Mur>();
@@ -72,28 +74,17 @@ public class Piece implements Serializable{
         this.pieceValide = false;
         this.Sfonction = "";
 
-        if(objects.get(0) instanceof Coin)
+        for(int i = 0; i < coins.size(); i++)
         {
-            for(int i = 0; i < objects.size(); i++)
+            if(i != coins.size()-1)
             {
-                if(i != objects.size()-1)
-                {
-                    Mur m = new Mur(i, (Coin)objects.get(i), (Coin)objects.get(i+1));
-                    murs.add(m);
-                }
-                else
-                {
-                    Mur m = new Mur(i, (Coin)objects.get(i), (Coin)objects.get(0));
-                    murs.add(m);
-                }
+                Mur m = new Mur(i, coins.get(i), coins.get(i+1));
+                murs.add(m);
             }
-        }
-
-        else if(objects.get(0) instanceof Mur)
-        {
-            for(int i = 0; i < objects.size(); i++)
+            else
             {
-                murs.add((Mur)objects.get(i));
+                Mur m = new Mur(i, coins.get(i), coins.get(0));
+                murs.add(m);
             }
         }
 
@@ -103,6 +94,10 @@ public class Piece implements Serializable{
         this.soletplafond.add((Surface)sol);
         this.soletplafond.add((Surface)plafond);
     }
+    public Piece(int idPiece, ArrayList<Mur> murs, double test){ //je suis obligé de rajouter un argument qui ne sert à rien sinon ça croit que le construteur est le même que celui avec les arraylists de coins
+        System.out.println("Pièces créée via contructeur liste de mur");
+    }
+
 
     /**
      * <p>En faisant appel a cette methode un mur sera effacee</p>
@@ -224,22 +219,6 @@ public class Piece implements Serializable{
 
         return res;
     }
-
-    public double calculRevetement(double h)
-    {
-        double res = 0;
-        for(int i = 0; i < murs.size(); i++)
-        {
-            res += murs.get(i).calculRevetement(h);
-        }
-        for(int i = 0; i < soletplafond.size(); i++)
-        {
-            res += soletplafond.get(i).calculRevetement(h);
-        }
-
-        return res;
-    }
-
 
     public double surface()
     {

@@ -38,7 +38,7 @@ public class ManualPoint{
         
        
 
-        Scene scenePoint = new Scene(disposition, 500,500, Color.GREEN ); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
+        Scene scenePoint = new Scene(disposition, 50,80, Color.GREEN ); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
         
         newPointStage.setScene(scenePoint);
         newPointStage.show();

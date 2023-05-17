@@ -23,7 +23,7 @@ public class CustomLog  {
     
     public void Initialise(){
         
-        logTxt.setText("Texte par défaut"); //texte du label
+        logTxt.setText("Application démarée"); //texte du label
         root.setBottom(logTxt);
         
         root.setBottom(logTxt); //on ajoute le label en bas de du border pane.
@@ -32,6 +32,7 @@ public class CustomLog  {
     }
 
     public void setTxt(String txt){
+        logTxt.setFill(Color.BLACK); //à chaque fois qu'on affiche un new texte, il est noir par défaut, et on précise si on veut en changer la couleur
        logTxt.setText(txt);
     }
 

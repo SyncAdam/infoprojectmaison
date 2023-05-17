@@ -6,6 +6,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+
+
 /*NOTE DE Timéo POUR ADAM DU 21/04  : 
  * Voilà tout ce que j'ai rajouté : 
  * Si on clique 2 fois sur un même point ca créér un mur avec le point qui existe déja.
@@ -16,7 +18,9 @@ import java.io.IOException;
  * Pour l'instant il y a une erreur quand on essaye de fermer une pièce en cliquant sur un point quand il manque un mur, il faut que je fasse un truc avec les exceptions.
  */
 
+
 public class App extends Application {
+    
     
     @Override
     public void start(Stage homeWindow) throws IOException {

@@ -17,6 +17,7 @@ import insa.Batiment.Porte;
 import insa.GUI.ImmeubleHierarchy.HierarchySurfaceItemContext;
 
 public class DisplayCanvas extends Pane{
+ 
 
     MainPane parentPane;        //type non-primitive passé par référence
 
@@ -25,10 +26,15 @@ public class DisplayCanvas extends Pane{
     public ArrayList<ArrayList<Mur>> murArrayTab; //on créer une array liste qui contient des listes de mur, pour pouvoir envoyer dans le constructeur de pièce
     public ArrayList<Piece> pieceTab;
     public ArrayList<Integer> iDOfSelectedWall;
+    //public ArrayList<Integer>
+    
     public ArrayList<Porte> doorTabList;
     public ArrayList<Coin> bufferCoinPiece; //contient temporairement tous les coins d'une boucle de mur lorsqu'elle est detectée pour pouvoir utiliser le construteur de pièce que t'as fait
+    public ArrayList<Mur> bufferMurPiece;
 
-    public ArrayList<Coin> selectedPoint;
+    public ArrayList<Coin> selectedPoint; //sert juste à garder en mémoire les 2 points que l'on veut relier avec l'outils mur
+    public ArrayList<Mur> selectedMur; //sert juste à garder en mémoire les murs de la pièce que l'on veut créer avec l'outils pièce
+    public double[] coordsOfHilightedPoint = new double[2]; //utile pour quand on a le mode vertical ou horizon activé et qu'on veut mettre un point alligné avec un point qui existe déjà pour faire un carré
 
 
     DisplayCanvas(MainPane parentPane)
@@ -40,10 +46,54 @@ public class DisplayCanvas extends Pane{
         this.bufferCoinPiece = new ArrayList<Coin>();
         this.murArrayTab = new ArrayList<ArrayList<Mur>>(); //on créer une array liste qui contient des listes de mur, pour pouvoir envoyer dans le constructeur de pièce
         this.pieceTab = new ArrayList<Piece>();
+        this.bufferMurPiece = new ArrayList<Mur>();
         this.iDOfSelectedWall = new ArrayList<Integer>();
+       
         this.doorTabList = new ArrayList<Porte>();
     
-        selectedPoint = new ArrayList<Coin>();
+        this.selectedPoint = new ArrayList<Coin>();
+        this.selectedMur = new ArrayList<Mur>();
+
+        
+   
+
+        parentPane.buttonPiece.setOnAction(e->{ //quand on veut crééer une pièce avec l'outils pièce
+        
+           
+                if(iDOfSelectedWall.size()<3){parentPane.log.setTxt("Vous ne pouvez pas créer une pièce de moins de 3 murs, veuillez en selectionner plus !"); parentPane.log.setColor(Color.RED);}
+                else{
+                parentPane.log.setTxt("Création d'une pièce de " + iDOfSelectedWall.size() + " murs");
+                bufferMurPiece.clear();//on vide le buffer
+                for (int index = 0; index < iDOfSelectedWall.size(); index++) { //de i aux nbr de mur selectionnés on :
+                    bufferMurPiece.add(wallTab.get(iDOfSelectedWall.get(index)));//ajoute à bufferMurpièce le mur d'id à la position i dand IdOfSelectedWall
+                    
+                }
+                pieceTab.add(new Piece(pieceTab.size()-1, bufferMurPiece, 0)); //on créer la pièce avec les murs selectionnés
+                bufferMurPiece.clear(); //on vide le buffer
+            }
+                
+               
+ 
+        });
+
+
+
+
+        parentPane.buttonPorte.setOnAction(e->{ //quand bouton porte cliqué
+            if (iDOfSelectedWall.size() == 0){parentPane.log.setTxt("Veuillez selectionner au moins un mur avant de créer une porte");} //on vérif qu'il y a bien un mur selectionné
+            else{ //si au moins un mur est selectionné :
+
+                for (int i = 0; i < iDOfSelectedWall.size(); i++) { //pour i allant de 0 au nombre de mur selectionné, on crééer un porte qu'on ajoute dans le tableau, puis on affiche
+                    doorTabList.add(new Porte(doorTabList.size(), wallTab.get(iDOfSelectedWall.get(i)))); //on créer la porte
+
+                    DisplayPorte(doorTabList.get(doorTabList.size()-1));  //on affiche la denière porte créée.
+                }
+                
+            }
+
+
+        });
+
 
         this.setOnMouseClicked(e -> { //détection du clic + récup coords
             if (parentPane.ctrlIsPressed == false){
@@ -56,20 +106,24 @@ public class DisplayCanvas extends Pane{
                         if(parentPane.HIsPressed == true){ //si on clique et que H est pressé, on récup la coord le Y du pt d'avant et le X du clic
                             this.coinTab.add(new Coin(this.coinTab.size(), e.getX(), coinTab.get(coinTab.size()-1).getY())); //on créér le new point dans le tableau
                             DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
+                            parentPane.log.setTxt("Vous venez de créer un point d'ID : " + Integer.toString(coinTab.size()-1) );
+                            
                         }else if(parentPane.VIsPressed == true){ //si V est pressé, on fait comme pour H mais à l'inverse
                             this.coinTab.add(new Coin(this.coinTab.size(), coinTab.get(coinTab.size()-1).getX(), e.getY())); //on créér le new point dans le tableau
                             DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
+                            parentPane.log.setTxt("Vous venez de créer un point d'ID : " + Integer.toString(coinTab.size()-1) );
 
                         }else{ //si ni V ni H n'est pas pressé on place le point à l'endroit du clic
                 
-                        this.coinTab.add(new Coin(this.coinTab.size(), e.getX(), e.getY())); //on créé le new point dans le tableau
-                        DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
+                            this.coinTab.add(new Coin(this.coinTab.size(), e.getX(), e.getY())); //on créé le new point dans le tableau
+                            DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
+                            parentPane.log.setTxt("Vous venez de créer un point d'ID : " + Integer.toString(coinTab.size()-1) );
 
-                        /*NOTE : si on a un seul élement dans l'array list, sont index est 0, mais quand on demande la taille (.size()),
-                        * on obtient 1, d'où le "-1", pour faire coller à la taille.
-                        */
+                            /*NOTE : si on a un seul élement dans l'array list, sont index est 0, mais quand on demande la taille (.size()),
+                            * on obtient 1, d'où le "-1", pour faire coller à la taille.
+                            */
 
-                        System.out.println("clic detecté");
+                        
 
                     }
                 }
@@ -114,11 +168,15 @@ public class DisplayCanvas extends Pane{
 
                 if(parentPane.pointAlreadyExist ==true){ //si ya déjà un point
 
-                    if (parentPane.autoWallState == false){ //et que autowall est désactivé, on dit qu'on ne peut pas placer un autre point au même endroit
-                        System.out.println("Vous ne pouvez pas placer un point ici ! ") ;
+                    if (parentPane.autoWallState == false && parentPane.wallButtonState == false && parentPane.HIsPressed == false && parentPane.VIsPressed == false &&parentPane.modifyButtonState == false ){ //si on est pas dans un outils spécial et qu'on veut crééer un pr où il y en a déjà
+                        
+                            System.out.println("Vous ne pouvez pas placer un point ici ! ") ;
+                        
+                        parentPane.log.setTxt("Vous ne pouvez pas placer de point ici !");
+                        parentPane.log.setColor(Color.RED);
                     }
 
-                    else{ //si autowall est activé et qu'il y a déjà un point : on fait un mur avec le dernier point créé et le point selectionné
+                    if(parentPane.autoWallState == true){ //si autowall est activé et qu'il y a déjà un point : on fait un mur avec le dernier point créé et le point selectionné
                     
                         coinTab.add(coinTab.size(), coinTab.get(parentPane.idOfCurrentSelectedPoint));
                         //coinTab.remove(idOfCurrentSelectedPoint);
@@ -176,7 +234,7 @@ public class DisplayCanvas extends Pane{
 
                             pieceTab.add(new Piece(pieceTab.size(), bufferCoinPiece));
                             pieceTab.get(pieceTab.size()-1).toString();
-                            HilightRoom(pieceTab.get(pieceTab.size()-1), Color.YELLOW); 
+                            //HilightRoom(pieceTab.get(pieceTab.size()-1), Color.YELLOW); 
                         }
                         catch(PieceNonFermeeException err){
                             System.out.println(err);
@@ -191,18 +249,27 @@ public class DisplayCanvas extends Pane{
         HilightRoom(piece, Color.YELLOW);*/
     }
 
+
+
+
+
+
     public void DisplayCoin(Coin c)
     {
-        Circle circle1 = new Circle(c.getX(), c.getY(), 5);
+        Circle circle1 = new Circle(c.getX(), c.getY(), 7);
         this.getChildren().add(circle1);
         
         circle1.setOnMouseEntered(e -> { //on détecte quand la souris passe sur un point (POUR PLUS TARD : EFFET MAGNET ?)
       
             circle1.setFill(Color.BLUE); 
             this.parentPane.pointAlreadyExist = true;  //empeche de pouvoir placer un point au même eendroit (cf classe app)
-            this.parentPane.idOfCurrentSelectedPoint = c.getId(); //on actualise cette variable avec l'id du point selectionné 
+            this.parentPane.idOfCurrentSelectedPoint = c.getId(); //on actualise cette variable avec l'id du point selectionné
+            coordsOfHilightedPoint[0]= c.getX() ; //on rentre les coords du point survolé pour pouvoir faire un carré avec mode H ou V
+            coordsOfHilightedPoint[1]= c.getY() ;
+
             System.out.println("L'id du point selectionné est" + this.parentPane.idOfCurrentSelectedPoint);
             //this.parentPane.log.setTxt("po");
+
             
         }); 
 
@@ -217,9 +284,34 @@ public class DisplayCanvas extends Pane{
         }); 
 
         circle1.setOnMouseClicked(e -> {
+            if (parentPane.modifyButtonState == true){
+                PointModifier pointModifier = new PointModifier(this.parentPane, c);
+                pointModifier.Initialise();
+                circle1.setRadius(0); // j'ai pas trouvé comment le faire s'auto-détruire, donc on réduit ça taille à 0 pour le faire disparaitre
+                
+            }
             
-            if (this.parentPane.wallButtonState == true){
+            if (this.parentPane.wallButtonState == true){ //si on a cliqué sur le bouton pour créer un mur et que l'on clique sur un point qui existe déjà, on l'ajoute à selected point
+                circle1.setFill(Color.RED);
                 this.selectedPoint.add(c);
+                if (selectedPoint.size() == 1){parentPane.log.setTxt("Veuillez cliquer sur un deuxième point");}
+                if (selectedPoint.size() == 2){ //si on a déjà un point qui a été cliqué alors :
+                    wallTab.add(new Mur(wallTab.size(), selectedPoint.get(0), selectedPoint.get(1))); //on créér un nouveau mur avec les 2 pts selectionés
+                    DisplayMur(wallTab.get(wallTab.size()-1)); //on affiche le mur nouvellement créé
+                    selectedPoint.clear(); //on vide les murs de selected point
+                    //parentPane.wallButtonState = false; // on quitte le mode de création de mur
+                    selectedPoint.clear();
+                    parentPane.log.setTxt("Vous venez de créer un nouveau mur, veuillez en selectionner 2 autres");
+                }
+            }
+
+
+            if(parentPane.HIsPressed == true){ //si on clique sur un point qui existe déjà avec le mode horizontale activé on va récupérer le y du pt d'avant et le x du point cliqué puis  crééer un new point
+                this.coinTab.add(new Coin(this.coinTab.size(), coordsOfHilightedPoint[0], coinTab.get(coinTab.size()-1).getY())); //on créér le new point dans le tableau
+                DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
+            } else if(parentPane.VIsPressed == true){//si on clique sur un point qui existe déjà avec le mode vertical activé on va récupérer le x du pt d'avant et le y du point cliqué puis  crééer un new point
+                this.coinTab.add(new Coin(this.coinTab.size(), coinTab.get(coinTab.size()-1).getX(),coordsOfHilightedPoint[1])); //on créér le new point dans le tableau
+                DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
             }
 
         });
@@ -252,19 +344,20 @@ public class DisplayCanvas extends Pane{
             
                 ligne.setOnMouseClicked(event -> { //si la souris est sur la ligne et clique :
                     if(this.parentPane.ctrlIsPressed ==true){ //clique + ctrl :
-                        if(m.isSelected == false){
+                        if(m.isSelected == false){//si le mur n'est pas déjà selectionné, on le selectionne 
 
                             setColor(ligne, Color.GREENYELLOW);
-                            iDOfSelectedWall.add(m.getID());
-                            m.isSelected = true;
+                            this.iDOfSelectedWall.add(m.getID());
+                            m.isSelected = true;//on le def comme selectionné
+                            this.parentPane.log.setTxt("mur(s) selectionné(s)");
                         }
-                        this.parentPane.log.setTxt("mur(s) selectionné(s)");
-                        /*else{
-                            setColor(Color.BLACK);
-                            iDOfSelectedWall.remove(this.idMur);
-                            isSelected = false;
+                        
+                        else{ //si on a cliqué dessus et qu'il était déjà selectionné on le déselectionne
+                            setColor(ligne, Color.BLACK);
+                            iDOfSelectedWall.remove(m.getID());
+                            m.isSelected = false;
                             
-                        }*/
+                        }
                     } 
                 });    
         
@@ -278,6 +371,44 @@ public class DisplayCanvas extends Pane{
                 setColor(ligne, Color.BLACK);
             } //si on quitte le point de la souris et qu'il n'est pas selectionné, on le met en noir
         }); //on remet la couleur en noir
+    }
+
+
+    public void DisplayPorte(Porte p){
+        Polygon rectangle = new Polygon(); //on utilise des polygone pour faire des rectangles blanc et non des rectangles directement, car c'est plus simple pour les aligner avec le mur 
+        double l, L; //pas utiles, juste plus court pour les formules trigo d'après
+
+        double t =0;
+        double x1 = p.mur.getDebut().getX(); //on récup les coords des 2 pts qui def le mur :
+        double y1 = p.mur.getDebut().getY();
+        double x2 = p.mur.getFin().getX();
+        double y2 = p.mur.getFin().getY();
+        double xp1, xp2,xp3,xp4; //abscisses des 4 points du rectangle qui va servir à afficher la porte
+        double yp1,yp2,yp3,yp4; //idem
+
+        l= 8.0; //a modifier au besoin = épaisseur du trait qui sert à tracer le mur 
+        L = 40.0; //largeur de l'ouverture
+
+        //on va calculer les coords des 4 coins du rectangle qui sera affiché en blanc pour afficher la porte :(bcp de trigo et long....J'Y AI PASSÉ AU MOINS 3H!!!!)
+
+        t = Math.atan((y1-y2)/(x1-x2)); //angle que forme le mur avec l'horizon
+    
+
+        xp1 = -(l/2)*Math.sin(t)+(L/2)*Math.cos(t)+x1-((x1-x2)/2);
+        yp1 = (l/2)*Math.cos(t)+(L/2)*Math.sin(t)+y1-((y1-y2)/2);
+
+        xp2 = (l/2)*Math.sin(t)-(L/2)*Math.cos(t)+x1-((x1-x2)/2);
+        yp2 = -(l/2)*Math.cos(t)-(L/2)*Math.sin(t)+y1-((y1-y2)/2);
+
+        xp3 = (l/2)*Math.sin(t)+(L/2)*Math.cos(t)+x1-((x1-x2)/2);
+        yp3 = -(l/2)*Math.cos(t)+(L/2)*Math.sin(t)+y1-((y1-y2)/2);
+
+        xp4 = -(l/2)*Math.sin(t)-(L/2)*Math.cos(t)+x1-((x1-x2)/2);
+        yp4 = (l/2)*Math.cos(t)-(L/2)*Math.sin(t)+y1-((y1-y2)/2);
+
+        rectangle.getPoints().addAll(new Double[]{xp1,yp1,xp4,yp4,xp2,yp2,xp3,yp3});
+        rectangle.setFill(Color.WHITESMOKE); //temporaire pour visualiser la porte
+        this.getChildren().add(rectangle); // on l'affiche sur le pane 
     }
 
 
@@ -358,6 +489,10 @@ public class DisplayCanvas extends Pane{
         else if(obj instanceof Mur)
         {
             DisplayMur((Mur) obj);
+        }
+        else if(obj instanceof Porte)
+        {
+            DisplayPorte((Porte) obj);
         }
         else if(obj instanceof Piece)
         {   

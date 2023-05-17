@@ -16,13 +16,16 @@ import javafx.scene.paint.Color;
 
 public class MainPane extends BorderPane{
 
-    boolean ctrlIsPressed; //variables pour quand on appuie sur clavier
+    boolean ctrlIsPressed; //variables pour quand on appuie sur CTRL
     boolean HIsPressed;
     boolean VIsPressed;
 
     boolean pointAlreadyExist;
     boolean autoWallState;
-    public boolean wallButtonState;
+    public boolean wallButtonState; //Donne juste l'état des boutons pour pouvoir les utiliser ailleur
+    public boolean roomButtonState; //Donne juste l'état des boutons pour pouvoir les utiliser ailleur
+    public boolean modifyButtonState;//
+
     int idOfCurrentSelectedPoint;
     
     Menus menuBar;
@@ -32,9 +35,11 @@ public class MainPane extends BorderPane{
     CheckBox autoWall;
 
     Button buttonMur;
-    Button buttonPoint;
+    //Button buttonPoint;
     Button buttonPorte;
+    Button buttonPiece;
     Button unselectButton;
+    Button modifyButton;
 
     //Group canva;
     BorderPane viewerLayout = new BorderPane();
@@ -52,22 +57,46 @@ public class MainPane extends BorderPane{
         this.pointAlreadyExist = false;
         this.idOfCurrentSelectedPoint = 999;
         this.menuBar = new Menus(this);
-        this.autoWall = new CheckBox("autoWall");
+        this.autoWall = new CheckBox("Automatique");
+
         this.autoWallState = false;
         this.wallButtonState = false;
+        this.roomButtonState = false;
+        this.modifyButtonState = false;
         this.toolBar = new ToolBar();
+
         this.hierarchy = new ImmeubleHierarchy(this);
+
         this.buttonMur = new Button("Mur");
-        this.buttonPoint = new Button("Point");
+        //this.buttonPoint = new Button("Point");
         this.buttonPorte = new Button("Porte");
+        this.buttonPiece = new Button("Piece");
         this.unselectButton = new Button("Unselect all");
+        this.modifyButton = new Button("Modifier");
+        double witdh =  102;
+
+        this.buttonMur.setMinWidth(witdh); //largeur des boutons : pour l'esthétique
+        this.buttonPiece.setMinWidth(witdh);
+        this.unselectButton.setMinWidth(witdh);
+        this.modifyButton.setMinWidth(witdh);
+        this.buttonPorte.setMinWidth(witdh);
+
+        this.buttonMur.setStyle("-fx-background-color: #CAC6C6; "); //largeur des boutons : pour l'esthétique
+        this.buttonPiece.setStyle("-fx-background-color: #CAC6C6; ");
+        this.unselectButton.setStyle("-fx-background-color: #CAC6C6; ");
+        this.modifyButton.setStyle("-fx-background-color: #CAC6C6; ");
+        this.buttonPorte.setStyle("-fx-background-color: #CAC6C6; ");
+
+
+
         //this.canva = new Group();
         this.canva = new DisplayCanvas(this);
         this.viewerLayout = new BorderPane();
         this.log = new CustomLog(this);
 
         toolBar.setOrientation(Orientation.VERTICAL);
-        toolBar.getItems().addAll(autoWall, buttonMur, buttonPoint, buttonPorte, unselectButton);
+        toolBar.setMinWidth(110);
+        toolBar.getItems().addAll(autoWall, modifyButton, buttonMur, buttonPiece, buttonPorte, unselectButton);//on ajoute tout les boutons à la tool bar
 
         this.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, new CornerRadii(0), Insets.EMPTY))); // j'ai pas trouvé plus simple pour changer la couleur de fond
         this.setRight(toolBar);
@@ -110,17 +139,41 @@ public class MainPane extends BorderPane{
                 System.out.println("CTRL relaché");
                 ctrlIsPressed = false; //si ctrl est relaché, on met la variable correspondante à false.
                 log.setTxt("Appuyez sur CTRL pour selectionner des élements");
+                
             }
  
         });
 
-        buttonMur.setOnAction(e ->{
+        buttonMur.setOnAction(e ->{ //actualise juste la bonne variable pour pouvoir les actions adéquates (cf Display Canva)
             if (wallButtonState == false){
+                buttonMur.setStyle("-fx-background-color: #4AE87D; "); //colo en vert du bouton
+                
                 wallButtonState = true;
                 log.setTxt("Veuillez cliquer sur 2 points pour créer un mur");
                // Mur mur = new Mur(idOfCurrentSelectedPoint, null, null);
-            }
+
+               
+            }else{
+                buttonMur.setStyle("-fx-background-color: #CAC6C6; "); //colo en gris défaut
+                wallButtonState = false;
+                log.setTxt("Vous quittez l'outils mur");}
+            
         });
+
+        modifyButton.setOnAction(e->{
+            if(modifyButtonState == false){
+                
+                log.setTxt("[Mode modification] - Cliquer sur un point pour le modifier");
+                modifyButton.setStyle("-fx-background-color: #4AE87D; "); //colo en vert du bouton
+                modifyButtonState = true;
+            }else{
+                modifyButtonState = false;log.setTxt("Vous venez de quitter l'outils de modification");
+                modifyButton.setStyle("-fx-background-color: #CAC6C6; "); //colo en gris défaut
+            }
+            
+        });
+
+
 
         
 
@@ -131,27 +184,12 @@ public class MainPane extends BorderPane{
             System.out.println("Etat de la case : " + autoWallState);
         });
 
-        unselectButton.setOnAction(e->{
-            //UnselectAll();
-        });
+       
 
-        /*
-
-        buttonPorte.setOnAction(e->{ //quand bouton porte cliqué
-            if (iDOfSelectedWall.size() == 0){System.out.println("Veuillez selectionner au moins un mur avant de créer une porte");} //on vérif qu'il y a bien un mur selectionné
-            else{ //si au moins un mur est selectionné :
-
-                for (int i = 0; i < iDOfSelectedWall.size(); i++) { //pour i allant de 0 au nombre de mur selectionné, on crééer un porte qu'on ajoute dans le tableau, puis on affiche
-                    doorTab.add(new Porte(doorTab.size(), wallTab.get(iDOfSelectedWall.get(i))));
-                    doorTab.get(doorTab.size()-1).Display(root);  //on affiche la denière porte créée.
-                }
-                
-            }
+        
 
 
-        });
-
-        */
+        
 
     }
     

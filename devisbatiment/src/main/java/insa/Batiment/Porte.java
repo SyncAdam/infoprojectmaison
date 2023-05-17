@@ -9,7 +9,7 @@ import javafx.scene.shape.Polygon;
 public class Porte extends App {
 
     //private Mur mur = new Mur(5,new Coin(1, 25.0, 28.0) , new Coin(1, 29.0, 2.0));
-    Mur mur;
+    public Mur mur;
     double l, L; //pas utiles, juste plus court pour les formules trigo d'après
     public Porte(int idPorte, Mur mur1){ //on récupère le mur sur lequel la porte va être
         this.mur = mur1;
@@ -34,7 +34,7 @@ public class Porte extends App {
 
 
 
-    public void Display(BorderPane root){
+    /*public void Display(BorderPane root){
         
 
         double x1 = mur.getDebut().getX(); //on récup les coords des 2 pts qui def le mur :
@@ -74,7 +74,7 @@ public class Porte extends App {
 
 
         
-    }
+    }*/
 
 
 
