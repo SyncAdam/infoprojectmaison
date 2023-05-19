@@ -25,6 +25,7 @@ public class MainPane extends BorderPane{
     public boolean wallButtonState; //Donne juste l'état des boutons pour pouvoir les utiliser ailleur
     public boolean roomButtonState; //Donne juste l'état des boutons pour pouvoir les utiliser ailleur
     public boolean modifyButtonState;//
+    public boolean buttonPorteState;
 
     int idOfCurrentSelectedPoint;
     
@@ -32,7 +33,7 @@ public class MainPane extends BorderPane{
     ToolBar toolBar;
     ImmeubleHierarchy hierarchy;
 
-    CheckBox autoWall;
+    Button autoWall;
 
     Button buttonMur;
     //Button buttonPoint;
@@ -57,17 +58,19 @@ public class MainPane extends BorderPane{
         this.pointAlreadyExist = false;
         this.idOfCurrentSelectedPoint = 999;
         this.menuBar = new Menus(this);
-        this.autoWall = new CheckBox("Automatique");
+        
 
         this.autoWallState = false;
         this.wallButtonState = false;
         this.roomButtonState = false;
         this.modifyButtonState = false;
+        this.buttonPorteState  = false;
         this.toolBar = new ToolBar();
 
         this.hierarchy = new ImmeubleHierarchy(this);
 
         this.buttonMur = new Button("Mur");
+        this.autoWall = new Button("Automatique");
         //this.buttonPoint = new Button("Point");
         this.buttonPorte = new Button("Porte");
         this.buttonPiece = new Button("Piece");
@@ -80,12 +83,15 @@ public class MainPane extends BorderPane{
         this.unselectButton.setMinWidth(witdh);
         this.modifyButton.setMinWidth(witdh);
         this.buttonPorte.setMinWidth(witdh);
+        this.autoWall.setMinWidth(witdh);
 
-        this.buttonMur.setStyle("-fx-background-color: #CAC6C6; "); //largeur des boutons : pour l'esthétique
+        this.buttonMur.setStyle("-fx-background-color: #CAC6C6; "); //design bouttons : pour l'esthétique
         this.buttonPiece.setStyle("-fx-background-color: #CAC6C6; ");
         this.unselectButton.setStyle("-fx-background-color: #CAC6C6; ");
         this.modifyButton.setStyle("-fx-background-color: #CAC6C6; ");
         this.buttonPorte.setStyle("-fx-background-color: #CAC6C6; ");
+        this.autoWall.setStyle("-fx-background-color: #CAC6C6; ");
+
 
 
 
@@ -175,13 +181,36 @@ public class MainPane extends BorderPane{
 
 
 
+        buttonPorte.setOnAction(e->{
+            if(buttonPorteState == false){
+                buttonPorteState = true;
+                buttonPorte.setStyle("-fx-background-color: #4AE87D; "); //colo en vert du bouton
+                log.setTxt("Veuillez cliquer sur un mur pour ajouter une porte");
+
+            }else{buttonPorteState = false; 
+                buttonPorte.setStyle("-fx-background-color: #CAC6C6; ");
+            log.setTxt("Vous avez quitté le mode porte");}
+
+
+
+        });
+
+
+
         
 
 
 
         autoWall.setOnAction(e -> {
-            autoWallState= autoWall.isSelected();
-            System.out.println("Etat de la case : " + autoWallState);
+            if(autoWallState == false){
+                autoWallState = true;
+                autoWall.setStyle("-fx-background-color: #4AE87D; "); //colo en vert du bouton
+                log.setTxt("Mode auto activé, veuillez cliquer sur l'écran pour ajouter coin + mur");
+
+            }else{autoWallState = false; 
+                autoWall.setStyle("-fx-background-color: #CAC6C6; ");
+            log.setTxt("Vous avez quitté le mode auto");}
+
         });
 
        

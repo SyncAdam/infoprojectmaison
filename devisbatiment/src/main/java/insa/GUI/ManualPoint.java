@@ -23,7 +23,7 @@ public class ManualPoint{
     public void Initialise(){
 
         Stage newPointStage = new Stage();
-        
+        newPointStage.setResizable(false);       
         TextField xCoord = new TextField("Coordonnée en X");
         TextField yCoord = new TextField("Coordonnée en Y");
         Button okButton = new Button("Ok ");

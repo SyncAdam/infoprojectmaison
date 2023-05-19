@@ -7,6 +7,7 @@ public class Coin implements Serializable{
     private int idCoin; //identificateur du coin
     private double cx;  //abscisse du coin
     private double cy;  //ordonnee du coin
+    public boolean onAWall = false;
     boolean superpositionState = false; //sert juste à ne pas changer la couleur du point immédiatement après sa création
 
     /**

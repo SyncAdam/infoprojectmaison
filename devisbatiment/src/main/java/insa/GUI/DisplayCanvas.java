@@ -79,7 +79,7 @@ public class DisplayCanvas extends Pane{
 
 
 
-        parentPane.buttonPorte.setOnAction(e->{ //quand bouton porte cliqué
+        /*parentPane.buttonPorte.setOnAction(e->{ //quand bouton porte cliqué
             if (iDOfSelectedWall.size() == 0){parentPane.log.setTxt("Veuillez selectionner au moins un mur avant de créer une porte");} //on vérif qu'il y a bien un mur selectionné
             else{ //si au moins un mur est selectionné :
 
@@ -92,12 +92,12 @@ public class DisplayCanvas extends Pane{
             }
 
 
-        });
+        });*/
 
 
         this.setOnMouseClicked(e -> { //détection du clic + récup coords
-            if (parentPane.ctrlIsPressed == false){
-                 //sert juste à ne pas crééer de nouveau éléments lorsqu'on veut juste selectionner un point/mur avec ctrl
+            if (parentPane.ctrlIsPressed == false && parentPane.modifyButtonState == false && parentPane.buttonPorteState == false){
+                 //sert juste à ne pas crééer de nouveau éléments lorsqu'on veut juste selectionner un point/mur avec ctrl ou si l'on veut le modifier
                 System.out.println(parentPane.pointAlreadyExist + " vrai");
                 if (parentPane.pointAlreadyExist == false){
                     
@@ -268,6 +268,7 @@ public class DisplayCanvas extends Pane{
             coordsOfHilightedPoint[1]= c.getY() ;
 
             System.out.println("L'id du point selectionné est" + this.parentPane.idOfCurrentSelectedPoint);
+            parentPane.log.setTxt("Vous êtes sur le point d'iD : " +  this.parentPane.idOfCurrentSelectedPoint);
             //this.parentPane.log.setTxt("po");
 
             
@@ -284,12 +285,13 @@ public class DisplayCanvas extends Pane{
         }); 
 
         circle1.setOnMouseClicked(e -> {
-            if (parentPane.modifyButtonState == true){
+            if (parentPane.modifyButtonState == true && c.onAWall == false){ //si quand on clique sur le coin, qu'il n'est pas dans un mur et que l'outil modifier est activé, on ouvre le mon menu
                 PointModifier pointModifier = new PointModifier(this.parentPane, c);
                 pointModifier.Initialise();
                 circle1.setRadius(0); // j'ai pas trouvé comment le faire s'auto-détruire, donc on réduit ça taille à 0 pour le faire disparaitre
                 
-            }
+            }//else if (parentPane.modifyButtonState == true && c.onAWall == false){parentPane.log.setTxt("Le point est sur un mur, vous ne pouvez plus le modifier");parentPane.log.setColor(Color.RED);} //ne se voit pas car on affiche dèja l'id du pt au survol
+            
             
             if (this.parentPane.wallButtonState == true){ //si on a cliqué sur le bouton pour créer un mur et que l'on clique sur un point qui existe déjà, on l'ajoute à selected point
                 circle1.setFill(Color.RED);
@@ -318,8 +320,8 @@ public class DisplayCanvas extends Pane{
     }
 
     public void DisplayMur(Mur m){
-        DisplayCoin(m.getDebut());
-        DisplayCoin(m.getFin());
+        //DisplayCoin(m.getDebut());
+        //DisplayCoin(m.getFin());
 
         Line ligne = new Line();
       
@@ -330,7 +332,7 @@ public class DisplayCanvas extends Pane{
         ligne.setStrokeWidth(4);
         this.getChildren().add(ligne);
      
-        ligne.setOnMouseEntered(e -> { //on détecte quand la souris passe la ligne (POUR PLUS TARD : EFFET MAGNET ?)
+        /*ligne.setOnMouseEntered(e -> { //on détecte quand la souris passe la ligne (POUR PLUS TARD : EFFET MAGNET ?)
             
             if (m.superpositionState == false){
                 m.superpositionState = true;
@@ -362,15 +364,24 @@ public class DisplayCanvas extends Pane{
                 });    
         
             }
-        }); 
+        }); */
 
-        System.out.println("Point affiché");
+        
 
         ligne.setOnMouseExited(e -> {  //si la souris n'est plus sur la ligne et que ctrl n'est pas selectionné, on remet le trait en noir
             if (m.isSelected == false){
                 setColor(ligne, Color.BLACK);
             } //si on quitte le point de la souris et qu'il n'est pas selectionné, on le met en noir
         }); //on remet la couleur en noir
+
+        ligne.setOnMouseClicked(e->{
+
+            if(parentPane.buttonPorteState == true){ //si on clique sur un mur et qu'on est en mode porte :
+            System.out.println("portte crée");
+                doorTabList.add(new Porte(doorTabList.size(), m)); 
+                DisplayPorte(doorTabList.get(doorTabList.size()-1));
+            }
+        });
     }
 
 

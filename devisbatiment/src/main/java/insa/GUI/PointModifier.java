@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 public class PointModifier {
     MainPane parentPane;
     Coin coin;
+    //boolean deleteButtonState = false;
 
     PointModifier(MainPane parentPane, Coin coin)
     {
@@ -46,8 +47,10 @@ public class PointModifier {
         
        
 
-        Scene scenePoint = new Scene(disposition, 150,100, Color.GREEN ); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
-        
+        Scene scenePoint = new Scene(disposition, 200,100, Color.GREEN ); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
+        newPointStage.setResizable(false);
+        //newPointStage.setTitle("Modificateur de point");
+        newPointStage.setOnCloseRequest(null);
         newPointStage.setScene(scenePoint);
         newPointStage.show();
 
@@ -68,10 +71,16 @@ public class PointModifier {
 
         });
 
+        DelButton.setOnAction(e-> {
+            parentPane.canva.coinTab.set(coin.getId(), new Coin(coin.getId(), 0, 0)); //on remplace le point supprimé par un point "nul", on ne le supprime pas de coinTab car sinon ça décallerait tout les id par rapport à la position dans le tableau et ça serait le barda
+            newPointStage.close();
+        });
 
-        /*DelButton.setOnAction(e->{
-            
-        });*/
+
+        newPointStage.setOnCloseRequest(e -> { //permet juste de désactiver la fermeture de la fen^tre pour éviter tout bug
+            e.consume(); // Annule l'événement de fermeture
+           
+        });
 
     }
     
