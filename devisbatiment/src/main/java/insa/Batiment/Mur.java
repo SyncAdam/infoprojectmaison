@@ -35,6 +35,8 @@ public class Mur extends Surface{
         this.nmbrPortes = 0;
         this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
+        c1.onAWall = true; //permet d'empécher la modification par la suite.
+        c2.onAWall = true;
     }
 
     /**
