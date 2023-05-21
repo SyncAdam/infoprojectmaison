@@ -1,9 +1,12 @@
+package insa.GUI;
+
 import java.util.ArrayList;
 
 import java.io.FileOutputStream;
 import java.util.Date;
 
-import com.itextpdf.text.BaseColor;
+/*
+import com.itextpdf.kernel.*;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -14,9 +17,9 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.parser.Path;
-
-
+*/
 public class devis {
+    /*
     double total = 0;
     ArrayList<String> revs = new ArrayList<String>();
     String Path = "Devis";
@@ -141,5 +144,5 @@ public class devis {
             paragraph.add(new Paragraph(" "));
         }
     }
-    
+    */
 }

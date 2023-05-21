@@ -66,7 +66,7 @@ public class Piece implements Serializable{
         
     }
 
-    public Piece(int idPiece, ArrayList<Coin> coins)
+    public Piece(int idPiece, ArrayList<Object> objects)
     {
         this.idPiece = idPiece;
         this.murs = new ArrayList<Mur>();
@@ -74,17 +74,28 @@ public class Piece implements Serializable{
         this.pieceValide = false;
         this.Sfonction = "";
 
-        for(int i = 0; i < coins.size(); i++)
+        if(objects.get(0) instanceof Coin)
         {
-            if(i != coins.size()-1)
+            for(int i = 0; i < objects.size(); i++)
             {
-                Mur m = new Mur(i, coins.get(i), coins.get(i+1));
-                murs.add(m);
+                if(i != objects.size()-1)
+                {
+                    Mur m = new Mur(i, (Coin)objects.get(i), (Coin)objects.get(i+1));
+                    murs.add(m);
+                }
+                else
+                {
+                    Mur m = new Mur(i, (Coin)objects.get(i), (Coin)objects.get(0));
+                    murs.add(m);
+                }
             }
-            else
+        }
+
+        else if(objects.get(0) instanceof Mur)
+        {
+            for(int i = 0; i < objects.size(); i++)
             {
-                Mur m = new Mur(i, coins.get(i), coins.get(0));
-                murs.add(m);
+                murs.add((Mur)objects.get(i));
             }
         }
 
@@ -93,9 +104,6 @@ public class Piece implements Serializable{
 
         this.soletplafond.add((Surface)sol);
         this.soletplafond.add((Surface)plafond);
-    }
-    public Piece(int idPiece, ArrayList<Mur> murs, double test){ //je suis obligé de rajouter un argument qui ne sert à rien sinon ça croit que le construteur est le même que celui avec les arraylists de coins
-        System.out.println("Pièces créée via contructeur liste de mur");
     }
 
 
@@ -199,24 +207,14 @@ public class Piece implements Serializable{
     public double calculrevetement(double h)
     {
         double res = 0;
-        for(Mur mur : murs)
+        for(int i = 0; i < murs.size(); i++)
         {
-            //res += mur.surface(h) * mur.revetement.prixUnitaire;
+            res += murs.get(i).calculRevetement(h);
         }
-        for(Surface s : soletplafond)
+        for(int i = 0; i < soletplafond.size(); i++)
         {
-            if(s instanceof Sol)
-            {
-                Sol sol = (Sol) s;
-                //res += sol.surface(h) * sol.revetement.prixUnitaire;
-            }
-            else if(s instanceof Plafond)
-            {
-                Plafond plaf = (Plafond) s;
-                //res += plaf.surface(h) * plaf.revetement.prixUnitaire;
-            }
+            res += soletplafond.get(i).calculRevetement(h);
         }
-
         return res;
     }
 

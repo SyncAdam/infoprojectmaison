@@ -15,18 +15,16 @@ public class Immeuble extends Batiment implements Serializable{
 
     public int idImmeuble;
     public ArrayList<Niveau> niveau;
+    public ArrayList<Integer> AllNivIDS;
     
-    Immeuble(int idImmeuble, int nbrNiveau){
+    public Immeuble(int idImmeuble){
 
         this.idImmeuble = idImmeuble;
-        niveau = new ArrayList<Niveau>();
-
-        for(int i = 0; i < nbrNiveau; i++)
+        this.niveau = new ArrayList<Niveau>();
+        this.AllNivIDS = new ArrayList<Integer>();
+        for(int i = 0; i < this.niveau.size(); i++)
         {
-            System.out.println("Donnez le nombre d'appartement pour le niveau " + i);
-            int nm = Lire.i();
-            Niveau myniv = new Niveau(i, nm);
-            niveau.add(myniv);
+            this.AllNivIDS.add(this.niveau.get(i).getIdNiveau());
         }
   
     }
@@ -37,8 +35,14 @@ public class Immeuble extends Batiment implements Serializable{
         this.niveau = nivs;
     }
 
-    public void afficher (){
-
+    public ArrayList<Integer> getAllNivIDS()
+    {
+        ArrayList<Integer> in = new ArrayList<>();
+        for(int i = 0; i < this.niveau.size(); i++)
+        {
+            in.add(this.niveau.get(i).getIdNiveau());
+        }
+        return in;
     }
 
     public static void saveImmeuble(ArrayList<Immeuble> is, String nomFichier) throws IOException, ClassNotFoundException
@@ -80,7 +84,6 @@ public class Immeuble extends Batiment implements Serializable{
 
         while(line != null)
         {
-            
 
             String[] mys = line.split(";", 2);
             String[] reste;
@@ -95,7 +98,7 @@ public class Immeuble extends Batiment implements Serializable{
                     break;
 
                 case "Piece":
-                    ArrayList<Coin> coins = new ArrayList<>();
+                    ArrayList<Object> coins = new ArrayList<>();
 
                     String[] splitted = reste[1].split(",");
                     for(String mystring : splitted)
@@ -104,7 +107,7 @@ public class Immeuble extends Batiment implements Serializable{
                         {
                             if(input.get(i) instanceof Coin && ((Coin) input.get(i)).getId() == Integer.parseInt(mystring))  //ne devrait pas jeter une exception
                             {
-                                coins.add((Coin) input.get(i));
+                                coins.add(input.get(i));
                                 input.remove(i);
                                 break;
                             }
@@ -136,7 +139,7 @@ public class Immeuble extends Batiment implements Serializable{
                         }        
                     }
 
-                    Appartement myAppartement = new Appartement(Integer.parseInt(reste[0]), Integer.parseInt(reste[1]), pieces);
+                    Appartement myAppartement = new Appartement(Integer.parseInt(reste[0]), pieces);
                     input.add(myAppartement);
                     break;
 
@@ -148,7 +151,7 @@ public class Immeuble extends Batiment implements Serializable{
                     {
                         for(int i = 0; i < input.size() ; i++)
                         {
-                            if(input.get(i) instanceof Appartement && ((Appartement) input.get(i)).getAppartId() == Integer.parseInt(mystring))  //ne devrait pas jeter une exception
+                            if(input.get(i) instanceof Appartement && ((Appartement) input.get(i)).getIdAppartement() == Integer.parseInt(mystring))  //ne devrait pas jeter une exception
                             {
                                 apparts.add((Appartement) input.get(i));
                                 input.remove(i);
@@ -169,7 +172,7 @@ public class Immeuble extends Batiment implements Serializable{
                     {
                         for(int i = 0; i < input.size() ; i++)
                         {
-                            if(input.get(i) instanceof Niveau && ((Niveau) input.get(i)).getNivId() == Integer.parseInt(mystring))  //ne devrait pas jeter une exception
+                            if(input.get(i) instanceof Niveau && ((Niveau) input.get(i)).getIdNiveau() == Integer.parseInt(mystring))  //ne devrait pas jeter une exception
                             {
                                 niveaux.add((Niveau) input.get(i));
                                 input.remove(i);
@@ -179,6 +182,16 @@ public class Immeuble extends Batiment implements Serializable{
                     }                    
 
                     Immeuble imm = new Immeuble(Integer.parseInt(reste[0]), niveaux);
+                    for(Niveau niv : imm.niveau)
+                    {
+                        for(Appartement app : niv.appartements)
+                        {
+                            app.setParentImmeuble(imm);
+                            app.setParentNiveau(niv);
+                        }
+                        niv.changeParentImmeuble(imm);
+                    }
+
                     im.add(imm);
                     break;
 
@@ -198,6 +211,52 @@ public class Immeuble extends Batiment implements Serializable{
     public static void exportImmeubles(ArrayList<Immeuble> immeubles, String path) throws IOException, ClassNotFoundException
     {
         //a faire
+    }
+
+    public int getIdImmeuble()
+    {
+        return this.idImmeuble;
+    }
+
+    public void addNiveau(Niveau n)
+    {
+        this.niveau.add(n);
+    }
+
+    public void removeNiveau(Niveau n)
+    {
+        this.niveau.remove(n);
+    }
+
+    public Niveau getNiveau(int ind)
+    {
+        for(Niveau n : niveau)
+        {
+            if(n.getIdNiveau() == ind)
+            {
+                return n;
+            }
+        }
+        return null;
+    }
+
+    public static double calculRevetement(Immeuble immeuble)
+    {
+
+        double res = 0;
+
+        for(int i = 0; i < immeuble.niveau.size(); i++)
+        {
+            for(int j = 0; j < immeuble.niveau.get(i).appartements.size(); j++)
+            {
+                for(int k = 0; k < immeuble.niveau.get(i).appartements.get(j).pieces.size(); k++)
+                {
+                    res += immeuble.niveau.get(i).appartements.get(j).pieces.get(k).calculrevetement(immeuble.niveau.get(i).getHeight());
+                }
+            }
+        }
+        
+        return res;
     }
 
 }

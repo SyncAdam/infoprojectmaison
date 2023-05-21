@@ -2,8 +2,6 @@ package insa.Batiment;
 
 
 import insa.GUI.App;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class Porte extends App {

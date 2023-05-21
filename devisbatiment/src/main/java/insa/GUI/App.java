@@ -19,6 +19,9 @@ import java.io.IOException;
  */
 
 
+//Il reste a faire la surface des pieces, fixer le dessin, et le calcul de devis, quelquepart autre que dans le console
+
+
 public class App extends Application {
     
     

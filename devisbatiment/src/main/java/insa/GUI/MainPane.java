@@ -4,7 +4,6 @@ import insa.GUI.ImmeubleHierarchy.ImmeubleHierarchy;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
@@ -44,10 +43,14 @@ public class MainPane extends BorderPane{
 
     //Group canva;
     BorderPane viewerLayout = new BorderPane();
-    protected CustomLog log; //on créer le custom log
+    public CustomLog log; //on créer le custom log
     public DisplayCanvas canva;
+
+    public boolean projectOpened;
     
     public String cataloguePath, projectPath;
+    
+    public final Color backgroundColor;
 
     //protected Scene scene1 = new Scene(root, Color.GREY); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
     
@@ -58,7 +61,6 @@ public class MainPane extends BorderPane{
         this.pointAlreadyExist = false;
         this.idOfCurrentSelectedPoint = 999;
         this.menuBar = new Menus(this);
-        
 
         this.autoWallState = false;
         this.wallButtonState = false;
@@ -66,6 +68,8 @@ public class MainPane extends BorderPane{
         this.modifyButtonState = false;
         this.buttonPorteState  = false;
         this.toolBar = new ToolBar();
+        
+        this.backgroundColor = Color.WHITESMOKE;
 
         this.hierarchy = new ImmeubleHierarchy(this);
 
@@ -176,10 +180,9 @@ public class MainPane extends BorderPane{
                 modifyButtonState = false;log.setTxt("Vous venez de quitter l'outils de modification");
                 modifyButton.setStyle("-fx-background-color: #CAC6C6; "); //colo en gris défaut
             }
+
             
         });
-
-
 
         buttonPorte.setOnAction(e->{
             if(buttonPorteState == false){

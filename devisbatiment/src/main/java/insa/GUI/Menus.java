@@ -64,10 +64,8 @@ public class Menus extends MenuBar{
 
         this.getMenus().add(fichier);        //on ajoute les menus principaux à la barre de menu
         this.getMenus().add(edition);
-        //this.getMenus().add(view);
 
         fichier.getItems().addAll(nouveau, sauver, charger, importer, exporter);
-        //view.getItems().addAll(editeur, viewer);
 
         nouveau.getItems().addAll(NProjet, NPoint, NNiveau);
 
@@ -114,14 +112,15 @@ public class Menus extends MenuBar{
 
                     for(int i = 0; i < parentPane.hierarchy.loadedImmeubles.size(); i++)
                     {
-                        parentPane.hierarchy.loadedImmeubles.remove(i);
+                        parentPane.hierarchy.loadedImmeubles.remove(i);     //out with the old
                     }
     
                     for(Immeuble i : ims)
                     {
-
-                        parentPane.hierarchy.loadedImmeubles.add(i);
+                        parentPane.hierarchy.loadedImmeubles.add(i);        //in with the new
                     }
+                    this.parentPane.projectOpened = true;
+                    this.parentPane.hierarchy.hierarchyRefresh();
                 }
                 catch(IOException | ClassNotFoundException err)
                 {
@@ -132,9 +131,7 @@ public class Menus extends MenuBar{
             else
             {
                 System.out.println("Aborting project selection");
-            }
-
-            this.parentPane.hierarchy.hierarchyRefresh();
+            }            
 
         });
 
@@ -195,7 +192,10 @@ public class Menus extends MenuBar{
             }
         });
 
-
+        NProjet.setOnAction(event -> {
+            this.parentPane.hierarchy.hierarchyRefresh();
+            this.parentPane.projectOpened = true;
+        });
 
     }
 

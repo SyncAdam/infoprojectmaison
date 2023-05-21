@@ -41,11 +41,7 @@ public class PointModifier {
         disposition.getChildren().add(label);
         disposition.getChildren().add(xCoord);
         disposition.getChildren().add(yCoord);
-        disposition.getChildren().add(buttonBar);
-        
-
-        
-       
+        disposition.getChildren().add(buttonBar);      
 
         Scene scenePoint = new Scene(disposition, 200,100, Color.GREEN ); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
         newPointStage.setResizable(false);
@@ -64,8 +60,6 @@ public class PointModifier {
             coin.setY(cy);
             
             parentPane.canva.DisplayCoin(coin);
-
-
 
             newPointStage.close();
 

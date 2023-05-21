@@ -10,23 +10,21 @@ import javafx.stage.Stage;
 
 public class ManualPoint{
 
-
     MainPane parentPane;
-    Coin coin;
 
     ManualPoint(MainPane parentPane)
     {
         this.parentPane = parentPane;
-        coin = new Coin(1, 70, 100);
     }
 
     public void Initialise(){
 
         Stage newPointStage = new Stage();
-        newPointStage.setResizable(false);       
+        
         TextField xCoord = new TextField("Coordonnée en X");
         TextField yCoord = new TextField("Coordonnée en Y");
         Button okButton = new Button("Ok ");
+        newPointStage.setResizable(false);
         
         VBox disposition = new VBox(); //on créer un groupe root
        

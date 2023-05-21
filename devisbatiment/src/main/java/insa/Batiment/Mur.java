@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import insa.Batiment.Revetements.Revetement;
 import insa.Batiment.Revetements.RevetementException;
+import javafx.scene.shape.Line;
 
 public class Mur extends Surface{
     
@@ -11,9 +12,8 @@ public class Mur extends Surface{
     private Coin debut;     //Point de départ du mur
     private Coin fin;     //Point de fin du mur
     private int idMur;
-    private int nmbrPortes;     //NON!!!!!!!!!
-    private int nmbrFenetres;   //NON!!!!!!!!!
     public boolean superpositionState;
+    public Line ligne;
     
     public boolean isSelected = false;
 
@@ -31,12 +31,16 @@ public class Mur extends Surface{
         this.debut = c1;
         this.fin = c2;
         this.idMur = id;
-        this.nmbrFenetres = 0;
-        this.nmbrPortes = 0;
         this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
-        c1.onAWall = true; //permet d'empécher la modification par la suite.
-        c2.onAWall = true;
+
+        this.ligne = new Line();
+      
+        ligne.setStartX(this.getDebut().getX());
+        ligne.setStartY(this.getDebut().getY());
+        ligne.setEndX(this.getFin().getX());
+        ligne.setEndY(this.getFin().getY());
+        ligne.setStrokeWidth(4);
     }
 
     /**
@@ -52,10 +56,16 @@ public class Mur extends Surface{
         Coin fin = new Coin(id+1);
         this.fin = fin;
         this.idMur = id;
-        this.nmbrFenetres = 0;
-        this.nmbrPortes = 0;
         this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
+
+        this.ligne = new Line();
+      
+        ligne.setStartX(this.getDebut().getX());
+        ligne.setStartY(this.getDebut().getY());
+        ligne.setEndX(this.getFin().getX());
+        ligne.setEndY(this.getFin().getY());
+        ligne.setStrokeWidth(4);
 
     }
 
@@ -73,10 +83,16 @@ public class Mur extends Surface{
         this.debut = debut;
         this.fin = fin;
         this.idMur = id;
-        this.nmbrFenetres = 0;
-        this.nmbrPortes = 0;
         this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
+
+        this.ligne = new Line();
+      
+        ligne.setStartX(this.getDebut().getX());
+        ligne.setStartY(this.getDebut().getY());
+        ligne.setEndX(this.getFin().getX());
+        ligne.setEndY(this.getFin().getY());
+        ligne.setStrokeWidth(4);
 
     }
     
@@ -121,26 +137,6 @@ public class Mur extends Surface{
     public double ordonneeintercept()
     {
         return this.getDebut().getY() - this.pente() * this.getDebut().getX();
-    }
-
-    /**
-     * <p>Methode pour ajouter des fenetres </p>
-     * @param n <code>int</code> nombre de fenetre a ajouter au mur
-     */
-
-    public void addFenetres(int n)          //NOOOON!!!!!!!!
-    {
-        this.nmbrFenetres += n;
-    }
-
-    /**
-     * <p>Methode pour ajouter des portes au mur </p>
-     * @param n <code>int</code> nombre de fenetre a ajouter au mur
-     */
-
-    public void addPortes(int n)            //NOOOON!!!!!!!!
-    {
-        this.nmbrPortes += n;
     }
 
     @Override
@@ -195,16 +191,6 @@ public class Mur extends Surface{
         return this.fin;
     }
 
-    public int getNFenetres()           //NOOOOOOOOOOOOOON!!!!!!!!!!
-    {
-        return this.nmbrFenetres;
-    }
-
-    public int getNPortes()             //NOOOOOOOOOOOOOON!!!!!!!!!!
-    {
-        return this.nmbrPortes;
-    }
-
     /**
      * <p>Methode qui permet de changer le coin de depart d'un mur</p>
      * <i>Attention! Quand les coins d'un mur sont changes, la piece n'est plus integre! </i>
@@ -239,76 +225,4 @@ public class Mur extends Surface{
     public void setSelectedState(boolean state){
         isSelected = state;
     }
-
-    /*
-
-    public void DisplayMur(BorderPane canva){
-        debut.DisplayPoint(root);
-        fin.DisplayPoint(root);
-      
-        ligne.setStartX(debut.getX());
-        ligne.setStartY(debut.getY());
-        ligne.setEndX(fin.getX());
-        ligne.setEndY(fin.getY());
-        ligne.setStrokeWidth(4);
-        canva.getChildren().add(ligne);
-
-
-
-     
-        ligne.setOnMouseEntered(e -> { //on détecte quand la souris passe la ligne (POUR PLUS TARD : EFFET MAGNET ?)
-            
-            if (superpositionState == false){superpositionState = true;}else{System.out.println("superposition ligne"); //permet de ne pas la selectionner dès sa création
-            if(ctrlIsPressed ==true && isSelected == false){setColor(Color.RED);} //si on est en mode selection (ctrl pressé) et que le mur n'est pas selectionné, on colore en rouge au survol
-            
-            ligne.setOnMouseClicked(event -> { //si la souris est sur la ligne et clique :
-                if(ctrlIsPressed ==true){ //clique + ctrl :
-                    if(isSelected == false){
-                    setColor(Color.GREENYELLOW);
-                    iDOfSelectedWall.add(this.idMur);
-                    isSelected = true;}
-                    log.setTxt("mur(s) selectionné(s)");
-                    /*else{
-                        setColor(Color.BLACK);
-                        iDOfSelectedWall.remove(this.idMur);
-                        isSelected = false;
-                        
-                    }
-                } 
-
-
-                
-            });
-           
-
-
-            
-        
-        
-        }
-        }); 
-        System.out.println("Point affiché");
-        ligne.setOnMouseExited(e -> {  //si la souris n'est plus sur la ligne et que ctrl n'est pas selectionné, on remet le trait en noir
-            if (isSelected == false){setColor(Color.BLACK);} //si on quitte le point de la souris et qu'il n'est pas selectionné, on le met en noir
-    
-    
-    
-        }); //on remet la couleur en noir
-
-            
-            
-
-
-    }
-
-
-    public void setColor(Color couleur){
-        ligne.setStroke(couleur);
-
-
-    }
-
-    */
-
-    //public void setSelectedState(boolean state){isSelected = state;}
 }
