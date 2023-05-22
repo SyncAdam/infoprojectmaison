@@ -1,5 +1,6 @@
 package insa.GUI;
 
+import insa.Batiment.Surface;
 import insa.GUI.ImmeubleHierarchy.ImmeubleHierarchy;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -115,6 +116,15 @@ public class MainPane extends BorderPane{
         this.setLeft(hierarchy);
 
         log.Initialise(); //on ini le log
+
+        this.unselectButton.setOnAction(event -> {
+            int limit = this.canva.selectedSurfaces.size();
+
+            for(int i = 0; i < limit; i++)
+            {
+                this.canva.deselectSurface(i);
+            }
+        });
 
         this.setOnKeyPressed(e -> { //gestion de la detection des touches
             if(e.getCode()== KeyCode.CONTROL){ //si CTRL est pressé

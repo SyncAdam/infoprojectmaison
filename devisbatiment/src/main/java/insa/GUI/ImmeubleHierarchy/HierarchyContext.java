@@ -113,8 +113,8 @@ public class HierarchyContext extends ContextMenu{
         mi3.setOnAction(event -> {
 
             Stage appartStage = new Stage();
-            appartStage.setTitle("Creer un Niveau");
-            TextField appartID = new TextField("Identificateur de niveau");
+            appartStage.setTitle("Creer un Appartement");
+            TextField appartID = new TextField("Identificateur de Appartement");
             
             
             Button okButton = new Button("Ok");

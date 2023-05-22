@@ -28,12 +28,15 @@ public class ClickEventHandler implements EventHandler<MouseEvent>{
             {
                 this.fatherTree.parentPane.canva.HilightRoom(this.fatherTree.parentPane.canva.selectedPiece, this.fatherTree.parentPane.backgroundColor);
             }
-            this.fatherTree.parentPane.canva.HilightRoom((Piece) this.targetObject, Color.web("#eff704", 0.3));
+            this.fatherTree.parentPane.canva.clearCanva();
             this.fatherTree.parentPane.canva.selectedPiece = (Piece) this.targetObject;
+            this.fatherTree.parentPane.canva.DisplayObject(this.targetObject);
+            this.fatherTree.parentPane.canva.HilightRoom((Piece) this.targetObject, Color.web("#eff704", 0.3));
         }
         else if(this.targetObject instanceof Surface)
         {
-            for(int i = 0; i < this.fatherTree.parentPane.canva.selectedSurfaces.size(); i++)
+            int limit = this.fatherTree.parentPane.canva.selectedSurfaces.size();
+            for(int i = 0; i < limit; i++)
             {
                 this.fatherTree.parentPane.canva.deselectSurface(this.fatherTree.parentPane.canva.selectedSurfaces.get(i));
             }

@@ -246,6 +246,11 @@ public class DisplayCanvas extends Pane{
         });
     }
 
+    public void clearCanva()
+    {
+        this.getChildren().clear();
+    }
+
     /*
     public void concatenateTransform(Transform trans) {
         Transform oldTrans = this.drawingCanvas.getGraphicsContext2D().getTransform();
@@ -416,6 +421,17 @@ public class DisplayCanvas extends Pane{
             Mur M = (Mur) m;
             setColor(M.ligne, Color.BLACK);
             selectedSurfaces.remove(m);
+            M.isSelected = false;
+        }
+    }
+
+    public void deselectSurface(int ind)
+    {
+        if(this.selectedSurfaces.get(ind) instanceof Mur)
+        {
+            Mur M = (Mur) this.selectedSurfaces.get(ind);
+            setColor(M.ligne, Color.BLACK);
+            selectedSurfaces.remove(this.selectedSurfaces.get(ind));
             M.isSelected = false;
         }
     }

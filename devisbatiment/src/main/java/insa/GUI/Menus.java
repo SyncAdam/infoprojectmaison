@@ -48,7 +48,7 @@ public class Menus extends MenuBar{
 
         this.nouveau = new Menu("Nouveau"); //Sous Menus
         this.importer = new Menu("Importer");
-        this.sauver = new Menu("Sauvguarder");
+        this.sauver = new Menu("Sauvgarder");
         this.charger = new Menu("Charger");
         this.exporter = new Menu("Exporter");
 
@@ -121,6 +121,7 @@ public class Menus extends MenuBar{
                     }
                     this.parentPane.projectOpened = true;
                     this.parentPane.hierarchy.hierarchyRefresh();
+                    this.parentPane.canva.clearCanva();
                 }
                 catch(IOException | ClassNotFoundException err)
                 {
@@ -183,6 +184,7 @@ public class Menus extends MenuBar{
                         }
                         this.parentPane.hierarchy.loadedImmeubles = Immeuble.loadImmeuble(selectedFile.getPath());
                         this.parentPane.hierarchy.hierarchyRefresh();
+                        this.parentPane.canva.clearCanva();
                     }
                     catch(IOException | ClassNotFoundException err)
                     {
