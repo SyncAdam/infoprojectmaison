@@ -16,6 +16,8 @@ public class Immeuble extends Batiment implements Serializable{
     public int idImmeuble;
     public ArrayList<Niveau> niveau;
     public ArrayList<Integer> AllNivIDS;
+    public int maxX;
+    public int maxY;
     
     public Immeuble(int idImmeuble){
 
