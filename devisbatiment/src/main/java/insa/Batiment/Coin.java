@@ -8,7 +8,8 @@ public class Coin implements Serializable{
     private double cx;  //abscisse du coin
     private double cy;  //ordonnee du coin
     boolean superpositionState = false; //sert juste à ne pas changer la couleur du point immédiatement après sa création
-
+    public boolean onAWall = false;
+    
     /**
      * <p>Cette constructeur cree un coin en demandant a l'utilisateur de saisir les coordonnees</p>
      * <p>Attention! Dependence du class Lire!</p>

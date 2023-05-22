@@ -4,8 +4,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.Transform;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 
@@ -18,8 +16,6 @@ import insa.Batiment.Niveau;
 import insa.Batiment.Piece;
 import insa.Batiment.Porte;
 import insa.Batiment.Surface;
-
-import javafx.scene.canvas.Canvas;
 
 public class DisplayCanvas extends Pane{
  
@@ -111,7 +107,7 @@ public class DisplayCanvas extends Pane{
 
 
         this.setOnMouseClicked(e -> { //détection du clic + récup coords
-            if (parentPane.ctrlIsPressed == false && this.parentPane.projectOpened == true){
+            if (parentPane.ctrlIsPressed == false && this.parentPane.projectOpened == true && this.parentPane.modifyButtonState == false){
                  //sert juste à ne pas crééer de nouveau éléments lorsqu'on veut juste selectionner un point/mur avec ctrl
                 System.out.println(parentPane.pointAlreadyExist + " vrai");
                 if (parentPane.pointAlreadyExist == false){
@@ -289,6 +285,7 @@ public class DisplayCanvas extends Pane{
             coordsOfHilightedPoint[1]= c.getY() ;
 
             System.out.println("L'id du point selectionné est" + this.parentPane.idOfCurrentSelectedPoint);
+            parentPane.log.setTxt("ID : " + this.parentPane.idOfCurrentSelectedPoint);
             
         }); 
 
@@ -301,18 +298,30 @@ public class DisplayCanvas extends Pane{
         }); 
 
         circle1.setOnMouseClicked(e -> {
-            if (parentPane.modifyButtonState == true){
+            if (parentPane.modifyButtonState == true && c.onAWall == false && parentPane.HIsPressed == false && parentPane.VIsPressed == false ){
+                circle1.setRadius(0); // j'ai pas trouvé comment le faire s'auto-détruire, donc on réduit ça taille à 0 pour le faire disparaitre
                 PointModifier pointModifier = new PointModifier(this.parentPane, c);
                 pointModifier.Initialise();
-                circle1.setRadius(0); // j'ai pas trouvé comment le faire s'auto-détruire, donc on réduit ça taille à 0 pour le faire disparaitre
                 
+                
+            } 
+            if(c.onAWall == true)
+            {
+                this.parentPane.log.setTxt("Vous ne pouvez pas modifier un coin qui est deja sur un murs");
+                this.parentPane.log.setColor(Color.RED);
+            }
+
+            if(parentPane.HIsPressed == true  || parentPane.VIsPressed == true)
+            {
+                this.parentPane.log.setTxt("Veuillez désactiver le mode horizontal ou vertical pour modifier un coin");
+                this.parentPane.log.setColor(Color.RED);
             }
             
             if (this.parentPane.wallButtonState == true){ //si on a cliqué sur le bouton pour créer un mur et que l'on clique sur un point qui existe déjà, on l'ajoute à selected point
                 circle1.setFill(Color.RED);
                 this.selectedPoint.add(c);
                 if (selectedPoint.size() == 1){parentPane.log.setTxt("Veuillez cliquer sur un deuxième point");}
-                if (selectedPoint.size() == 2){ //si on a déjà un point qui a été cliqué alors :
+                if (selectedPoint.size() >= 2){ //si on a déjà un point qui a été cliqué alors :
                     wallTab.add(new Mur(wallTab.size(), selectedPoint.get(0), selectedPoint.get(1))); //on créér un nouveau mur avec les 2 pts selectionés
                     DisplayMur(wallTab.get(wallTab.size()-1)); //on affiche le mur nouvellement créé
                     selectedPoint.clear(); //on vide les murs de selected point
@@ -321,10 +330,10 @@ public class DisplayCanvas extends Pane{
                 }
             }
 
-            if(parentPane.HIsPressed == true){ //si on clique sur un point qui existe déjà avec le mode horizontale activé on va récupérer le y du pt d'avant et le x du point cliqué puis  crééer un new point
+            if(parentPane.HIsPressed == true && parentPane.modifyButtonState == false){ //si on clique sur un point qui existe déjà avec le mode horizontale activé on va récupérer le y du pt d'avant et le x du point cliqué puis  crééer un new point
                 this.coinTab.add(new Coin(this.coinTab.size(), coordsOfHilightedPoint[0], coinTab.get(coinTab.size()-1).getY())); //on créér le new point dans le tableau
                 DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
-            } else if(parentPane.VIsPressed == true){//si on clique sur un point qui existe déjà avec le mode vertical activé on va récupérer le x du pt d'avant et le y du point cliqué puis  crééer un new point
+            } else if(parentPane.VIsPressed == true  && parentPane.modifyButtonState == false){//si on clique sur un point qui existe déjà avec le mode vertical activé on va récupérer le x du pt d'avant et le y du point cliqué puis  crééer un new point
                 this.coinTab.add(new Coin(this.coinTab.size(), coinTab.get(coinTab.size()-1).getX(),coordsOfHilightedPoint[1])); //on créér le new point dans le tableau
                 DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
             }

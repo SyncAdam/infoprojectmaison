@@ -33,6 +33,9 @@ public class Mur extends Surface{
         this.idMur = id;
         this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
+        
+        c1.onAWall = true; //permet d'empécher la modification par la suite.
+        c2.onAWall = true;
 
         this.ligne = new Line();
       
@@ -60,6 +63,9 @@ public class Mur extends Surface{
         this.superpositionState = false;
 
         this.ligne = new Line();
+
+        this.debut.onAWall = true; //permet d'empécher la modification par la suite.
+        this.fin.onAWall = true;
       
         ligne.setStartX(this.getDebut().getX());
         ligne.setStartY(this.getDebut().getY());
@@ -86,7 +92,13 @@ public class Mur extends Surface{
         this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
 
+        this.debut.onAWall = true; //permet d'empécher la modification par la suite.
+        this.fin.onAWall = true;
+
         this.ligne = new Line();
+
+        debut.onAWall = true; //permet d'empécher la modification par la suite.
+        fin.onAWall = true; 
       
         ligne.setStartX(this.getDebut().getX());
         ligne.setStartY(this.getDebut().getY());
