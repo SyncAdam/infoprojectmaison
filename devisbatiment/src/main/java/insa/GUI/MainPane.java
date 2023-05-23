@@ -126,7 +126,7 @@ public class MainPane extends BorderPane{
             }
         });
 
-        this.setOnKeyPressed(e -> { //gestion de la detection des touches
+        this.setOnKeyPressed(e -> { //gestion de la det[ection des touches
             if(e.getCode()== KeyCode.CONTROL){ //si CTRL est pressé
                 System.out.println("CTRL pressé");
                 ctrlIsPressed = true; //si ctrl est appuyé, on met la variable correspondante à true.
@@ -183,7 +183,7 @@ public class MainPane extends BorderPane{
         modifyButton.setOnAction(e->{
             if(modifyButtonState == false){
                 
-                log.setTxt("[Mode modification] - Cliquer sur un point pour le modifier");
+                log.setTxt("[Mode modification] - Cliquer sur un point ou un mur pour le modifier");
                 modifyButton.setStyle("-fx-background-color: #4AE87D; "); //colo en vert du bouton
                 modifyButtonState = true;
             }else{

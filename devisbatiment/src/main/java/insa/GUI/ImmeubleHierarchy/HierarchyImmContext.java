@@ -17,7 +17,7 @@ public class HierarchyImmContext extends ContextMenu{
         this.fatherTree = fatherTree;
         this.targetObject = targetObject;
         
-        MenuItem mi2 = new MenuItem("Revetements");
+        MenuItem mi2 = new MenuItem("Revêtements");
 
         this.getItems().addAll(mi2);
 

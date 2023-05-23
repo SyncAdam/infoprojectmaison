@@ -21,15 +21,15 @@ public class HierarchyNivContext extends HierarchyItemContext{
     {
         super(parentObject, targetObject, fatherTree);
 
-        MenuItem mi3 = new MenuItem("Change Immeuble");
-        MenuItem mi4 = new MenuItem("Supprime Niveau");
+        MenuItem mi3 = new MenuItem("Changer d'immeuble");
+        MenuItem mi4 = new MenuItem("Supprimer le niveau");
 
         this.getItems().addAll(mi3, mi4);
 
         mi3.setOnAction(event -> {
 
             Stage niveauStage = new Stage();
-            niveauStage.setTitle("Changer Immeuble");
+            niveauStage.setTitle("Changer d'immeuble");
             
             Button okButton = new Button("Ok");
             VBox disposition = new VBox(); //on créer un groupe root
@@ -85,7 +85,7 @@ public class HierarchyNivContext extends HierarchyItemContext{
                 catch(RuntimeException e)
                 {
                     e.printStackTrace();
-                    this.fatherTree.parentPane.log.setTxt("ID deja existe");
+                    this.fatherTree.parentPane.log.setTxt("L'ID existe déjà ! ");
                 }
                 
                 niveauStage.close();
