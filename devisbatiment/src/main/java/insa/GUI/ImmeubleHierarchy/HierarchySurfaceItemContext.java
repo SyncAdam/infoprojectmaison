@@ -31,8 +31,8 @@ public class HierarchySurfaceItemContext extends ContextMenu {
         this.fatherTree = fatherTree;
         this.targetObject = targetObject;
 
-        MenuItem mi1 = new MenuItem("Ajouter un revetement");
-        MenuItem mi2 = new MenuItem("Revetements");
+        MenuItem mi1 = new MenuItem("Ajouter un revêtement");
+        MenuItem mi2 = new MenuItem("Revêtements");
 
         this.getItems().addAll(mi1, mi2);
 
@@ -52,7 +52,7 @@ public class HierarchySurfaceItemContext extends ContextMenu {
 
         // Create the selection scene
         Button selectButton = new Button("Add");
-        Label title = new Label("Catalogue des revetements");
+        Label title = new Label("Catalogue des revêtements");
 
         TableView<Revetement> catalog = new TableView<>(null);
 
@@ -99,8 +99,8 @@ public class HierarchySurfaceItemContext extends ContextMenu {
                 err.printStackTrace();
                 Alert albert = new Alert(Alert.AlertType.WARNING);
                 albert.setTitle("Revetement Error");
-                albert.setHeaderText("Revetement n'est pas ajoutee");
-                albert.setContentText("La revetement n'est pas appliquable a cette surface");
+                albert.setHeaderText("Le revêtement n'a pas été ajouté !");
+                albert.setContentText("La revêtement n'est pas appliquable a cette surface !");
                 albert.showAndWait();
             }
         });
@@ -109,7 +109,7 @@ public class HierarchySurfaceItemContext extends ContextMenu {
         selectionLayout.setPadding(new Insets(10));
         Scene selectionScene = new Scene(selectionLayout, 530, 300);
 
-        selectionStage.setTitle("Revetements");
+        selectionStage.setTitle("Revêtements");
         selectionStage.setScene(selectionScene);
 
         // Set the selection stage as a new window
@@ -123,7 +123,7 @@ public class HierarchySurfaceItemContext extends ContextMenu {
         // Create the selection scene
         Button closeButton = new Button("Fermer");
         Button delButton = new Button("Enlever");
-        Label title = new Label("Revetements pour cette surface");
+        Label title = new Label("Revêtements pour cette surface");
 
         TableView<Revetement> revetementstable = new TableView<>();
 
@@ -150,7 +150,7 @@ public class HierarchySurfaceItemContext extends ContextMenu {
         selectionLayout.setPadding(new Insets(10));
         Scene selectionScene = new Scene(selectionLayout);
 
-        selectionStage.setTitle("Revetements");
+        selectionStage.setTitle("Revêtements");
         selectionStage.setScene(selectionScene);
 
         // Set the selection stage as a new window
