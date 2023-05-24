@@ -20,9 +20,9 @@ public class HierarchyContext extends ContextMenu{
     {
         this.fatherTree = fatherTree;
 
-        MenuItem mi1 = new MenuItem("Creer Immeuble");
-        MenuItem mi2 = new MenuItem("Creer Niveau");
-        MenuItem mi3 = new MenuItem("Creer Appartement");
+        MenuItem mi1 = new MenuItem("Nouvel immeuble");
+        MenuItem mi2 = new MenuItem("Nouveau niveau");
+        MenuItem mi3 = new MenuItem("Nouvel Appartement");
 
         this.setAutoHide(true);
 
@@ -76,7 +76,7 @@ public class HierarchyContext extends ContextMenu{
         mi2.setOnAction(event -> {
 
             Stage niveauStage = new Stage();
-            niveauStage.setTitle("Creer un Niveau");
+            niveauStage.setTitle("Créer un Niveau");
             TextField niveauID = new TextField("Identificateur du Niveau");
             TextField niveauH = new TextField("Hauteur du niveau");
             
@@ -113,8 +113,8 @@ public class HierarchyContext extends ContextMenu{
         mi3.setOnAction(event -> {
 
             Stage appartStage = new Stage();
-            appartStage.setTitle("Creer un Appartement");
-            TextField appartID = new TextField("Identificateur de Appartement");
+            appartStage.setTitle("Créer un Appartement");
+            TextField appartID = new TextField("Identificateur de l'appartement");
             
             
             Button okButton = new Button("Ok");
@@ -136,7 +136,7 @@ public class HierarchyContext extends ContextMenu{
                 catch(RuntimeException e)
                 {
                     e.printStackTrace();
-                    this.fatherTree.parentPane.log.setTxt("Error en creation de l'appartement");
+                    this.fatherTree.parentPane.log.setTxt("Erreur lors de la création de l'appartement");
                 }
                 
                 appartStage.close();

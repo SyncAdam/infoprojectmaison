@@ -17,7 +17,7 @@ public class HierarchyItemContext extends ContextMenu{
         this.targetObject = targetObject;
 
         MenuItem mi1 = new MenuItem("Voir");
-        MenuItem mi2 = new MenuItem("Revetements");
+        MenuItem mi2 = new MenuItem("Revêtements");
 
         this.getItems().addAll(mi1, mi2);
 
