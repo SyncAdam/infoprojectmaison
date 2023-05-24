@@ -106,6 +106,38 @@ public class DisplayCanvas extends Pane{
         });
 
 
+        Line ligne = new Line(); //Prévisualisation du mur .
+        this.getChildren().add(ligne);
+        this.setOnMouseMoved(e->{
+            
+            if (parentPane.autoWallState == true){
+                if (coinTab.size()>0){
+                    if (parentPane.HIsPressed == true){
+                        ligne.setStrokeWidth(4);
+                        ligne.setStartX(coinTab.get(coinTab.size()-1).getX());
+                        ligne.setStartY(coinTab.get(coinTab.size()-1).getY());
+                        ligne.setEndX(e.getX());
+                        ligne.setEndY(coinTab.get(coinTab.size()-1).getY());
+
+                    }else if(parentPane.VIsPressed == true){
+                        ligne.setStrokeWidth(4);
+                        ligne.setStartX(coinTab.get(coinTab.size()-1).getX());
+                        ligne.setStartY(coinTab.get(coinTab.size()-1).getY());
+                        ligne.setEndX(coinTab.get(coinTab.size()-1).getX());
+                        ligne.setEndY(e.getY());
+                    }
+                    else{
+                    ligne.setStrokeWidth(4);
+                    ligne.setStartX(coinTab.get(coinTab.size()-1).getX());
+                    ligne.setStartY(coinTab.get(coinTab.size()-1).getY());
+                    ligne.setEndX(e.getX());
+                    ligne.setEndY(e.getY());
+                    }
+                 }       
+            }else{ligne.setStrokeWidth(0); }//quand on est plus en auto on cache la ligne}
+        });
+
+
         this.setOnMouseClicked(e -> { //détection du clic + récup coords
             if (parentPane.ctrlIsPressed == false && this.parentPane.projectOpened == true && this.parentPane.modifyButtonState == false){
                  //sert juste à ne pas crééer de nouveau éléments lorsqu'on veut juste selectionner un point/mur avec ctrl

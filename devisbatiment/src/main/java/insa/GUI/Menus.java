@@ -20,17 +20,17 @@ public class Menus extends MenuBar{
     MenuBar menuBar;
 
     Menu fichier; //On def les menus principaux
-    Menu edition;
-    //Menu view;
+    
+    
 
     Menu nouveau; //Sous Menus
     Menu importer;
-    Menu exporter;
-    Menu sauver;
-    Menu charger;
+    
+    MenuItem sauver;
+    MenuItem charger;
     
     MenuItem NProjet;  //Elements du menu fichier-->Nouveau
-    MenuItem NNiveau;
+ 
     MenuItem NPoint;
     MenuItem ImportProj;
     MenuItem ImportCatalogue ;
@@ -43,31 +43,31 @@ public class Menus extends MenuBar{
         this.parentPane = parentPane;
 
         fichier = new Menu("Fichier"); //On def les menus principaux
-        this.edition = new Menu("Édition");
+        
         //this.view = new Menu("View");
 
         this.nouveau = new Menu("Nouveau"); //Sous Menus
         this.importer = new Menu("Importer");
-        this.sauver = new Menu("Sauvgarder");
-        this.charger = new Menu("Charger");
-        this.exporter = new Menu("Exporter");
+        this.sauver = new MenuItem("Sauvgarder");
+        this.charger = new MenuItem("Charger");
+       
 
         
         this.NProjet = new MenuItem("Projet");  //Elements du menu fichier-->Nouveau
-        this.NNiveau = new MenuItem("Niveau");
+        
         this.NPoint = new MenuItem("Point");
         this.ImportProj = new MenuItem("Projet");
         this.ImportCatalogue = new MenuItem("Catalogue");
 
-        this.editeur = new MenuItem("Editeur");     //Elements du menu viewer
-        this.viewer = new MenuItem("Viewer");
+        //this.editeur = new MenuItem("Editeur");     //Elements du menu viewer
+        //this.viewer = new MenuItem("Viewer");
 
         this.getMenus().add(fichier);        //on ajoute les menus principaux à la barre de menu
-        this.getMenus().add(edition);
+       
 
-        fichier.getItems().addAll(nouveau, sauver, charger, importer, exporter);
+        fichier.getItems().addAll(nouveau, sauver, charger, importer);
 
-        nouveau.getItems().addAll(NProjet, NPoint, NNiveau);
+        nouveau.getItems().addAll(NProjet, NPoint);
 
         importer.getItems().addAll(ImportProj, ImportCatalogue);
           
