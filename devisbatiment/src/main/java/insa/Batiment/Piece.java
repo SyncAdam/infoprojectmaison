@@ -81,12 +81,15 @@ public class Piece implements Serializable{
                 if(i != objects.size()-1)
                 {
                     Mur m = new Mur(i, (Coin)objects.get(i), (Coin)objects.get(i+1));
+                    m.inARoom = true;
                     murs.add(m);
                 }
                 else
                 {
                     Mur m = new Mur(i, (Coin)objects.get(i), (Coin)objects.get(0));
+                    m.inARoom = true;
                     murs.add(m);
+                    
                 }
             }
         }
@@ -96,6 +99,7 @@ public class Piece implements Serializable{
             for(int i = 0; i < objects.size(); i++)
             {
                 murs.add((Mur)objects.get(i));
+                murs.get(i).inARoom = true;
             }
         }
 

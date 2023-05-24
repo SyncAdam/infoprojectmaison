@@ -37,6 +37,9 @@ public class Menus extends MenuBar{
 
     MenuItem editeur;     //Elements du menu viewer
     MenuItem viewer;
+ 
+    Menu devisMenu;
+    MenuItem generate;
 
     Menus(MainPane parentPane)
     {
@@ -50,9 +53,11 @@ public class Menus extends MenuBar{
         this.importer = new Menu("Importer");
         this.sauver = new MenuItem("Sauvgarder");
         this.charger = new MenuItem("Charger");
+        this.devisMenu = new Menu("Devis");
+       
        
 
-        
+        this.generate = new MenuItem("Générer");
         this.NProjet = new MenuItem("Projet");  //Elements du menu fichier-->Nouveau
         
         this.NPoint = new MenuItem("Point");
@@ -65,9 +70,10 @@ public class Menus extends MenuBar{
         this.getMenus().add(fichier);        //on ajoute les menus principaux à la barre de menu
        
 
-        fichier.getItems().addAll(nouveau, sauver, charger, importer);
+        fichier.getItems().addAll(nouveau, sauver, charger, importer, devisMenu);
 
         nouveau.getItems().addAll(NProjet, NPoint);
+        devisMenu.getItems().add(generate);
 
         importer.getItems().addAll(ImportProj, ImportCatalogue);
           
@@ -136,6 +142,8 @@ public class Menus extends MenuBar{
 
         });
 
+
+
         sauver.setOnAction(event -> {
 
             FileChooser fileChooser = new FileChooser();
@@ -197,6 +205,11 @@ public class Menus extends MenuBar{
         NProjet.setOnAction(event -> {
             this.parentPane.hierarchy.hierarchyRefresh();
             this.parentPane.projectOpened = true;
+        });
+
+
+        generate.setOnAction(e -> {
+            DevisTxt.generate(new ArrayList<>(), 54);
         });
 
     }

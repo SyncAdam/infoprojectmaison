@@ -14,6 +14,7 @@ public class Mur extends Surface{
     private int idMur;
     public boolean superpositionState;
     public Line ligne;
+    public boolean inARoom = false;
     
     public boolean isSelected = false;
 
