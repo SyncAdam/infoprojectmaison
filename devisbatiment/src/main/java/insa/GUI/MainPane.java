@@ -31,7 +31,7 @@ public class MainPane extends BorderPane{
     public boolean buttonPorteState;
 
     int idOfCurrentSelectedPoint;
-    
+
     Menus menuBar;
     ToolBar toolBar;
     ImmeubleHierarchy hierarchy;
@@ -45,6 +45,9 @@ public class MainPane extends BorderPane{
     Button unselectButton;
     Button modifyButton;
     Button moveLeft;
+    Button moveRight;
+    Button moveUp;
+    Button moveDown;
 
     //Group canva;
     BorderPane viewerLayout = new BorderPane();
@@ -87,6 +90,9 @@ public class MainPane extends BorderPane{
         this.unselectButton = new Button("Unselect all");
         this.modifyButton = new Button("Modifier");
         this.moveLeft= new Button("Gauche");
+        this.moveRight = new Button("Droite");
+        this.moveUp = new Button("Haut");
+        this.moveDown = new Button("Bas");
 
         double witdh =  102;
 
@@ -97,6 +103,9 @@ public class MainPane extends BorderPane{
         this.buttonPorte.setMinWidth(witdh);
         this.autoWall.setMinWidth(witdh);
         this.moveLeft.setMinWidth(witdh);
+        this.moveRight.setMinWidth(witdh);
+        this.moveUp.setMinWidth(witdh);
+        this.moveDown.setMinWidth(witdh);
 
         this.buttonMur.setStyle("-fx-background-color: #CAC6C6; "); //design bouttons : pour l'esthétique
         this.buttonPiece.setStyle("-fx-background-color: #CAC6C6; ");
@@ -116,7 +125,7 @@ public class MainPane extends BorderPane{
 
         toolBar.setOrientation(Orientation.VERTICAL);
         toolBar.setMinWidth(110);
-        toolBar.getItems().addAll(autoWall, modifyButton, buttonMur, buttonPiece, buttonPorte, unselectButton, moveLeft);//on ajoute tout les boutons à la tool bar
+        toolBar.getItems().addAll(autoWall, modifyButton, buttonMur, buttonPiece, buttonPorte, unselectButton, moveLeft, moveRight, moveUp, moveDown);//on ajoute tout les boutons à la tool bar
 
         this.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, new CornerRadii(0), Insets.EMPTY))); // j'ai pas trouvé plus simple pour changer la couleur de fond
         this.setRight(toolBar);
@@ -127,7 +136,19 @@ public class MainPane extends BorderPane{
         log.Initialise(); //on ini le log
 
         this.moveLeft.setOnAction(event -> {
-            //canva.set
+            this.canva.setTranslateX(this.canva.getTranslateX()-30.0d);
+        });
+
+        this.moveRight.setOnAction(event -> {
+            this.canva.setTranslateX(this.canva.getTranslateX()+30.0d);
+        });
+
+        this.moveUp.setOnAction(event -> {
+            this.canva.setTranslateY(this.canva.getTranslateY()+30.0d);
+        });
+
+        this.moveDown.setOnAction(event -> {
+            this.canva.setTranslateY(this.canva.getTranslateY()-30.0d);
         });
 
         this.unselectButton.setOnAction(event -> {
@@ -276,9 +297,7 @@ public class MainPane extends BorderPane{
 
        
 
-        
-
-
+    
         
 
     }
