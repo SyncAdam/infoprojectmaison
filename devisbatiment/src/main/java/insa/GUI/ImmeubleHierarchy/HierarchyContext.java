@@ -23,10 +23,11 @@ public class HierarchyContext extends ContextMenu{
         MenuItem mi1 = new MenuItem("Nouvel immeuble");
         MenuItem mi2 = new MenuItem("Nouveau niveau");
         MenuItem mi3 = new MenuItem("Nouvel Appartement");
+        MenuItem mi4 = new MenuItem("Vider l'ecran");
 
         this.setAutoHide(true);
 
-        this.getItems().addAll(mi1, mi2, mi3);
+        this.getItems().addAll(mi1, mi2, mi3, mi4);
 
         mi1.setOnAction(event -> {
 
@@ -143,6 +144,11 @@ public class HierarchyContext extends ContextMenu{
     
             });
             
+        });
+
+        mi4.setOnAction(event -> {
+            this.fatherTree.parentPane.canva.resetSelection();
+            this.fatherTree.parentPane.canva.clearCanva();
         });
     }
     

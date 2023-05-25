@@ -9,6 +9,7 @@ public class Appartement implements Serializable{
     Niveau parentNiveau;
     Immeuble parentImmeuble;
     public ArrayList<Piece> pieces;
+    public double px, py;
 
     public Appartement(int id)
     {
@@ -16,6 +17,8 @@ public class Appartement implements Serializable{
         this.pieces = new ArrayList<>();
         parentNiveau = null;
         parentImmeuble = null;
+        this.px = 0;
+        this.py = 0;
     }
 
     public Appartement(int id, ArrayList<Piece> pieces)
@@ -24,6 +27,18 @@ public class Appartement implements Serializable{
         this.pieces = pieces;
         parentNiveau = null;
         parentImmeuble = null;
+        this.px = 0;
+        this.py = 0;
+    }
+
+    public Appartement(int id, ArrayList<Piece> pieces, double x, double y)
+    {
+        this.idAppartement = id;
+        this.pieces = pieces;
+        parentNiveau = null;
+        parentImmeuble = null;
+        this.px = x;
+        this.py = y;
     }
  
     public void setParentImmeuble(Immeuble I)

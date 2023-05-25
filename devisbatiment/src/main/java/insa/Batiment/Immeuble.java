@@ -2,7 +2,10 @@ package insa.Batiment;
 
 import java.util.ArrayList;
 
+import insa.Batiment.Revetements.Revetement;
+
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -28,6 +31,8 @@ public class Immeuble extends Batiment implements Serializable{
         {
             this.AllNivIDS.add(this.niveau.get(i).getIdNiveau());
         }
+        this.maxX = 0;
+        this.maxY = 0;
   
     }
 
@@ -35,6 +40,9 @@ public class Immeuble extends Batiment implements Serializable{
     {
         this.idImmeuble = idImmeuble;
         this.niveau = nivs;
+        this.AllNivIDS = new ArrayList<Integer>();
+        this.maxX = 0;
+        this.maxY = 0;
     }
 
     public ArrayList<Integer> getAllNivIDS()
@@ -246,7 +254,7 @@ public class Immeuble extends Batiment implements Serializable{
     {
 
         double res = 0;
-
+ 
         for(int i = 0; i < immeuble.niveau.size(); i++)
         {
             for(int j = 0; j < immeuble.niveau.get(i).appartements.size(); j++)
@@ -258,6 +266,65 @@ public class Immeuble extends Batiment implements Serializable{
             }
         }
         
+        return res;
+    }
+
+    public static ArrayList<String> revetementString(ArrayList<Immeuble> ims)
+    {
+        ArrayList<String> res = new ArrayList<>();
+        ArrayList<Revetement> revs = Revetement.readDef();
+
+        for(Revetement r : revs)
+        {
+            res.add(r.getDesignation() + " (" + r.getIdRevetement() + ")");
+            double cout = 0;
+            double surface = 0;
+            for(int i = 0; i < ims.size(); i++)
+            {
+                for(int j = 0; j < ims.get(i).niveau.size(); j++)
+                {
+                    for(int k = 0; k < ims.get(i).niveau.get(j).appartements.size(); k++)
+                    {
+                        for(int l = 0; l < ims.get(i).niveau.get(j).appartements.get(k).pieces.size(); l++)
+                        {
+                            for(int m = 0; m < ims.get(i).niveau.get(j).appartements.get(k).pieces.get(l).murs.size(); m++)
+                            {
+                                for(Revetement revetement : ims.get(i).niveau.get(j).appartements.get(k).pieces.get(l).murs.get(m).revetements)
+                                {
+                                    if(revetement.getIdRevetement() == r.getIdRevetement())
+                                    {
+                                        surface += ims.get(i).niveau.get(j).appartements.get(k).pieces.get(l).murs.get(m).surface(ims.get(i).niveau.get(j).getHeight());
+                                        cout += ims.get(i).niveau.get(j).appartements.get(k).pieces.get(l).murs.get(m).surface(ims.get(i).niveau.get(j).getHeight()) * r.getPrixUnitaire();
+                                    }
+                                }
+                            }
+                            for(int m = 0; m < ims.get(i).niveau.get(j).appartements.get(k).pieces.get(l).soletplafond.size(); m++)
+                            {
+                                for(Revetement revetement : ims.get(i).niveau.get(j).appartements.get(k).pieces.get(l).soletplafond.get(m).revetements)
+                                {
+                                    if(revetement.getIdRevetement() == r.getIdRevetement())
+                                    {
+                                        surface += ims.get(i).niveau.get(j).appartements.get(k).pieces.get(l).soletplafond.get(m).surface(ims.get(i).niveau.get(j).getHeight());
+                                        cout += ims.get(i).niveau.get(j).appartements.get(k).pieces.get(l).soletplafond.get(m).surface(ims.get(i).niveau.get(j).getHeight()) * r.getPrixUnitaire();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            int decimalPlaces = 2;
+
+            DecimalFormat decimalFormat = new DecimalFormat("#0." + "0".repeat(decimalPlaces));
+            String s1 = decimalFormat.format(surface);
+            res.add(s1);
+
+            DecimalFormat decimalFormat1 = new DecimalFormat("#0." + "0".repeat(decimalPlaces));
+            String s2 = decimalFormat1.format(cout);
+            res.add(s2);
+        }
+
         return res;
     }
 

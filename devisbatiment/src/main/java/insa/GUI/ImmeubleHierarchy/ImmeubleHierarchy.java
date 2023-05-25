@@ -71,6 +71,10 @@ public class ImmeubleHierarchy extends TreeView<String>{
                 });
                 nivitem.setExpanded(true);
                 item.getChildren().add(nivitem);
+
+                ClickEventHandler clicker = new ClickEventHandler(nivitem, this, this.loadedImmeubles.get(i).niveau.get(j));
+                        
+                nivitem.getGraphic().addEventHandler(MouseEvent.MOUSE_CLICKED, clicker); 
                 //chaque appartement
                 
                 for (int k = 0; k < this.loadedImmeubles.get(i).niveau.get(j).appartements.size(); k++)
@@ -87,6 +91,10 @@ public class ImmeubleHierarchy extends TreeView<String>{
 
                     nivitem.getChildren().add(aptitem);
 
+                    ClickEventHandler clicker0 = new ClickEventHandler(aptitem, this, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k));
+                        
+                    aptitem.getGraphic().addEventHandler(MouseEvent.MOUSE_CLICKED, clicker0); 
+
                     //chaque piece
                     for (int l = 0; l < this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.size(); l++)
                     {
@@ -102,9 +110,9 @@ public class ImmeubleHierarchy extends TreeView<String>{
 
                         aptitem.getChildren().add(pieceitem);
 
-                        ClickEventHandler clicker = new ClickEventHandler(pieceitem, this, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l));
+                        ClickEventHandler clicker1 = new ClickEventHandler(pieceitem, this, this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l));
                         
-                        pieceitem.getGraphic().addEventHandler(MouseEvent.MOUSE_CLICKED, clicker); 
+                        pieceitem.getGraphic().addEventHandler(MouseEvent.MOUSE_CLICKED, clicker1); 
 
                         //chaque mur
                         for (int m = 0; m < this.loadedImmeubles.get(i).niveau.get(j).appartements.get(k).pieces.get(l).murs.size(); m++)

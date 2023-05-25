@@ -8,6 +8,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import insa.Batiment.Appartement;
 import insa.Batiment.Coin;
@@ -15,7 +16,6 @@ import insa.Batiment.Mur;
 import insa.Batiment.Niveau;
 import insa.Batiment.Piece;
 import insa.Batiment.Porte;
-import insa.Batiment.Surface;
 
 public class DisplayCanvas extends Pane{
  
@@ -32,9 +32,15 @@ public class DisplayCanvas extends Pane{
     public ArrayList<Object> bufferMurPiece;
 
     public ArrayList<Coin> selectedPoint; //sert juste à garder en mémoire les 2 points que l'on veut relier avec l'outils mur
-    public ArrayList<Surface> selectedSurfaces; //sert juste à garder en mémoire les murs de la pièce que l'on veut créer avec l'outils pièce
+    public ArrayList<Mur> selectedSurfaces; //sert juste à garder en mémoire les murs de la pièce que l'on veut créer avec l'outils pièce
     public double[] coordsOfHilightedPoint = new double[2]; //utile pour quand on a le mode vertical ou horizon activé et qu'on veut mettre un point alligné avec un point qui existe déjà pour faire un carré
     public Piece selectedPiece;
+    public Appartement selectedAppartement;
+
+    public Hashtable<Mur, Line> murlineHT;
+    public Hashtable<Line, Mur> linemurHT;
+
+    //BiMap<String, String> capitalCountryBiMap = HashBiMap.create();
 
     DisplayCanvas(MainPane parentPane)
     {
@@ -47,12 +53,15 @@ public class DisplayCanvas extends Pane{
         this.pieceTab = new ArrayList<Piece>();
         this.bufferMurPiece = new ArrayList<Object>();
         this.iDOfSelectedWall = new ArrayList<Integer>();
-        this.selectedPiece = null;
-       
         this.doorTabList = new ArrayList<Porte>();
+
+        this.murlineHT = new Hashtable<>();
+        this.linemurHT = new Hashtable<>();
     
-        this.selectedPoint = new ArrayList<Coin>();
-        this.selectedSurfaces = new ArrayList<Surface>();
+        this.selectedPoint = new ArrayList<Coin>(0);
+        this.selectedSurfaces = new ArrayList<Mur>(0);
+        this.selectedPiece = null;
+        this.selectedAppartement = null;
 
         //DevisTxt.generate(new ArrayList<String>(), 14);
 
@@ -396,8 +405,19 @@ public class DisplayCanvas extends Pane{
     public void DisplayMur(Mur m){
         DisplayCoin(m.getDebut());
         DisplayCoin(m.getFin());
+
+        Line foobar = new Line();
+      
+        foobar.setStartX(m.getDebut().getX());
+        foobar.setStartY(m.getDebut().getY());
+        foobar.setEndX(m.getFin().getX());
+        foobar.setEndY(m.getFin().getY());
+        foobar.setStrokeWidth(4);
+
+        murlineHT.put(m, foobar);
+        linemurHT.put(foobar, m);
     
-        m.ligne.setOnMouseEntered(e -> { //on détecte quand la souris passe la ligne (POUR PLUS TARD : EFFET MAGNET ?)
+        foobar.setOnMouseEntered(e -> { //on détecte quand la souris passe la ligne (POUR PLUS TARD : EFFET MAGNET ?)
             
             if (m.superpositionState == false){
                 m.superpositionState = true;
@@ -406,7 +426,7 @@ public class DisplayCanvas extends Pane{
 
                 System.out.println("superposition ligne"); //permet de ne pas la selectionner dès sa création
                 if(this.parentPane.ctrlIsPressed ==true && m.isSelected == false){
-                    setColor(m.ligne, Color.RED);
+                    setColor(foobar, Color.RED);
                 } //si on est en mode selection (ctrl pressé) et que le mur n'est pas selectionné, on colore en rouge au survol
        
         
@@ -415,7 +435,7 @@ public class DisplayCanvas extends Pane{
 
 
 
-        m.ligne.setOnMouseClicked(event -> { //si la souris est sur la ligne et clique :
+        foobar.setOnMouseClicked(event -> { //si la souris est sur la ligne et clique :
 
 
             if(parentPane.modifyButtonState == true){
@@ -451,38 +471,34 @@ public class DisplayCanvas extends Pane{
             } 
         });  
 
-        this.getChildren().add(m.ligne);
+        this.getChildren().add(murlineHT.get(m));
 
         System.out.println("Point affiché");
 
-        m.ligne.setOnMouseExited(e -> {  //si la souris n'est plus sur la ligne et que ctrl n'est pas selectionné, on remet le trait en noir
+        foobar.setOnMouseExited(e -> {  //si la souris n'est plus sur la ligne et que ctrl n'est pas selectionné, on remet le trait en noir
             if (m.isSelected == false){
-                setColor(m.ligne, Color.BLACK);
+                setColor(foobar, Color.BLACK);
             } //si on quitte le point de la souris et qu'il n'est pas selectionné, on le met en noir
         }); //on remet la couleur en noir
     }
 
-    public void selectSurface(Surface m)
+    public void selectSurface(Mur m)
     {
-        if(m instanceof Mur)
-        {
-            Mur M = (Mur) m;
-            setColor(M.ligne, Color.GREENYELLOW);
+
+            setColor(murlineHT.get(m), Color.GREENYELLOW);
             this.selectedSurfaces.add(m);
-            M.isSelected = true;//on le def comme selectionné
+            m.isSelected = true;//on le def comme selectionné
             this.parentPane.log.setTxt("mur(s) selectionné(s)");
-        }
+        
     }
 
-    public void deselectSurface(Surface m)
+    public void deselectSurface(Mur m)
     {
-        if(m instanceof Mur)
-        {
-            Mur M = (Mur) m;
-            setColor(M.ligne, Color.BLACK);
+
+            setColor(murlineHT.get(m), Color.BLACK);
             selectedSurfaces.remove(m);
-            M.isSelected = false;
-        }
+            m.isSelected = false;
+        
     }
 
     public void deselectSurface(int ind)
@@ -490,7 +506,7 @@ public class DisplayCanvas extends Pane{
         if(this.selectedSurfaces.get(ind) instanceof Mur)
         {
             Mur M = (Mur) this.selectedSurfaces.get(ind);
-            setColor(M.ligne, Color.BLACK);
+            setColor(murlineHT.get(M), Color.BLACK);
             selectedSurfaces.remove(this.selectedSurfaces.get(ind));
             M.isSelected = false;
         }
@@ -564,6 +580,13 @@ public class DisplayCanvas extends Pane{
         polygon.setFill(couleur); //on colore le polygone avec la couleur du constructeur de la méthode
         this.getChildren().add(polygon); // on l'affiche sur le pane 
 
+    }
+
+    public void resetSelection()
+    {
+        this.selectedAppartement = null;
+        this.selectedPiece = null;
+        this.selectedSurfaces = new ArrayList<>();
     }
 
     public void setColor(Line l, Color couleur){

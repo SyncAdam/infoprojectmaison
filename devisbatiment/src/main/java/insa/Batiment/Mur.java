@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import insa.Batiment.Revetements.Revetement;
 import insa.Batiment.Revetements.RevetementException;
-import javafx.scene.shape.Line;
 
 public class Mur extends Surface{
     
@@ -13,10 +12,9 @@ public class Mur extends Surface{
     private Coin fin;     //Point de fin du mur
     private int idMur;
     public boolean superpositionState;
-    public Line ligne;
-    public boolean inARoom = false;
+    public boolean inARoom;
     
-    public boolean isSelected = false;
+    public boolean isSelected;
 
     //Constructors
 
@@ -34,17 +32,11 @@ public class Mur extends Surface{
         this.idMur = id;
         this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
+        this.inARoom = false;
+        this.isSelected = false;
         
         c1.onAWall = true; //permet d'empécher la modification par la suite.
         c2.onAWall = true;
-
-        this.ligne = new Line();
-      
-        ligne.setStartX(this.getDebut().getX());
-        ligne.setStartY(this.getDebut().getY());
-        ligne.setEndX(this.getFin().getX());
-        ligne.setEndY(this.getFin().getY());
-        ligne.setStrokeWidth(4);
     }
 
     /**
@@ -62,18 +54,11 @@ public class Mur extends Surface{
         this.idMur = id;
         this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
-
-        this.ligne = new Line();
+        this.inARoom = false;
+        this.isSelected = false;
 
         this.debut.onAWall = true; //permet d'empécher la modification par la suite.
         this.fin.onAWall = true;
-      
-        ligne.setStartX(this.getDebut().getX());
-        ligne.setStartY(this.getDebut().getY());
-        ligne.setEndX(this.getFin().getX());
-        ligne.setEndY(this.getFin().getY());
-        ligne.setStrokeWidth(4);
-
     }
 
      /**
@@ -92,21 +77,11 @@ public class Mur extends Surface{
         this.idMur = id;
         this.revetements = new ArrayList<Revetement>();
         this.superpositionState = false;
+        this.inARoom = false;
+        this.isSelected = false;
 
         this.debut.onAWall = true; //permet d'empécher la modification par la suite.
         this.fin.onAWall = true;
-
-        this.ligne = new Line();
-
-        debut.onAWall = true; //permet d'empécher la modification par la suite.
-        fin.onAWall = true; 
-      
-        ligne.setStartX(this.getDebut().getX());
-        ligne.setStartY(this.getDebut().getY());
-        ligne.setEndX(this.getFin().getX());
-        ligne.setEndY(this.getFin().getY());
-        ligne.setStrokeWidth(4);
-
     }
     
     //Methods
@@ -177,7 +152,7 @@ public class Mur extends Surface{
 
     public double surface(double h)
     {
-        return this.longueur() * h;
+        return (this.longueur()/100) * h;
     }
 
     public void addRevetement(Revetement rev) throws RevetementException
@@ -238,4 +213,6 @@ public class Mur extends Surface{
     public void setSelectedState(boolean state){
         isSelected = state;
     }
+
+    
 }

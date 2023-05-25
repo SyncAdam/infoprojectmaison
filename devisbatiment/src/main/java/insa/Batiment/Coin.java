@@ -7,8 +7,8 @@ public class Coin implements Serializable{
     private int idCoin; //identificateur du coin
     private double cx;  //abscisse du coin
     private double cy;  //ordonnee du coin
-    boolean superpositionState = false; //sert juste à ne pas changer la couleur du point immédiatement après sa création
-    public boolean onAWall = false;
+    boolean superpositionState; //sert juste à ne pas changer la couleur du point immédiatement après sa création
+    public boolean onAWall;
     
     /**
      * <p>Cette constructeur cree un coin en demandant a l'utilisateur de saisir les coordonnees</p>
@@ -22,6 +22,8 @@ public class Coin implements Serializable{
         this.cx = Lire.d();
         System.out.println("Donnez le coordonnée y de votre coin " + this.idCoin);
         this.cy = Lire.d();
+        this.superpositionState = false;
+        this.onAWall = false;
     }
 
     /**
@@ -37,6 +39,8 @@ public class Coin implements Serializable{
         this.cx = x;
         this.cy = y;
         this.idCoin = id;
+        this.superpositionState = false;
+        this.onAWall = false;
     }
 
     public int getId()

@@ -2,6 +2,7 @@ package insa.GUI;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -78,8 +79,15 @@ public class Menus extends MenuBar{
         importer.getItems().addAll(ImportProj, ImportCatalogue);
           
         NPoint.setOnAction(e -> {
-            ManualPoint manualPoint = new ManualPoint(this.parentPane);
-            manualPoint.Initialise();
+            if(this.parentPane.projectOpened)
+            {
+                ManualPoint manualPoint = new ManualPoint(this.parentPane);
+                manualPoint.Initialise();
+            }
+            else
+            {
+                this.parentPane.canva.showNoProjectOpenedPopup();
+            }
         });
 
 
@@ -207,9 +215,22 @@ public class Menus extends MenuBar{
             this.parentPane.projectOpened = true;
         });
 
-
         generate.setOnAction(e -> {
-            DevisTxt.generate(new ArrayList<>(), 54);
+            if(!this.parentPane.projectOpened) this.parentPane.canva.showNoProjectOpenedPopup();
+            ArrayList<String> revs= Immeuble.revetementString(this.parentPane.hierarchy.loadedImmeubles);
+
+            double total = 0;
+
+            for(Immeuble i : this.parentPane.hierarchy.loadedImmeubles)
+            {
+                total += Immeuble.calculRevetement(i);
+            }
+
+            DecimalFormat decimalFormat = new DecimalFormat("#0." + "0".repeat(2));
+            String s1 = decimalFormat.format(total);
+
+            Devis devis = new Devis(revs, s1);
+            devis.generate();
         });
 
     }

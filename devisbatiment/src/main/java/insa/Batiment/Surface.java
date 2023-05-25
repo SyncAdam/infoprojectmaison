@@ -12,6 +12,10 @@ public abstract class Surface implements Serializable{
 
     public abstract double surface(double h);
     public abstract void addRevetement(Revetement rev) throws RevetementException;
+    public void removeRevetement(Revetement R)
+    {
+        this.revetements.remove(R);
+    }
 
     public double calculRevetement(double h)
     {

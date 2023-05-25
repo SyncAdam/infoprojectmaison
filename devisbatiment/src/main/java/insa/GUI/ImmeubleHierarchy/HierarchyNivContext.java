@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
@@ -23,8 +24,9 @@ public class HierarchyNivContext extends HierarchyItemContext{
 
         MenuItem mi3 = new MenuItem("Changer d'immeuble");
         MenuItem mi4 = new MenuItem("Supprimer le niveau");
+        MenuItem mi5 = new MenuItem("Changer la hauteur du niveau");
 
-        this.getItems().addAll(mi3, mi4);
+        this.getItems().addAll(mi3, mi4, mi5);
 
         mi3.setOnAction(event -> {
 
@@ -108,6 +110,39 @@ public class HierarchyNivContext extends HierarchyItemContext{
                 this.fatherTree.nonClasseNiveaux.remove((Niveau)this.targetObject);
             }
             this.fatherTree.hierarchyRefresh();
+        });
+
+        mi5.setOnAction(event -> {
+
+            Stage appartStage = new Stage();
+            appartStage.setTitle("Changer la hauteur du niveau");
+            TextField hauteurField = new TextField("hautuer");
+            
+            Button okButton = new Button("Ok");
+            VBox disposition = new VBox(); //on créer un groupe root
+           
+            disposition.getChildren().addAll(hauteurField, okButton);
+            
+            Scene sceneAppart = new Scene(disposition, 300,80, Color.GREEN ); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
+            
+            appartStage.setScene(sceneAppart);
+            appartStage.show();
+
+            okButton.setOnAction(event0 -> {
+
+                try{
+                    Niveau n = (Niveau)this.targetObject;
+                    n.setHeight(Double.parseDouble(hauteurField.getText()));
+                }
+                catch(RuntimeException e)
+                {
+                    e.printStackTrace();
+                    this.fatherTree.parentPane.log.setTxt("Erreur lors de la création de l'appartement");
+                }
+                
+                appartStage.close();
+    
+            });
         });
     }
     

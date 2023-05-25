@@ -1,6 +1,9 @@
 package insa.GUI;
 
-import insa.Batiment.Surface;
+import java.util.ArrayList;
+
+import insa.Batiment.Mur;
+import insa.Batiment.Piece;
 import insa.GUI.ImmeubleHierarchy.ImmeubleHierarchy;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -41,6 +44,7 @@ public class MainPane extends BorderPane{
     Button buttonPiece;
     Button unselectButton;
     Button modifyButton;
+    Button moveLeft;
 
     //Group canva;
     BorderPane viewerLayout = new BorderPane();
@@ -68,6 +72,7 @@ public class MainPane extends BorderPane{
         this.roomButtonState = false;
         this.modifyButtonState = false;
         this.buttonPorteState  = false;
+
         this.toolBar = new ToolBar();
         
         this.backgroundColor = Color.WHITESMOKE;
@@ -81,6 +86,8 @@ public class MainPane extends BorderPane{
         this.buttonPiece = new Button("Piece");
         this.unselectButton = new Button("Unselect all");
         this.modifyButton = new Button("Modifier");
+        this.moveLeft= new Button("Gauche");
+
         double witdh =  102;
 
         this.buttonMur.setMinWidth(witdh); //largeur des boutons : pour l'esthétique
@@ -89,6 +96,7 @@ public class MainPane extends BorderPane{
         this.modifyButton.setMinWidth(witdh);
         this.buttonPorte.setMinWidth(witdh);
         this.autoWall.setMinWidth(witdh);
+        this.moveLeft.setMinWidth(witdh);
 
         this.buttonMur.setStyle("-fx-background-color: #CAC6C6; "); //design bouttons : pour l'esthétique
         this.buttonPiece.setStyle("-fx-background-color: #CAC6C6; ");
@@ -96,6 +104,7 @@ public class MainPane extends BorderPane{
         this.modifyButton.setStyle("-fx-background-color: #CAC6C6; ");
         this.buttonPorte.setStyle("-fx-background-color: #CAC6C6; ");
         this.autoWall.setStyle("-fx-background-color: #CAC6C6; ");
+        this.moveLeft.setStyle("-fx-background-color: #CAC6C6; ");
 
 
 
@@ -107,7 +116,7 @@ public class MainPane extends BorderPane{
 
         toolBar.setOrientation(Orientation.VERTICAL);
         toolBar.setMinWidth(110);
-        toolBar.getItems().addAll(autoWall, modifyButton, buttonMur, buttonPiece, buttonPorte, unselectButton);//on ajoute tout les boutons à la tool bar
+        toolBar.getItems().addAll(autoWall, modifyButton, buttonMur, buttonPiece, buttonPorte, unselectButton, moveLeft);//on ajoute tout les boutons à la tool bar
 
         this.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, new CornerRadii(0), Insets.EMPTY))); // j'ai pas trouvé plus simple pour changer la couleur de fond
         this.setRight(toolBar);
@@ -117,12 +126,51 @@ public class MainPane extends BorderPane{
 
         log.Initialise(); //on ini le log
 
-        this.unselectButton.setOnAction(event -> {
-            int limit = this.canva.selectedSurfaces.size();
+        this.moveLeft.setOnAction(event -> {
+            //canva.set
+        });
 
-            for(int i = 0; i < limit; i++)
+        this.unselectButton.setOnAction(event -> {
+            this.canva.selectedSurfaces.clear();
+        });
+
+        this.buttonPiece.setOnAction(event -> {
+            ArrayList<Object> temp = new ArrayList<Object>();
+            for(Object o : this.canva.wallTab)
             {
-                this.canva.deselectSurface(i);
+                temp.add(o);
+            }
+
+            if(this.canva.selectedAppartement != null)
+            {
+                int nextindex = 0;
+                boolean idAvailable = false;
+
+                while (!idAvailable) {
+                    boolean found = false;
+                    for (Piece p : this.canva.selectedAppartement.pieces) {
+                        if (p.getPieceId() == nextindex) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if(!found)
+                    {
+                        idAvailable = true;
+                    } 
+                    else 
+                    {
+                        nextindex++;
+                    }
+                }
+
+                this.canva.selectedAppartement.addPiece(new Piece(nextindex, temp));
+                this.hierarchy.hierarchyRefresh();
+            }
+            else
+            {
+                this.hierarchy.nonClassePieces.add(new Piece(0, temp));
             }
         });
 

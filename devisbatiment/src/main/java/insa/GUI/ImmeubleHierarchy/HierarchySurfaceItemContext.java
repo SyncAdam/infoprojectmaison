@@ -143,7 +143,7 @@ public class HierarchySurfaceItemContext extends ContextMenu {
 
         revetementstable.setItems(obslist);
 
-        HBox buttons = new HBox( delButton, closeButton);
+        HBox buttons = new HBox(delButton, closeButton);
 
         VBox selectionLayout = new VBox(title, revetementstable, buttons);
         selectionLayout.setSpacing(10);
@@ -155,6 +155,14 @@ public class HierarchySurfaceItemContext extends ContextMenu {
 
         // Set the selection stage as a new window
         selectionStage.showAndWait();
+
+        closeButton.setOnAction(event -> {
+            selectionStage.close();
+        });
+
+        delButton.setOnAction(event -> {
+            this.targetObject.removeRevetement(revetementstable.getSelectionModel().getSelectedItem());
+        });
     }
 
 }

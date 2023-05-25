@@ -1,11 +1,9 @@
 package insa.GUI;
-import insa.Batiment.Coin;
 import insa.Batiment.Mur;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -59,7 +57,7 @@ public class WallModifier {
 
         DelButton.setOnAction(e-> {
             if(mur.inARoom == false){ //si mur pas dans une pièce on peut le supprimer
-            mur.ligne.setStrokeWidth(0); // on l'efface 
+            this.parentPane.canva.murlineHT.get(mur).setStrokeWidth(0); // on l'efface 
             mur.getDebut().onAWall = false;
             mur.getFin().onAWall = false;
             parentPane.canva.wallTab.remove(mur);

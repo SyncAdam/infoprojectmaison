@@ -80,6 +80,11 @@ public class Niveau implements Serializable{
         return this.height;
     }
 
+    public void setHeight(double g)
+    {
+        this.height = g;
+    }
+
     //A verifier si les appartements coincident
 
 }
