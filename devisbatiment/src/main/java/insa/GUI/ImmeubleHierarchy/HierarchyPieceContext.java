@@ -25,15 +25,15 @@ public class HierarchyPieceContext extends HierarchyItemContext{
     {
         super(parentObject, targetObject, fatherTree);
 
-        MenuItem mi3 = new MenuItem("Change Appartement");
-        MenuItem mi4 = new MenuItem("Supprimer Piece");
+        MenuItem mi3 = new MenuItem("Changer d'appartement");
+        MenuItem mi4 = new MenuItem("Supprimer la Piece");
 
         this.getItems().addAll(mi3, mi4);
 
         mi3.setOnAction(event -> {
 
             Stage pieceStage = new Stage();
-            pieceStage.setTitle("Changer Appartement");
+            pieceStage.setTitle("Changer d'appartement");
             
             Button okButton = new Button("Ok");
             VBox disposition = new VBox(); //on créer un groupe root

@@ -54,6 +54,8 @@ public class DisplayCanvas extends Pane{
         this.selectedPoint = new ArrayList<Coin>();
         this.selectedSurfaces = new ArrayList<Surface>();
 
+        //DevisTxt.generate(new ArrayList<String>(), 14);
+
         /*
 
         this.drawingCanvas = new Canvas(this.getWidth(), this.getHeight());
@@ -74,7 +76,7 @@ public class DisplayCanvas extends Pane{
                 bufferMurPiece.clear();//on vide le buffer
                 for (int index = 0; index < selectedSurfaces.size(); index++) { //de i aux nbr de mur selectionnés on :
 
-                    bufferMurPiece.add(selectedSurfaces.get(index));//ajoute à bufferMurpièce le mur d'id à la position i dand IdOfSelectedWall
+                    bufferMurPiece.add(selectedSurfaces.get(index));//ajoute à bufferMurpièce tous les murs sélectionnés
                     wallTab.remove(selectedSurfaces.get(index));
 
                 }
@@ -139,7 +141,7 @@ public class DisplayCanvas extends Pane{
 
 
         this.setOnMouseClicked(e -> { //détection du clic + récup coords
-            if (parentPane.ctrlIsPressed == false && this.parentPane.projectOpened == true && this.parentPane.modifyButtonState == false){
+            if (parentPane.ctrlIsPressed == false && this.parentPane.projectOpened == true && this.parentPane.modifyButtonState == false && parentPane.buttonPorteState == false){
                  //sert juste à ne pas crééer de nouveau éléments lorsqu'on veut juste selectionner un point/mur avec ctrl
                 System.out.println(parentPane.pointAlreadyExist + " vrai");
                 if (parentPane.pointAlreadyExist == false){
@@ -302,9 +304,9 @@ public class DisplayCanvas extends Pane{
     public void showNoProjectOpenedPopup()
     {
         Alert albert = new Alert(Alert.AlertType.WARNING);
-        albert.setTitle("Project Error");
-        albert.setHeaderText("Aucun projet est ouvert");
-        albert.setContentText("Ouvrez un projet d'abord.");
+        albert.setTitle("Erreur");
+        albert.setHeaderText("Aucun projet n'est ouvert !");
+        albert.setContentText("Veuillez en ouvrir un ou le créer via le menu fichier");
         albert.showAndWait();
     }
 
@@ -370,9 +372,21 @@ public class DisplayCanvas extends Pane{
             if(parentPane.HIsPressed == true && parentPane.modifyButtonState == false){ //si on clique sur un point qui existe déjà avec le mode horizontale activé on va récupérer le y du pt d'avant et le x du point cliqué puis  crééer un new point
                 this.coinTab.add(new Coin(this.coinTab.size(), coordsOfHilightedPoint[0], coinTab.get(coinTab.size()-1).getY())); //on créér le new point dans le tableau
                 DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
+                if(parentPane.autoWallState == true){
+                    wallTab.add(new Mur (wallTab.size(), coinTab.get(coinTab.size()-2), coinTab.get(coinTab.size()-1))); //on créér un mur à partir des 2 dernies coins du coinTab
+                    /*NOTE : coinTab.size()-1 correspond à l'index du dernier point et coinTab.size()-2, à celui de l'avant dernier */
+                    DisplayMur(wallTab.get(wallTab.size()-1));
+                }
             } else if(parentPane.VIsPressed == true  && parentPane.modifyButtonState == false){//si on clique sur un point qui existe déjà avec le mode vertical activé on va récupérer le x du pt d'avant et le y du point cliqué puis  crééer un new point
                 this.coinTab.add(new Coin(this.coinTab.size(), coinTab.get(coinTab.size()-1).getX(),coordsOfHilightedPoint[1])); //on créér le new point dans le tableau
                 DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
+
+                if(parentPane.autoWallState == true){
+                    wallTab.add(new Mur (wallTab.size(), coinTab.get(coinTab.size()-2), coinTab.get(coinTab.size()-1))); //on créér un mur à partir des 2 dernies coins du coinTab                         
+                    DisplayMur(wallTab.get(wallTab.size()-1));
+
+
+                }
             }
 
         });
@@ -394,34 +408,48 @@ public class DisplayCanvas extends Pane{
                 if(this.parentPane.ctrlIsPressed ==true && m.isSelected == false){
                     setColor(m.ligne, Color.RED);
                 } //si on est en mode selection (ctrl pressé) et que le mur n'est pas selectionné, on colore en rouge au survol
-            
-                m.ligne.setOnMouseClicked(event -> { //si la souris est sur la ligne et clique :
-
-                    if(this.parentPane.ctrlIsPressed ==true){ //clique + ctrl :
-                        if(m.isSelected == false){//si le mur n'est pas déjà selectionné, on le selectionne 
-
-                            selectSurface(m);
-                            if(parentPane.buttonPorteState == true)
-                            {                                       //si on clique sur un mur et qu'on est en mode porte :
-                                System.out.println("portte crée");
-                                doorTabList.add(new Porte(doorTabList.size(), m)); 
-                                DisplayPorte(doorTabList.get(doorTabList.size()-1));
-                            }   
-
-                        }
-                        
-                        else{ //si on a cliqué dessus et qu'il était déjà selectionné on le déselectionne
-
-                            deselectSurface(m);
-                            
-                        }
-                    } 
-                });  
-                
-                
+       
         
             }
         }); 
+
+
+
+        m.ligne.setOnMouseClicked(event -> { //si la souris est sur la ligne et clique :
+
+
+            if(parentPane.modifyButtonState == true){
+                //m.ligne.setStrokeWidth(0); // on l'efface temporairement
+                WallModifier WallModifier = new WallModifier(parentPane, m);
+                WallModifier.Initialise();
+
+            }
+            if(parentPane.buttonPorteState == true){
+                doorTabList.add(new Porte(doorTabList.size(), m)); 
+                DisplayPorte(doorTabList.get(doorTabList.size()-1));
+
+            }
+
+            if(this.parentPane.ctrlIsPressed ==true){ //clique + ctrl :
+                if(m.isSelected == false){//si le mur n'est pas déjà selectionné, on le selectionne 
+
+                    selectSurface(m);
+                   /*  if(parentPane.buttonPorteState == true)
+                    {                                       //si on clique sur un mur et qu'on est en mode porte :
+                        System.out.println("portte crée");
+                        doorTabList.add(new Porte(doorTabList.size(), m)); 
+                        DisplayPorte(doorTabList.get(doorTabList.size()-1));
+                    }   */
+
+                }
+                
+                else{ //si on a cliqué dessus et qu'il était déjà selectionné on le déselectionne
+
+                    deselectSurface(m);
+                    
+                }
+            } 
+        });  
 
         this.getChildren().add(m.ligne);
 
