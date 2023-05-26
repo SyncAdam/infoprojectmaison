@@ -30,6 +30,8 @@ public class PointModifier {
         
         TextField xCoord = new TextField(xstring);
         TextField yCoord = new TextField(ystring);
+        xCoord.setPromptText(xstring);
+        yCoord.setPromptText(ystring);
         Button okButton = new Button("Modifier");
         Button DelButton = new Button("Supprimer");
 

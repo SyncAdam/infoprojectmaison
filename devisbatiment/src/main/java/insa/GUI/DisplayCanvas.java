@@ -265,7 +265,7 @@ public class DisplayCanvas extends Pane{
                 
                 
             } 
-            if(c.onAWall == true)
+            if(c.onAWall == true && parentPane.toolbar.modifyButtonState == true)
             {
                 this.parentPane.log.setTxt("Vous ne pouvez pas modifier un coin qui est deja sur un murs");
                 this.parentPane.log.setColor(Color.RED);
@@ -391,7 +391,11 @@ public class DisplayCanvas extends Pane{
 
 
                 }
-            }
+            }/*else if(parentPane.autoWallState == true){
+                // wallTab.add(new Mur (wallTab.size(), c, coinTab.get(coinTab.size()-1))); //on créér un mur à partir du dernier pt et du pt cliqué
+                // DisplayMur(wallTab.get(wallTab.size()-1), 0, 0);
+
+            }*/
 
         });
     }

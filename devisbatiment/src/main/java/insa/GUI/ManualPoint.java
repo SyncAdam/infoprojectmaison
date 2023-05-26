@@ -21,8 +21,11 @@ public class ManualPoint{
 
         Stage newPointStage = new Stage();
         
-        TextField xCoord = new TextField("Coordonnée en X");
-        TextField yCoord = new TextField("Coordonnée en Y");
+        TextField xCoord = new TextField();
+        xCoord.setPromptText("Coordonnée en X");
+        
+        TextField yCoord = new TextField();
+        yCoord.setPromptText("Coordonnée en Y");
         Button okButton = new Button("Ok ");
         newPointStage.setResizable(false);
         

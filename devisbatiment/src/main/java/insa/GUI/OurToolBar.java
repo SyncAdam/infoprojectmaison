@@ -69,8 +69,10 @@ public class OurToolBar extends Pane{
 
         double width =  102; //largeur des boutons
 
-        this.setMinHeight(this.parentPane.getHeight());
-        this.toolBar.setMinHeight(this.getHeight());
+        
+        
+        this.toolBar.setMinHeight(10000);
+      
 
         this.buttonMur.setMinWidth(width); //largeur des boutons : pour l'esthétique
         this.buttonPiece.setMinWidth(width);
