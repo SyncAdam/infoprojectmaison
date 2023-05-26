@@ -82,7 +82,7 @@ public class Devis {
         for (int i = 0; i < revs.size(); i++) { // on ajoute le contenu
             if(i%3 == 2 ){table.addCell(revs.get(i) + " €");}
             if(i%3 == 0 ){table.addCell(revs.get(i));}
-            if(i%3 == 1 ){table.addCell(revs.get(i) + " m^2");}
+            if(i%3 == 1 ){table.addCell(revs.get(i) + " m²");}
             
             
         }

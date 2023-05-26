@@ -36,7 +36,7 @@ public class Plafond extends Surface{
             dy = (this.murs.get(i).getFin().getY() + this.murs.get(i).getDebut().getY())/2;
             r += dx*dy;
         }
-        return r;
+        return r/10000;
     }
 
 }

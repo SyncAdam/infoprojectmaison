@@ -181,13 +181,13 @@ public class Piece implements Serializable{
             }
 
             //En tout cas le surface ne doit etre inferier a 0
-            /* 
+            
             if(this.surface() <= 0)
             {
                 this.pieceValide = false;
                 return false;  
             }
-            */
+            
             refreshsoletplafond();
 
             this.pieceValide = true;
@@ -226,7 +226,7 @@ public class Piece implements Serializable{
             dy = (this.murs.get(i).getFin().getY() + this.murs.get(i).getDebut().getY())/2;
             r += dx*dy;
         }
-        return r;
+        return r/10000;
     }
 
     public static void ordonnerMurs(Piece p)
