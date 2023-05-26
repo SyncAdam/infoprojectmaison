@@ -10,7 +10,7 @@ Sauvegarder un projet : fichier > sauver
 
 Avant de commencer à dessiner nos pièces, il va falloir créer des immeubles, niveaux et appartements. Tout cela se passe dans l’arbre hiérarchique à gauche. Faites clique droit puis créez l’élément désiré. Il va ensuite falloir classer ces éléments (mettre un niveau dans un immeuble, un appartement dans un niveau…). Pour cela, faites clique droit sur l’objet à classer et sélectionnez “ changer le xxxxxx”.
 
->####Création d’objets dans un appartement : 
+> #### Création d’objets dans un appartement : 
 >Coins : 
 >-Cliquez n’importe où dans la fenêtre principale pour placer un point<br>
 fichier > nouveau > coin
@@ -23,11 +23,11 @@ fichier > nouveau > coin
 >Portes : 
 >-Cliquez sur le bouton Porte, puis  sur les murs où vous souhaitez ajouter une porte.
 
->####Navigation : 
+> #### Navigation : 
 >Vous pouvez cliquer sur une pièce dans l’arbre hiérarchique pour la mettre en surbrillance.
 >Vous pouvez cliquer sur un appartement pour en afficher le contenu (ou clique droit → voir)
 
->####Autres outils : 
+> #### Autres outils : 
 >Générateur de devis : fichier > devis > générer : le devis sera généré au format txt dans le dossier racine du projet.
 >Applicateur de revêtement : dans l’arbre de navigation cliquez droit sur l’objet auquel vous voulez ajouter un revêtement 
 >Modes horizontal et vertical : Ces modes permettent de placer un coin aligné (horizontalement ou verticalement)  avec un autre. Pour cela activez le mode adéquat (en >appuyant H ou V de votre clavier), puis cliquez sur l'espace de travail pour placer le point désiré. Si un de ces modes est activé et que vous cliquez sur un point qui  existe déjà, un coin dont vous n’aurez pas le choix des coordonnées sera placé automatiquement de manière à former un rectangle.
