@@ -70,15 +70,15 @@ public class Immeuble extends Batiment implements Serializable{
 
     public static ArrayList<Immeuble> loadImmeuble(String nomFichier) throws IOException, ClassNotFoundException
     {
-        FileInputStream fis = new FileInputStream(nomFichier);
-        ObjectInputStream ois = new ObjectInputStream(fis);
+        FileInputStream fileInputStream = new FileInputStream(nomFichier);
+        ObjectInputStream ObjectInputStream = new ObjectInputStream(fileInputStream);
 
-        ArrayList<Immeuble> immeubles = (ArrayList<Immeuble>)ois.readObject();
+        ArrayList<Immeuble> immeubles = (ArrayList<Immeuble>)ObjectInputStream.readObject();
         
         System.out.println("Immeuble charge");
         
-        ois.close();
-        fis.close();
+        ObjectInputStream.close();
+        fileInputStream.close();
         return immeubles;
     }
 

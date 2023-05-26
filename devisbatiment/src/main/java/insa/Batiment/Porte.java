@@ -2,13 +2,14 @@ package insa.Batiment;
 
 
 import insa.GUI.App;
-import javafx.scene.shape.Polygon;
+//import javafx.scene.shape.Polygon;
 
 public class Porte extends App {
 
     //private Mur mur = new Mur(5,new Coin(1, 25.0, 28.0) , new Coin(1, 29.0, 2.0));
+    public int idPorte;
     public Mur mur;
-    double l, L; //pas utiles, juste plus court pour les formules trigo d'après
+    //double l, L; //pas utiles, juste plus court pour les formules trigo d'après
     public Porte(int idPorte, Mur mur1){ //on récupère le mur sur lequel la porte va être
         this.mur = mur1;
         this.idPorte = idPorte;
@@ -16,7 +17,7 @@ public class Porte extends App {
 
     }
 
-    public int idPorte;
+    /*
     public double largeur;
     public double hauteur;
    
@@ -31,7 +32,7 @@ public class Porte extends App {
 
 
 
-
+*/
     /*public void Display(BorderPane root){
         
 

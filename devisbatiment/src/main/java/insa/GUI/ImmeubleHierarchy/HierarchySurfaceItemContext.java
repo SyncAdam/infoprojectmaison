@@ -154,7 +154,7 @@ public class HierarchySurfaceItemContext extends ContextMenu {
         selectionStage.setScene(selectionScene);
 
         // Set the selection stage as a new window
-        selectionStage.showAndWait();
+        selectionStage.show();
 
         closeButton.setOnAction(event -> {
             selectionStage.close();
@@ -162,6 +162,7 @@ public class HierarchySurfaceItemContext extends ContextMenu {
 
         delButton.setOnAction(event -> {
             this.targetObject.removeRevetement(revetementstable.getSelectionModel().getSelectedItem());
+            selectionStage.close();
         });
     }
 

@@ -458,7 +458,7 @@ public class DisplayCanvas extends Pane{
         DisplayCoin(m.getDebut(), x, y);
         DisplayCoin(m.getFin(), x, y);
 
-        Line foobar = new Line();
+        Line foobar = new Line(); //ligne qui représente un mur 
       
         foobar.setStartX(m.getDebut().getX() + x);
         foobar.setStartY(m.getDebut().getY() + y);
@@ -466,7 +466,7 @@ public class DisplayCanvas extends Pane{
         foobar.setEndY(m.getFin().getY() + y);
         foobar.setStrokeWidth(4);
 
-        murlineHT.put(m, foobar);
+        murlineHT.put(m, foobar);//permet de lier une ligne du displayCanva à un mur réel
         linemurHT.put(foobar, m);
     
         foobar.setOnMouseEntered(e -> { //on détecte quand la souris passe la ligne (POUR PLUS TARD : EFFET MAGNET ?)
@@ -496,7 +496,7 @@ public class DisplayCanvas extends Pane{
                 WallModifier.Initialise();
 
             }
-            if(parentPane.toolbar.buttonPorteState == true){
+            if(parentPane.toolbar.buttonPorteState == true){ //si on clique sur mur avec outils porte : on créer et affiche porte
                 doorTabList.add(new Porte(doorTabList.size(), m)); 
                 DisplayPorte(doorTabList.get(doorTabList.size()-1));
 
@@ -535,6 +535,7 @@ public class DisplayCanvas extends Pane{
     }
 
     public void DisplayMur(Mur m){
+
         DisplayCoin(m.getDebut());
         DisplayCoin(m.getFin());
 
@@ -546,8 +547,8 @@ public class DisplayCanvas extends Pane{
         foobar.setEndY(m.getFin().getY());
         foobar.setStrokeWidth(4);
 
-        murlineHT.put(m, foobar);
-        linemurHT.put(foobar, m);
+        murlineHT.put(m, foobar); //HashTable qui permet à partir d'un mur de retrouver la ligne correspondante 
+        linemurHT.put(foobar, m); //HashTable qui permet à partir d'une lingne de retrouver le mur correspondant 
     
         foobar.setOnMouseEntered(e -> { //on détecte quand la souris passe la ligne (POUR PLUS TARD : EFFET MAGNET ?)
             
@@ -577,6 +578,7 @@ public class DisplayCanvas extends Pane{
 
             }
             if(parentPane.toolbar.buttonPorteState == true){
+                
                 doorTabList.add(new Porte(doorTabList.size(), m)); 
                 DisplayPorte(doorTabList.get(doorTabList.size()-1));
 
@@ -657,7 +659,7 @@ public class DisplayCanvas extends Pane{
         double yp1,yp2,yp3,yp4; //idem
 
         l= 8.0; //a modifier au besoin = épaisseur du trait qui sert à tracer le mur 
-        L = 40.0; //largeur de l'ouverture
+        L = 82.0; //largeur de l'ouverture
 
         //on va calculer les coords des 4 coins du rectangle qui sera affiché en blanc pour afficher la porte :(bcp de trigo et long....J'Y AI PASSÉ AU MOINS 3H!!!!)
 
@@ -730,7 +732,19 @@ public class DisplayCanvas extends Pane{
     {
         for(int i = 0; i < p.murs.size(); i++)
         {
+
             DisplayMur(p.murs.get(i), x, y);
+            
+        }
+    }
+
+    public void DisplayPiece(Piece p)
+    {
+        for(int i = 0; i < p.murs.size(); i++)
+        {
+
+            DisplayMur(p.murs.get(i));
+            
         }
     }
 
@@ -738,7 +752,15 @@ public class DisplayCanvas extends Pane{
     {
         for(int i = 0; i < appart.pieces.size(); i++)
         {
-            DisplayPiece(appart.pieces.get(i), appart.px, appart.py);
+            DisplayPiece(appart.pieces.get(i));
+        }
+    }
+
+    public void DisplayAppart(Appartement appart, double px, double py)
+    {
+        for(int i = 0; i < appart.pieces.size(); i++)
+        {
+            DisplayPiece(appart.pieces.get(i), px, py);
         }
     }
 
@@ -746,7 +768,7 @@ public class DisplayCanvas extends Pane{
     {
         for(int i = 0; i < niv.appartements.size(); i++)
         {
-            DisplayAppart(niv.appartements.get(i));
+            DisplayAppart(niv.appartements.get(i), niv.appartements.get(i).px, niv.appartements.get(i).py);
         }
     }
 

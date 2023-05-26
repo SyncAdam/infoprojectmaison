@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 import insa.Batiment.Mur;
 import insa.Batiment.Piece;
-import insa.Batiment.Porte;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -20,7 +18,7 @@ public class OurToolBar extends Pane{
 
     MainPane parentPane;
 
-    Button autoWall;
+    Button autoWall; //déclaration de tous les boutons de la barre d'outils
     Button buttonMur;
     Button buttonPorte;
     Button buttonPiece;
@@ -31,7 +29,7 @@ public class OurToolBar extends Pane{
     Button moveUp;
     Button moveDown;
 
-    boolean autoWallState;
+    boolean autoWallState; //variables qui servent à détecter l'état des boutons pour effectuer les bonne interactions
     boolean wallButtonState;
     boolean roomButtonState;
     boolean modifyButtonState;
@@ -44,7 +42,9 @@ public class OurToolBar extends Pane{
 
     OurToolBar(MainPane parentPane)
     {
-        this.autoWallState = false;
+        this.toolBar = new ToolBar();//création de la toolBar
+
+        this.autoWallState = false; //initialisation des variables
         this.wallButtonState = false;
         this.roomButtonState = false;
         this.modifyButtonState = false;
@@ -52,7 +52,7 @@ public class OurToolBar extends Pane{
         this.mouseIsInTheToolBar = false;
 
 
-        this.buttonMur = new Button("Mur");
+        this.buttonMur = new Button("Mur"); //initilaisation de boutons
         this.autoWall = new Button("Automatique");
         this.buttonPorte = new Button("Porte");
         this.buttonPiece = new Button("Piece");
@@ -65,7 +65,10 @@ public class OurToolBar extends Pane{
 
         this.parentPane = parentPane;
 
-        double width =  102;
+        double width =  102; //largeur des boutons
+
+        this.setMinHeight(this.parentPane.getHeight());
+        this.toolBar.setMinHeight(this.getHeight());
 
         this.buttonMur.setMinWidth(width); //largeur des boutons : pour l'esthétique
         this.buttonPiece.setMinWidth(width);
@@ -95,9 +98,9 @@ public class OurToolBar extends Pane{
         navigateBorderPane.setTop(moveUp);
         navigateBorderPane.setBottom(moveDown);
 
-        this.toolBar = new ToolBar();
+        
 
-        navigateBorderPane.setAlignment(moveUp, Pos.CENTER);
+        navigateBorderPane.setAlignment(moveUp, Pos.CENTER); //on centre les boutons ^ et v pour l'esthétique
         navigateBorderPane.setAlignment(moveDown, Pos.CENTER);
 
         toolBar.setOrientation(Orientation.VERTICAL);
@@ -106,17 +109,7 @@ public class OurToolBar extends Pane{
 
         this.getChildren().add(toolBar);
 
-        this.moveLeft.setOnAction(event -> {
-            for(Node o : this.parentPane.canva.getChildren())
-            {
-                if(o instanceof Shape)
-                {
-                    o.setTranslateX(o.getTranslateX() - 30.0d);
-                }
-            }
-        });
-
-        this.moveRight.setOnAction(event -> {
+        this.moveLeft.setOnAction(event -> { //gestion déplacement avec flèches
             for(Node o : this.parentPane.canva.getChildren())
             {
                 if(o instanceof Shape)
@@ -126,7 +119,17 @@ public class OurToolBar extends Pane{
             }
         });
 
-        this.moveUp.setOnAction(event -> {
+        this.moveRight.setOnAction(event -> {//gestion déplacement avec flèches
+            for(Node o : this.parentPane.canva.getChildren())
+            {
+                if(o instanceof Shape)
+                {
+                    o.setTranslateX(o.getTranslateX() - 30.0d);
+                }
+            }
+        });
+
+        this.moveUp.setOnAction(event -> {//gestion déplacement avec flèches
             for(Node o : this.parentPane.canva.getChildren())
             {
                 if(o instanceof Shape)
@@ -136,7 +139,7 @@ public class OurToolBar extends Pane{
             }
         });
 
-        this.moveDown.setOnAction(event -> {
+        this.moveDown.setOnAction(event -> {//gestion déplacement avec flèches
             for(Node o : this.parentPane.canva.getChildren())
             {
                 if(o instanceof Shape)
@@ -164,6 +167,20 @@ public class OurToolBar extends Pane{
                 int nextindex = 0;
                 boolean idAvailable = false;
 
+                ArrayList<Object> var = new ArrayList<>();
+                for(Object o : temp)
+                {
+                    if(o instanceof Mur)
+                    {
+                        Mur m = (Mur) o;
+                        m.getDebut().setX(m.getDebut().getX() - this.parentPane.canva.selectedAppartement.px);
+                        m.getDebut().setY(m.getDebut().getY() - this.parentPane.canva.selectedAppartement.py);
+                        var.add(m);
+                    }
+                }
+
+                temp = var;
+                
                 while (!idAvailable) {
                     boolean found = false;
                     for (Piece p : this.parentPane.canva.selectedAppartement.pieces) {
@@ -181,17 +198,21 @@ public class OurToolBar extends Pane{
                     {
                         nextindex++;
                     }
+
                 }
                 Piece p = new Piece(nextindex, temp);
                 this.parentPane.canva.selectedAppartement.addPiece(p);
                 this.parentPane.canva.selectedPiece = p;
-                this.parentPane.hierarchy.hierarchyRefresh();
                 this.parentPane.canva.HilightRoom(p, Color.web("#eff704", 0.3));
             }
-            else
+            else if(this.parentPane.canva.selectedAppartement == null)
             {
                 this.parentPane.hierarchy.nonClassePieces.add(new Piece(0, temp));
             }
+            
+            
+            this.parentPane.hierarchy.hierarchyRefresh();
+            
         });
 
         buttonMur.setOnAction(e ->{ //actualise juste la bonne variable pour pouvoir les actions adéquates (cf Display Canva)
@@ -237,7 +258,7 @@ public class OurToolBar extends Pane{
                 this.parentPane.log.setTxt("Vous avez quitté le mode porte");
             }
 
-            if (this.parentPane.canva.selectedSurfaces.size() == 0){parentPane.log.setTxt("Veuillez selectionner au moins un mur avant de créer une porte");} //on vérif qu'il y a bien un mur selectionné
+            /*if (this.parentPane.canva.selectedSurfaces.size() == 0){parentPane.log.setTxt("Veuillez selectionner au moins un mur avant de créer une porte");} //on vérif qu'il y a bien un mur selectionné
             else{ //si au moins un mur est selectionné :
 
                 for (int i = 0; i < this.parentPane.canva.selectedSurfaces.size(); i++) { //pour i allant de 0 au nombre de mur selectionné, on crééer un porte qu'on ajoute dans le tableau, puis on affiche
@@ -249,7 +270,7 @@ public class OurToolBar extends Pane{
                     }    
                 }
                 
-            }
+            }*/
 
         });
 

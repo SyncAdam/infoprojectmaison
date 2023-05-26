@@ -27,8 +27,9 @@ public class HierarchyPieceContext extends HierarchyItemContext{
 
         MenuItem mi3 = new MenuItem("Changer d'appartement");
         MenuItem mi4 = new MenuItem("Supprimer la Piece");
+        MenuItem mi5 = new MenuItem("Changer ID");
 
-        this.getItems().addAll(mi3, mi4);
+        this.getItems().addAll(mi3, mi4, mi5);
 
         mi3.setOnAction(event -> {
 

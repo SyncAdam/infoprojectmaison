@@ -37,6 +37,6 @@ Coin;2;200;800
 Coin;3;600;800
 Coin;4;600;400
 Piece;3;1,2,3,4
-Appartement;2;0;1,2,3;0;600
+Appartement;2;0;1,2,3;600;0
 Niveau;0;1,2
 Immeuble;0;0

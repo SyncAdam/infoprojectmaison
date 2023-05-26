@@ -199,6 +199,7 @@ public class Menus extends MenuBar{
                             parentPane.hierarchy.loadedImmeubles.remove(i);
                         }
                         this.parentPane.hierarchy.loadedImmeubles = Immeuble.loadImmeuble(selectedFile.getPath());
+                        this.parentPane.projectOpened = true;
                         this.parentPane.hierarchy.hierarchyRefresh();
                         this.parentPane.canva.clearCanva();
                     }
