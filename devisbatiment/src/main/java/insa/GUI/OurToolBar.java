@@ -40,6 +40,8 @@ public class OurToolBar extends Pane{
 
     ToolBar toolBar;
 
+    double translateFactor;
+
     OurToolBar(MainPane parentPane)
     {
         this.toolBar = new ToolBar();//création de la toolBar
@@ -98,7 +100,7 @@ public class OurToolBar extends Pane{
         navigateBorderPane.setTop(moveUp);
         navigateBorderPane.setBottom(moveDown);
 
-        
+        this.translateFactor = 30.0d;
 
         navigateBorderPane.setAlignment(moveUp, Pos.CENTER); //on centre les boutons ^ et v pour l'esthétique
         navigateBorderPane.setAlignment(moveDown, Pos.CENTER);
@@ -114,9 +116,11 @@ public class OurToolBar extends Pane{
             {
                 if(o instanceof Shape)
                 {
-                    o.setTranslateX(o.getTranslateX() + 30.0d);
+                    o.setTranslateX(o.getTranslateX() + translateFactor);
                 }
             }
+            this.parentPane.canva.globalTranslate.setX(this.parentPane.canva.globalTranslate.getX() + translateFactor);
+            System.out.println(this.parentPane.canva.globalTranslate.getX());
         });
 
         this.moveRight.setOnAction(event -> {//gestion déplacement avec flèches
@@ -124,9 +128,11 @@ public class OurToolBar extends Pane{
             {
                 if(o instanceof Shape)
                 {
-                    o.setTranslateX(o.getTranslateX() - 30.0d);
+                    o.setTranslateX(o.getTranslateX() - translateFactor);
                 }
             }
+            this.parentPane.canva.globalTranslate.setX(this.parentPane.canva.globalTranslate.getX() - translateFactor);
+            System.out.println(this.parentPane.canva.globalTranslate.getX());
         });
 
         this.moveUp.setOnAction(event -> {//gestion déplacement avec flèches
@@ -134,9 +140,11 @@ public class OurToolBar extends Pane{
             {
                 if(o instanceof Shape)
                 {
-                    o.setTranslateY(o.getTranslateY() + 30.0d);
+                    o.setTranslateY(o.getTranslateY() + translateFactor);
                 }
             }
+            this.parentPane.canva.globalTranslate.setY(this.parentPane.canva.globalTranslate.getY() + translateFactor);
+            System.out.println(this.parentPane.canva.globalTranslate.getY());
         });
 
         this.moveDown.setOnAction(event -> {//gestion déplacement avec flèches
@@ -144,9 +152,11 @@ public class OurToolBar extends Pane{
             {
                 if(o instanceof Shape)
                 {
-                    o.setTranslateY(o.getTranslateY() - 30.0d);
+                    o.setTranslateY(o.getTranslateY() - translateFactor);
                 }
             }
+            this.parentPane.canva.globalTranslate.setY(this.parentPane.canva.globalTranslate.getY() - translateFactor);
+            System.out.println(this.parentPane.canva.globalTranslate.getY());
         });
 
         this.unselectButton.setOnAction(event -> {
@@ -168,16 +178,33 @@ public class OurToolBar extends Pane{
                 boolean idAvailable = false;
 
                 ArrayList<Object> var = new ArrayList<>();
-                for(Object o : temp)
+                if(this.parentPane.canva.selectedAppartement == null)
                 {
-                    if(o instanceof Mur)
+                    for(Object o : temp)
                     {
-                        Mur m = (Mur) o;
-                        m.getDebut().setX(m.getDebut().getX() - this.parentPane.canva.selectedAppartement.px);
-                        m.getDebut().setY(m.getDebut().getY() - this.parentPane.canva.selectedAppartement.py);
-                        var.add(m);
+                        if(o instanceof Mur)
+                        {
+                            Mur m = (Mur) o;
+                            m.getDebut().setX(m.getDebut().getX() - this.parentPane.canva.selectedAppartement.px);
+                            m.getDebut().setY(m.getDebut().getY() - this.parentPane.canva.selectedAppartement.py);
+                            var.add(m);
+                        }
                     }
                 }
+                else
+                {
+                    for(Object o : temp)
+                    {
+                        if(o instanceof Mur)
+                        {
+                            Mur m = (Mur) o;
+                            m.getDebut().setX(m.getDebut().getX());
+                            m.getDebut().setY(m.getDebut().getY());
+                            var.add(m);
+                        }
+                    }
+                }
+                
 
                 temp = var;
                 
@@ -203,11 +230,13 @@ public class OurToolBar extends Pane{
                 Piece p = new Piece(nextindex, temp);
                 this.parentPane.canva.selectedAppartement.addPiece(p);
                 this.parentPane.canva.selectedPiece = p;
-                this.parentPane.canva.HilightRoom(p, Color.web("#eff704", 0.3));
+                this.parentPane.canva.HilightRoom(p, Color.web("#eff704", 0.3), this.parentPane.canva.globalTranslate.getX(), this.parentPane.canva.globalTranslate.getY());
             }
             else if(this.parentPane.canva.selectedAppartement == null)
             {
-                this.parentPane.hierarchy.nonClassePieces.add(new Piece(0, temp));
+                Piece pi = new Piece(0, temp);
+                this.parentPane.hierarchy.nonClassePieces.add(pi);
+                this.parentPane.canva.HilightRoom(pi, Color.web("#eff704", 0.3), this.parentPane.canva.globalTranslate.getX(), this.parentPane.canva.globalTranslate.getY());
             }
             
             

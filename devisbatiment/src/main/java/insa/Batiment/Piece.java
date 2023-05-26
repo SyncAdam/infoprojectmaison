@@ -101,6 +101,9 @@ public class Piece implements Serializable{
             }
         }
 
+        ordonnerMurs(this);
+        this.pieceValide = pieceIntegre();
+
         Sol sol = new Sol(murs);
         Plafond plafond = new Plafond(murs);
 
@@ -147,17 +150,17 @@ public class Piece implements Serializable{
         try
         {
             
-            for(int i = 0; i < murs.size()-1; i++)
+                for(int i = 0; i < murs.size()-1; i++)
             {
                 if(i == murs.size()-1)
                 {
-                    if(!this.murs.get(i).getDebut().equals(this.murs.get(0).getFin()) || !this.murs.get(i).getFin().equals(this.murs.get(0).getDebut()))
+                    if(!this.murs.get(i).getDebut().equals(this.murs.get(0).getFin()) && !this.murs.get(i).getFin().equals(this.murs.get(0).getDebut()))
                     {
                         this.pieceValide = false;
                         return false;
                     }
                 }
-                else if(!this.murs.get(i).getDebut().equals(this.murs.get(i+1).getFin()) || !this.murs.get(i).getFin().equals(this.murs.get(i+1).getDebut()))
+                else if(!this.murs.get(i).getDebut().equals(this.murs.get(i+1).getFin()) && !this.murs.get(i).getFin().equals(this.murs.get(i+1).getDebut()))
                 {
                     this.pieceValide = false;
                     return false;
@@ -178,15 +181,17 @@ public class Piece implements Serializable{
             }
 
             //En tout cas le surface ne doit etre inferier a 0
+            /* 
             if(this.surface() <= 0)
             {
                 this.pieceValide = false;
                 return false;  
             }
-
+            */
             refreshsoletplafond();
 
             this.pieceValide = true;
+            System.out.println("Piece valide");
             return true;
         }
         catch(RuntimeException e)
@@ -224,13 +229,11 @@ public class Piece implements Serializable{
         return r;
     }
 
-    public static ArrayList<Mur> ordonnerMurs(Piece p)
+    public static void ordonnerMurs(Piece p)
     {
         ArrayList<Mur> newMurs = new ArrayList<>();
-        if(p.pieceValide)
-        {
 
-            Coin c = newMurs.get(0).getDebut();     //on retrouve le coin le plus loin de l'axe des abscisses
+            Coin c = p.murs.get(0).getDebut();     //on retrouve le coin le plus loin de l'axe des abscisses
     
             for(Mur m : p.murs)
             {
@@ -239,24 +242,86 @@ public class Piece implements Serializable{
             }
             
             //On décide dans quelle direction on va recreer le cycleű
-            Mur m1;
-            Mur m2;
+            Mur m1 = null;
+            Mur m2 = null;
             for(Mur m : p.murs)
             {
-                if(m.getDebut().equals(c) || m.getFin().equals(c)) m1 = m;
-                
+                if(m.getDebut().equals(c) || m.getFin().equals(c))
+                {
+                    if(m1 == null)
+                    {
+                        m1 = m;
+                    }
+                    else
+                    {
+                        m2 = m;
+                    }
+                } 
             }
 
+            Mur nextMur = m1;
 
-        }
-        
+            if(m1.pente() == m2.pente())            //si les deux pentes sont egales on prends celle qui a un coin plus loin sur l'axe des x
+            {
+                Coin coin = m1.getDebut();
 
+                if(m1.getFin().getX() > coin.getX())
+                {
+                    coin = m1.getFin();
+                    nextMur = m1;
+                }
+                else if(m2.getDebut().getX() > coin.getX())
+                {
+                    coin = m2.getDebut();
+                    nextMur = m2;
+                }
+                else if(m2.getFin().getX() > coin.getX())
+                {
+                    coin = m2.getFin();
+                    nextMur = m2;
+                }
+            }
+            else if(m1.pente() >= m2.pente())
+            {
+                nextMur = m2;
+            }
+            else if(m1.pente() <= m2.pente())
+            {
+                nextMur = m1;
+            }
 
+            newMurs.add(nextMur);
+            p.murs.remove(nextMur);
 
-
-
-        return newMurs;
+            while(!newMurs.get(newMurs.size()-1).getFin().equals(newMurs.get(0).getDebut()))
+            {
+                for(int i = 0; i < p.murs.size(); i++)
+                {
+                    Mur m = p.murs.get(i);
+                    if(m.contains(newMurs.get(newMurs.size()-1).getFin()) || m.contains(newMurs.get(newMurs.size()-1).getDebut()))
+                    {
+                        if(m.getDebut().equals(newMurs.get(newMurs.size()-1).getFin()))
+                        {
+                            newMurs.add(m);
+                            p.murs.remove(m);
+                            break;
+                        }
+                        else if(m.getFin().equals(newMurs.get(newMurs.size()-1).getFin()))
+                        {
+                            newMurs.add(new Mur(m.getID(), m.getFin(), m.getDebut()));
+                            p.murs.remove(m);
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            p.murs = newMurs;
+            System.out.println(p.pieceIntegre());
+            
     }
+        
+        
     
     public int getPieceId()
     {

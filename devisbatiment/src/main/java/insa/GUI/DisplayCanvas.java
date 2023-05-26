@@ -1,9 +1,12 @@
 package insa.GUI;
 
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
+import javafx.scene.transform.Translate;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 
@@ -37,6 +40,8 @@ public class DisplayCanvas extends Pane{
     public Piece selectedPiece;
     public Appartement selectedAppartement;
 
+    public Translate globalTranslate;
+
     public Hashtable<Mur, Line> murlineHT;
     public Hashtable<Line, Mur> linemurHT;
     Line ligne = new Line(); //Prévisualisation du mur .
@@ -57,6 +62,8 @@ public class DisplayCanvas extends Pane{
         this.doorTabList = new ArrayList<Porte>();
 
         this.ligne = new Line();
+
+        this.globalTranslate = new Translate(0, 0);
 
         this.murlineHT = new Hashtable<>();
         this.linemurHT = new Hashtable<>();
@@ -79,10 +86,15 @@ public class DisplayCanvas extends Pane{
 
         */
 
-        Line ligne = new Line(); //Prévisualisation du mur .
+        
         this.getChildren().add(ligne);
 
         this.setOnMouseMoved(e->{
+
+            if(!this.getChildren().contains(ligne)){
+                Line ligne = new Line(); //Prévisualisation du mur .
+                this.getChildren().add(ligne);
+            } 
             
             if (parentPane.toolbar.autoWallState == true){
  //quand on déplace la souris et qu'on est en automatique, on affiche le futur mur
@@ -103,17 +115,19 @@ public class DisplayCanvas extends Pane{
                         ligne.setEndY(e.getY());
                     }
                     else{
-                        System.out.println("bruh");
                         ligne.setStrokeWidth(4);
                         ligne.setStartX(coinTab.get(coinTab.size()-1).getX());
                         ligne.setStartY(coinTab.get(coinTab.size()-1).getY());
-                        ligne.setEndX(e.getX());
-                        ligne.setEndY(e.getY());
+                        ligne.setEndX(e.getX() - this.globalTranslate.getX());
+                        ligne.setEndY(e.getY() - this.globalTranslate.getY());
                     }
                  }       
-            }else{ligne.setStrokeWidth(0); }//quand on est plus en auto on cache la ligne}
+            }
+            else
+            {
+                ligne.setStrokeWidth(0);
+            }//quand on est plus en auto on cache la ligne}
         });
-
 
         this.setOnMouseClicked(e -> { //détection du clic + récup coords
             if (parentPane.ctrlIsPressed == false && this.parentPane.projectOpened == true && this.parentPane.toolbar.wallButtonState == false && parentPane.toolbar.modifyButtonState == false && parentPane.toolbar.buttonPorteState == false && parentPane.toolbar.mouseIsInTheToolBar == false){
@@ -135,8 +149,8 @@ public class DisplayCanvas extends Pane{
 
                         }else{ //si ni V ni H n'est pas pressé on place le point à l'endroit du clic
                 
-                            this.coinTab.add(new Coin(this.coinTab.size(), e.getX(), e.getY())); //on créé le new point dans le tableau
-                            DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
+                            this.coinTab.add(new Coin(this.coinTab.size(), e.getX() - this.globalTranslate.getX(), e.getY() - this.globalTranslate.getY())); //on créé le new point dans le tableau
+                            DisplayCoin(this.coinTab.get(this.coinTab.size()-1), this.globalTranslate.getX(), this.globalTranslate.getY()); //on l'affiche
                             parentPane.log.setTxt("Vous venez de créer un point d'ID : " + Integer.toString(coinTab.size()-1) );
 
                             /*NOTE : si on a un seul élement dans l'array list, sont index est 0, mais quand on demande la taille (.size()),
@@ -149,36 +163,24 @@ public class DisplayCanvas extends Pane{
                 }
                     if (parentPane.toolbar.autoWallState == true){ //si autowall activé :
                         if(parentPane.HIsPressed == true){ //si on clique et que H est pressé, on récup la coord le Y du pt d'avant et le X du clic
-                            this.coinTab.add(new Coin(this.coinTab.size(), e.getX(), coinTab.get(coinTab.size()-1).getY())); //on créér le new point dans le tableau
-                            DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
-                            wallTab.add(new Mur (wallTab.size(), coinTab.get(coinTab.size()-2), coinTab.get(coinTab.size()-1))); //on créér un mur à partir des 2 dernies coins du coinTab
+                            this.coinTab.add(new Coin(this.coinTab.size(), e.getX() - this.globalTranslate.getX(), coinTab.get(coinTab.size()-1).getY())); //on créér le new point dans le tableau
                             /*NOTE : coinTab.size()-1 correspond à l'index du dernier point et coinTab.size()-2, à celui de l'avant dernier */
 
-                            DisplayMur(wallTab.get(wallTab.size()-1), 0, 0);
-                            System.out.println("Le coin d'id " + coinTab.get(coinTab.size()-1).getId()+ "est à la pos " + (coinTab.size()-1));
                         }else if(parentPane.VIsPressed == true){ //si V est pressé, on fait comme pour H mais à l'inverse
-                            this.coinTab.add(new Coin(this.coinTab.size(), coinTab.get(coinTab.size()-1).getX(), e.getY())); //on créér le new point dans le tableau
-                            DisplayCoin(this.coinTab.get(this.coinTab.size()-1)); //on l'affiche
-                            wallTab.add(new Mur (wallTab.size(), coinTab.get(coinTab.size()-2), coinTab.get(coinTab.size()-1))); //on créér un mur à partir des 2 dernies coins du coinTab
-                                                    
-                            DisplayMur(wallTab.get(wallTab.size()-1), 0, 0);
-                            System.out.println("Le coin d'id " + coinTab.get(coinTab.size()-1).getId()+ "est à la pos " + (coinTab.size()-1));
+
+                            this.coinTab.add(new Coin(this.coinTab.size(), coinTab.get(coinTab.size()-1).getX(), e.getY()- this.globalTranslate.getY())); //on créér le new point dans le tableau
 
                         }else{ //si ni V ni H n'est pas pressé on place le point à l'endroit du clic
                 
-                            coinTab.add(new Coin(coinTab.size(), e.getX(), e.getY())); //on créé le new point dans le tableau avec comme id sa position dans le tableau
-                            DisplayCoin(coinTab.get(coinTab.size()-1)); //on l'affiche (le dernier pt du coinTab)
-                        
-                            if(coinTab.size() > 1) wallTab.add(new Mur (wallTab.size(), coinTab.get(coinTab.size()-2), coinTab.get(coinTab.size()-1))); //on créér un mur à partir des 2 dernies coins du coinTab
+                            coinTab.add(new Coin(coinTab.size(), e.getX() - this.globalTranslate.getX(), e.getY() - this.globalTranslate.getY())); //on créé le new point dans le tableau avec comme id sa position dans le tableau                            if(coinTab.size() > 1) wallTab.add(new Mur (wallTab.size(), coinTab.get(coinTab.size()-2), coinTab.get(coinTab.size()-1))); //on créér un mur à partir des 2 dernies coins du coinTab
+                            
+                            /*NOTE : coinTab.size()-1 correspond à l'index du dernier point et coinTab.size()-2, à celui de l'avant dernier */                   
+                        }
 
-                            /*NOTE : coinTab.size()-1 correspond à l'index du dernier point et coinTab.size()-2, à celui de l'avant dernier */
-                            DisplayMur(wallTab.get(wallTab.size()-1), 0, 0); //on l'affcihe
-                            
-                            System.out.println("Mur affiché");
-                            
-                            System.out.println("Le coin d'id " + coinTab.get(coinTab.size()-1).getId()+ "est à la pos " + (coinTab.size()-1));
-                    
-                     }
+                        wallTab.add(new Mur (wallTab.size(), coinTab.get(coinTab.size()-2), coinTab.get(coinTab.size()-1)));
+                        DisplayCoin(this.coinTab.get(this.coinTab.size()-1), this.globalTranslate.getX(), this.globalTranslate.getY()); //on l'affiche
+                        DisplayMur(wallTab.get(wallTab.size()-1), this.globalTranslate.getX(), this.globalTranslate.getY());
+                        System.out.println("Le coin d'id " + coinTab.get(coinTab.size()-1).getId()+ "est à la pos " + (coinTab.size()-1));
                 }
                 }
 
@@ -199,52 +201,8 @@ public class DisplayCanvas extends Pane{
                     
                         wallTab.add(new Mur (wallTab.size(), coinTab.get(coinTab.size()-2), coinTab.get(coinTab.size()-1)));
 
-                        DisplayMur(wallTab.get(wallTab.size()-1));//on l'affiche
+                        DisplayMur(wallTab.get(wallTab.size()-1), this.globalTranslate.getX(), this.globalTranslate.getY());//on l'affiche
                     
-
-                        /*Raisonnement de ce que j'ai fait (21/04): quand on clique 2 fois sur un coin, c'est forcément que l'on fait une pièce (du moins si le auto wall a tjrs été activé),
-                        * Donc on va parcourir tous les murs de walltab en partant du dernier jusquà trouver un point commun avec le dernier mur
-                        *placé. Et a chaque fois, on ajoute dans une liste de mur de l'array liste de liste de mur. (oui une array liste de liste !)
-                        
-
-                        //==================================================
-                        //Tout ca existe deja dans piece mais un peu plus efficacement
-                        //==================================================
-
-                        
-
-                        // on va commencer par vérifier l'avant dernier mur, sinon la boucle while sort dès la première itération
-                        
-                        murArrayTab.add(new ArrayList<Mur>()); //on créer un arraylist de mur dans l'arraylist d'arraylist de mur
-                        murArrayTab.get(murArrayTab.size()-1).add(wallTab.get(wallTab.size()-1)); //on ajoute le dernier mur crééé dans l'array liste de l'array liste d'array liste de mur, car il ne sera pas ajouté par la boucle while
-
-                            /*
-                            while (wallTab.get(i).getIdDebut() != parentPane.toolbar.idOfCurrentSelectedPoint && wallTab.get(i).getIdFin() != parentPane.toolbar.idOfCurrentSelectedPoint){ //tant que les 2 coins du mur i sont différents du currentidpoint on continue
-                                
-                                murArrayTab.get(murArrayTab.size()-1).add(wallTab.get(i)); //on ajoute au tableau dans le tableau mur i de la pièce
-                                j++;
-                                 //condition de si on a parcouru tous les murs et q'on est pas sorti du while
-                                //POUR PLUS TARD : EXEPTION QUI Détecte QUAND ERREUR DANS LA BOUCLE --> LA PI7CE N'EST PAS FERMée
-                            }
-                            
-                            
-                            ArrayList<Object> temp = new ArrayList<>();
-                            for(int i = wallTab.size()-1; i >= 0; i--)
-                            {
-                                temp.add((Object) wallTab.get(i));
-                                wallTab.remove(i);
-                            }
-                                //pieceTab.add(new Piece(murArrayTab.size()-1, temp)); // on ajoute dans l'arrayList de pièce la new pièce créée                        
-                            this.parentPane.toolbar.hierarchy.nonClassePieces.add(new Piece(murArrayTab.size()-1, temp));
-                            this.parentPane.toolbar.hierarchy.hierarchyRefresh();
-                            if(this.selectedPiece != null)
-                            {
-                               HilightRoom(this.selectedPiece, this.parentPane.toolbar.backgroundColor);
-                            }
-                            this.selectedPiece = this.parentPane.toolbar.hierarchy.nonClassePieces.get(this.parentPane.toolbar.hierarchy.nonClassePieces.size()-1);
-                                                        //pieceTab.get(pieceTab.size()-1).toString();
-                            HilightRoom(this.parentPane.toolbar.hierarchy.nonClassePieces.get(this.parentPane.toolbar.hierarchy.nonClassePieces.size()-1), Color.web("#eff704", 0.3)); 
-                        */  
                     }
 
                 }
@@ -263,21 +221,6 @@ public class DisplayCanvas extends Pane{
         this.getChildren().add(this.ligne);
     }
 
-    /*
-    public void concatenateTransform(Transform trans) {
-        Transform oldTrans = this.drawingCanvas.getGraphicsContext2D().getTransform();
-        Transform newTrans = oldTrans.createConcatenation(trans);
-        this.setTransform(newTrans);
-    }
-
-    public void setTransform(Transform trans) {
-        this.drawingCanvas.getGraphicsContext2D().setTransform(new Affine(trans));
-    }
-
-    public Transform getTransform() {
-        return this.drawingCanvas.getGraphicsContext2D().getTransform();
-    }
-    */
 
     public void showNoProjectOpenedPopup()
     {
@@ -646,6 +589,21 @@ public class DisplayCanvas extends Pane{
         }
     }
 
+    public void translateAllToZero()
+    {
+        this.globalTranslate.setX(0);
+        this.globalTranslate.setY(0);
+
+        for(Node o : this.getChildren())
+        {
+            if(o instanceof Shape)
+            {
+                o.setTranslateX(0);
+                o.setTranslateY(0);
+            }
+        }
+    }
+
     public void DisplayPorte(Porte p){
         Polygon rectangle = new Polygon(); //on utilise des polygone pour faire des rectangles blanc et non des rectangles directement, car c'est plus simple pour les aligner avec le mur 
         double l, L; //pas utiles, juste plus court pour les formules trigo d'après
@@ -714,6 +672,39 @@ public class DisplayCanvas extends Pane{
         this.getChildren().add(polygon); // on l'affiche sur le pane 
 
     }
+
+    public void HilightRoom(Piece piece, Color couleur, double x, double y){
+        //public void HilightRoom(){
+        
+
+        ArrayList<Coin> coinsPiece = new ArrayList<Coin>(); //arrayliste destinnée à contenir tous les points qui forment la pièce
+
+        for (int i = 0; i <piece.murs.size(); i++) { //piece.murs = array liste qui contient tous les murs de la pièce
+            coinsPiece.add(piece.murs.get(i).getDebut()); //on ajoute tous les points qui constituent la pièce 
+    
+            
+        }
+        double points[] = new double [coinsPiece.size()*2]; //tableau de taille 2 fois le nb de point pour stocker ttes les coords de tous les pts dans un tableau
+        int j =0;
+        for (int i = 0; i < coinsPiece.size(); i++) {  
+            //on veut récup les coords x y du point dans la case i de l'array liste, ajouter ces coords aux pos j et j+1 du tableau. j avance de 2 en 2 et i de 1 en 1 pour ne pas sauter de points
+            points[j] = coinsPiece.get(i).getX() + x; //en i on met la coord x du pt J
+            points[j+1] = coinsPiece.get(i).getY() + y;//en i+1 on met la coord x du pt J
+            j = j+2;
+            
+        }
+        for (int i = 0; i < coinsPiece.size()*2 ; i++) {
+            System.out.println("tab points : "+ points[i]);
+            
+        }
+    
+          // create a polygon
+        Polygon polygon = new Polygon(points);
+        polygon.setFill(couleur); //on colore le polygone avec la couleur du constructeur de la méthode
+        this.getChildren().add(polygon); // on l'affiche sur le pane 
+
+    }
+
 
     public void resetSelection()
     {

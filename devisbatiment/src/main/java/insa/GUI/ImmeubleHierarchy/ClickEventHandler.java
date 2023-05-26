@@ -24,6 +24,12 @@ public class ClickEventHandler implements EventHandler<MouseEvent>{
     @Override
     public void handle(MouseEvent arg0) {
 
+        
+        this.fatherTree.parentPane.canva.globalTranslate.setX(0);
+        this.fatherTree.parentPane.canva.globalTranslate.setY(0);
+        //this.fatherTree.parentPane.canva.translateAllToZero();
+        
+
         if(this.targetObject instanceof Piece)
         {
             if(this.fatherTree.parentPane.canva.selectedPiece != null)
@@ -58,9 +64,8 @@ public class ClickEventHandler implements EventHandler<MouseEvent>{
         {
             this.fatherTree.parentPane.canva.resetSelection();
             this.fatherTree.parentPane.canva.clearCanva();
-            this.fatherTree.parentPane.canva.DisplayObject(this.targetObject);   
-        }
-        
+            this.fatherTree.parentPane.canva.DisplayObject(this.targetObject);
+        }        
     }
     
 }

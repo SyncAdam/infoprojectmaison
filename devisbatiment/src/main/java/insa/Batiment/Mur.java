@@ -114,7 +114,13 @@ public class Mur extends Surface{
 
     public double pente()
     {
-        return (this.getFin().getY() - this.getDebut().getY()) / (this.getFin().getX() - this.getDebut().getX());
+        try{
+            return (this.getFin().getY() - this.getDebut().getY()) / (this.getFin().getX() - this.getDebut().getX());
+        }
+        catch(ArithmeticException e)
+        {
+            return Double.NaN;              //si la pente est verticale nyanyanya
+        }
     }
 
     /**
@@ -212,6 +218,15 @@ public class Mur extends Surface{
 
     public void setSelectedState(boolean state){
         isSelected = state;
+    }
+
+    public boolean contains(Coin c1)
+    {
+        if(this.debut.equals(c1) || this.fin.equals(c1)) return true;
+        else
+        {
+            return false;
+        }
     }
 
     
