@@ -2,6 +2,7 @@ package insa.GUI;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -24,16 +25,17 @@ import java.io.IOException;
 
 public class App extends Application {
     
-    
+
     @Override
     public void start(Stage homeWindow) throws IOException {
 
         Scene myScene = new Scene(new MainPane(), Color.GREY);
-        
+       
+        homeWindow.getIcons().add(new Image("file:src/main/resources/insa/icon.png"));
         homeWindow.setWidth(1200);
         homeWindow.setHeight(700); //def de la hauteur de la fenetre 
-        //homeWindow.setFullScreen(true); //plein écran
-        homeWindow.setFullScreenExitHint("Plein écran activé, veuillez faire votre devis");
+       
+       
         homeWindow.setScene(myScene);
         homeWindow.show();
         

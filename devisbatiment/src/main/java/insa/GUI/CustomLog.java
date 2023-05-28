@@ -16,6 +16,7 @@ public class CustomLog  {
     
     Text logTxt = new Text();//création d'un label
     BorderPane root;
+    
 
     CustomLog(BorderPane root){
         this.root = root;
@@ -25,6 +26,7 @@ public class CustomLog  {
         
         logTxt.setText("Application démarée"); //texte du label
         root.setBottom(logTxt);
+        logTxt.setFont(Font.font(14));
         
         root.setBottom(logTxt); //on ajoute le label en bas de du border pane.
         BorderPane.setAlignment(logTxt ,Pos.BOTTOM_LEFT); //on centre le txt.

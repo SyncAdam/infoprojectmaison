@@ -162,16 +162,37 @@ public class OurToolBar extends Pane{
         });
 
         this.unselectButton.setOnAction(event -> {
+
+
+            for (int i = 0; i <  parentPane.canva.selectedSurfaces.size(); i++) { //on remet toutes les lignes en noir
+                this.parentPane.canva.murlineHT.get(parentPane.canva.selectedSurfaces.get(i)).setStroke(Color.BLACK);
+            }
             this.parentPane.canva.selectedSurfaces.clear();
+
+            
+            
         });
 
         this.buttonPiece.setOnAction(event -> {
             ArrayList<Object> temp = new ArrayList<Object>();
 
+            if(parentPane.canva.selectedSurfaces.size() <3){
+                parentPane.log.setTxt("Veuillez selectionner plus de mur pour créer une pièce !");
+                parentPane.log.setColor(Color.RED);
+            }else{
+
             while(this.parentPane.canva.selectedSurfaces.size() != 0)
             {
+                
+
+
+                for (int i = 0; i <  parentPane.canva.selectedSurfaces.size(); i++) { //on remet toutes les lignes en noir
+                    this.parentPane.canva.murlineHT.get(parentPane.canva.selectedSurfaces.get(i)).setStroke(Color.BLACK);
+                }
+
                 temp.add(this.parentPane.canva.selectedSurfaces.get(0));
                 this.parentPane.canva.selectedSurfaces.remove(0);
+                
             }
 
             if(this.parentPane.canva.selectedAppartement != null)
@@ -243,7 +264,10 @@ public class OurToolBar extends Pane{
             
             
             this.parentPane.hierarchy.hierarchyRefresh();
-            
+
+
+
+        } 
         });
 
         buttonMur.setOnAction(e ->{ //actualise juste la bonne variable pour pouvoir les actions adéquates (cf Display Canva)
@@ -317,14 +341,14 @@ public class OurToolBar extends Pane{
 
         });
 
-        this.toolBar.setOnMouseEntered(e->{
+        this.toolBar.setOnMouseEntered(e->{ //empèche de placer un point quand on clique sur un bouton
             mouseIsInTheToolBar = true;
-            System.out.println("Souris dans toolbar");
+            
         });
         
          this.toolBar.setOnMouseExited(e->{
             mouseIsInTheToolBar = false;
-            System.out.println("Souris plus dans toolbar");
+            
         });
         
     }

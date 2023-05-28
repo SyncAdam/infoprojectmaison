@@ -15,6 +15,7 @@ public class Mur extends Surface{
     public boolean inARoom;
     
     public boolean isSelected;
+    public boolean door = false;
 
     //Constructors
 

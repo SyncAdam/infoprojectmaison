@@ -54,7 +54,28 @@ public class PointModifier {
 
         //parentPane.canva.DisplayCoin(coin);
 
+        
+        if(coin.onAWall ==true){
+            DelButton.setDisable(true);
+            okButton.setText("Quitter");
+            xCoord.setDisable(true);
+            yCoord.setDisable(true);
+        }        
+
+     
+        newPointStage.setOnCloseRequest(e -> { //permet juste de désactiver la fermeture de la fen^tre pour éviter tout bug
+            e.consume(); // Annule l'événement de fermeture
+           
+        });
+
+
+        DelButton.setOnAction(e-> {
+            parentPane.canva.coinTab.set(coin.getId(), new Coin(coin.getId(), 0, 0)); //on remplace le point supprimé par un point "nul", on ne le supprime pas de coinTab car sinon ça décallerait tout les id par rapport à la position dans le tableau et ça serait le barda
+            newPointStage.close();
+        });
+
         okButton.setOnAction(e->{
+            if(coin.onAWall == true){
             Double cx = Double.parseDouble(xCoord.getText()); //on récup la valeur des field et cconv en double
             Double cy = Double.parseDouble(yCoord.getText());
 
@@ -64,20 +85,16 @@ public class PointModifier {
             parentPane.canva.DisplayCoin(coin);
 
             newPointStage.close();
+            }else{
+                parentPane.canva.DisplayCoin(coin);
+                newPointStage.close();
+            }
 
         });
 
-        DelButton.setOnAction(e-> {
-            parentPane.canva.coinTab.set(coin.getId(), new Coin(coin.getId(), 0, 0)); //on remplace le point supprimé par un point "nul", on ne le supprime pas de coinTab car sinon ça décallerait tout les id par rapport à la position dans le tableau et ça serait le barda
-            newPointStage.close();
-        });
-
-
-        newPointStage.setOnCloseRequest(e -> { //permet juste de désactiver la fermeture de la fen^tre pour éviter tout bug
-            e.consume(); // Annule l'événement de fermeture
-           
-        });
 
     }
     
-}
+
+    }
+    
