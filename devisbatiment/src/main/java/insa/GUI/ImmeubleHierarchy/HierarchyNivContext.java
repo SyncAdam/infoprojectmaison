@@ -25,8 +25,9 @@ public class HierarchyNivContext extends HierarchyItemContext{
         MenuItem mi3 = new MenuItem("Changer d'immeuble");
         MenuItem mi4 = new MenuItem("Supprimer le niveau");
         MenuItem mi5 = new MenuItem("Changer la hauteur du niveau");
+        MenuItem mi6 = new MenuItem("Changer ID");
 
-        this.getItems().addAll(mi3, mi4, mi5);
+        this.getItems().addAll(mi3, mi5, mi6, mi4);
 
         mi3.setOnAction(event -> {
 
@@ -141,6 +142,58 @@ public class HierarchyNivContext extends HierarchyItemContext{
                 }
                 
                 appartStage.close();
+    
+            });
+        });
+
+        mi6.setOnAction(event -> {
+            Stage changeAppartIDStage = new Stage();
+            changeAppartIDStage.setTitle("Changer ID");
+            TextField pieceID = new TextField("Identificateur du niveau");
+            
+            
+            Button okButton = new Button("Ok");
+            VBox disposition = new VBox(); //on créer un groupe root
+           
+            disposition.getChildren().addAll(pieceID, okButton);
+            
+            Scene sceneAppart = new Scene(disposition, 300,80, Color.GREEN ); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
+            
+            changeAppartIDStage.setScene(sceneAppart);
+            changeAppartIDStage.show();
+
+            okButton.setOnAction(event0 -> {
+
+                try{
+
+                    //this amount of nesting is despicable
+                    if(this.targetObject instanceof Niveau)
+                    {
+                        int newID = Integer.parseInt(pieceID.getText());
+                        Niveau nivniv = (Niveau) this.targetObject;
+
+                        for(int i = 0; i < this.fatherTree.loadedImmeubles.size(); i++)
+                        {
+                            if(this.fatherTree.loadedImmeubles.get(i).niveau.contains(nivniv))
+                            {
+                                for(int j = 0; j < this.fatherTree.loadedImmeubles.get(i).niveau.size(); j++)
+                                {
+                                    if(this.fatherTree.loadedImmeubles.get(i).niveau.get(j).getIdNiveau() == newID) throw new RuntimeException("Cannot have two niveaux with the same ID in an immeule");
+                                }
+                            }
+                        }
+                        nivniv.setNiveauId(Integer.parseInt(pieceID.getText()));
+                        
+                    }
+                    this.fatherTree.hierarchyRefresh();
+                }
+                catch(RuntimeException e)
+                {
+                    e.printStackTrace();
+                    this.fatherTree.parentPane.log.setTxt("Erreur lors de la changement d'ID");
+                }
+                
+                changeAppartIDStage.close();
     
             });
         });

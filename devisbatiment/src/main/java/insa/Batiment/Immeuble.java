@@ -335,4 +335,9 @@ public class Immeuble extends Batiment implements Serializable{
         return res;
     }
 
+    public void setAppartementId(int parseInt)
+    {
+        this.idImmeuble = parseInt;
+    }
+
 }

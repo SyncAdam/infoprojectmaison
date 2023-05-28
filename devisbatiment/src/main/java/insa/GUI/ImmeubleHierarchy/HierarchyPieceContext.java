@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
@@ -29,7 +30,7 @@ public class HierarchyPieceContext extends HierarchyItemContext{
         MenuItem mi4 = new MenuItem("Supprimer la Piece");
         MenuItem mi5 = new MenuItem("Changer ID");
 
-        this.getItems().addAll(mi3, mi4, mi5);
+        this.getItems().addAll(mi3, mi5, mi4);
 
         mi3.setOnAction(event -> {
 
@@ -142,6 +143,69 @@ public class HierarchyPieceContext extends HierarchyItemContext{
 
             this.fatherTree.hierarchyRefresh();
             
+        });
+
+        mi5.setOnAction(event -> {
+
+            Stage ChangePieceIDStage = new Stage();
+            ChangePieceIDStage.setTitle("Changer ID");
+            TextField pieceID = new TextField("Identificateur de la piece");
+            
+            
+            Button okButton = new Button("Ok");
+            VBox disposition = new VBox(); //on créer un groupe root
+           
+            disposition.getChildren().addAll(pieceID, okButton);
+            
+            Scene sceneAppart = new Scene(disposition, 300,80, Color.GREEN ); //on créer une scene à laquelle on ajoute le grp root et on def la color du grp.
+            
+            ChangePieceIDStage.setScene(sceneAppart);
+            ChangePieceIDStage.show();
+
+            okButton.setOnAction(event0 -> {
+
+                try{
+
+                    //Ca c'est terrible
+                    //Programmation orienté objet nous donne une fausse perseption de simplicité
+                    //this amount of nesting is horrific
+                    //Go functional&procedural programming
+                    if(this.targetObject instanceof Piece)
+                    {
+                        int newID = Integer.parseInt(pieceID.getText());
+                        Piece p = (Piece) this.targetObject;
+
+                        for(int i = 0; i < this.fatherTree.loadedImmeubles.size(); i++)
+                        {
+                            for(Niveau niv : this.fatherTree.loadedImmeubles.get(i).niveau)
+                            {
+                                for(Appartement app : niv.appartements)
+                                {
+                                    if(app.contains(p))
+                                    {
+                                        for(Piece piece : app.pieces)
+                                        {
+                                            if(piece.getPieceId() == newID) throw new RuntimeException("Cannot have the same IDs in an appartement");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        p.setPieceId(Integer.parseInt(pieceID.getText()));
+                        
+                    }
+                    this.fatherTree.hierarchyRefresh();
+                }
+                catch(RuntimeException e)
+                {
+                    e.printStackTrace();
+                    this.fatherTree.parentPane.log.setTxt("Erreur lors de la changement d'ID");
+                }
+                
+                ChangePieceIDStage.close();
+    
+            });
         });
     }
     

@@ -321,7 +321,10 @@ public class Piece implements Serializable{
             
     }
         
-        
+    public void setPieceId(int num)
+    {
+        this.idPiece = num;
+    }
     
     public int getPieceId()
     {

@@ -40,6 +40,15 @@ public class Appartement implements Serializable{
         this.px = x;
         this.py = y;
     }
+
+    public boolean contains(Piece p)
+    {
+        for(int i = 0; i < pieces.size(); i++)
+        {
+            if(pieces.get(i).equals(p)) return true;
+        }
+        return false;
+    }
  
     public void setParentImmeuble(Immeuble I)
     {
@@ -74,6 +83,11 @@ public class Appartement implements Serializable{
     public void removePiece(Piece p)
     {
         this.pieces.remove(p);
+    }
+
+    public void setAppartementId(int parseInt)
+    {
+        this.idAppartement = parseInt;
     }
 
 

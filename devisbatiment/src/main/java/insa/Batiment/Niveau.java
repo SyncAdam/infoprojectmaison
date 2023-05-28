@@ -85,6 +85,11 @@ public class Niveau implements Serializable{
         this.height = g;
     }
 
+    public void setNiveauId(int parseInt) 
+    {
+        this.idNiveau = parseInt;
+    }
+
     //A verifier si les appartements coincident
 
 }
