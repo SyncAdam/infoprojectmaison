@@ -46,7 +46,6 @@ public class DisplayCanvas extends Pane{
     public Hashtable<Line, Mur> linemurHT;
     Line ligne = new Line(); //Prévisualisation du mur .
 
-    //BiMap<String, String> capitalCountryBiMap = HashBiMap.create();
 
     DisplayCanvas(MainPane parentPane)
     {
@@ -73,18 +72,6 @@ public class DisplayCanvas extends Pane{
         this.selectedPiece = null;
         this.selectedAppartement = null;
 
-        //DevisTxt.generate(new ArrayList<String>(), 14);
-
-        /*
-
-        this.drawingCanvas = new Canvas(this.getWidth(), this.getHeight());
-        this.getChildren().add(this.drawingCanvas);
-        this.drawingCanvas.heightProperty().bind(this.heightProperty());
-        this.drawingCanvas.setOnMouseClicked((t) -> {
-
-        });   
-
-        */
 
         
         this.getChildren().add(ligne);
@@ -97,8 +84,8 @@ public class DisplayCanvas extends Pane{
             } 
             
             if (parentPane.toolbar.autoWallState == true){
- //quand on déplace la souris et qu'on est en automatique, on affiche le futur mur
-                System.out.println(coinTab.size());
+    //quand on déplace la souris et qu'on est en automatique, on affiche le futur mur
+                
                 if (coinTab.size()>0){
                     if (parentPane.HIsPressed == true){
                         ligne.setStrokeWidth(4);
@@ -132,7 +119,7 @@ public class DisplayCanvas extends Pane{
         this.setOnMouseClicked(e -> { //détection du clic + récup coords
             if (parentPane.ctrlIsPressed == false && this.parentPane.projectOpened == true && this.parentPane.toolbar.wallButtonState == false && parentPane.toolbar.modifyButtonState == false && parentPane.toolbar.buttonPorteState == false && parentPane.toolbar.mouseIsInTheToolBar == false){
                  //sert juste à ne pas crééer de nouveau éléments lorsqu'on veut juste selectionner un point/mur avec ctrl
-                System.out.println(parentPane.pointAlreadyExist + " vrai");
+               
                 if (parentPane.pointAlreadyExist == false){
                     
                     if (parentPane.toolbar.autoWallState == false) { //si on clique et que autowall est off :
@@ -180,7 +167,7 @@ public class DisplayCanvas extends Pane{
                         wallTab.add(new Mur (wallTab.size(), coinTab.get(coinTab.size()-2), coinTab.get(coinTab.size()-1)));
                         DisplayCoin(this.coinTab.get(this.coinTab.size()-1), this.globalTranslate.getX(), this.globalTranslate.getY()); //on l'affiche
                         DisplayMur(wallTab.get(wallTab.size()-1), this.globalTranslate.getX(), this.globalTranslate.getY());
-                        System.out.println("Le coin d'id " + coinTab.get(coinTab.size()-1).getId()+ "est à la pos " + (coinTab.size()-1));
+                        
                 }
                 }
 
@@ -236,7 +223,7 @@ public class DisplayCanvas extends Pane{
         Circle circle1 = new Circle(c.getX()+ x, c.getY() + y, 7);
         this.getChildren().add(circle1);
         
-        circle1.setOnMouseEntered(e -> { //on détecte quand la souris passe sur un point (POUR PLUS TARD : EFFET MAGNET ?)
+        circle1.setOnMouseEntered(e -> { //on détecte quand la souris passe sur un point 
       
             circle1.setFill(Color.BLUE); 
             this.parentPane.pointAlreadyExist = true;  //empeche de pouvoir placer un point au même eendroit (cf classe app)
@@ -245,7 +232,7 @@ public class DisplayCanvas extends Pane{
             coordsOfHilightedPoint[1]= c.getY() + y;
 
             System.out.println("L'id du point selectionné est" + this.parentPane.idOfCurrentSelectedPoint);
-            parentPane.log.setTxt("ID : " + this.parentPane.idOfCurrentSelectedPoint);
+           // parentPane.log.setTxt("ID : " + this.parentPane.idOfCurrentSelectedPoint);
             
         }); 
 
@@ -258,7 +245,7 @@ public class DisplayCanvas extends Pane{
         }); 
 
         circle1.setOnMouseClicked(e -> {
-            if (parentPane.toolbar.modifyButtonState == true && c.onAWall == false && parentPane.HIsPressed == false && parentPane.VIsPressed == false ){
+            if (parentPane.toolbar.modifyButtonState == true &&  parentPane.HIsPressed == false && parentPane.VIsPressed == false ){
                 circle1.setRadius(0); // j'ai pas trouvé comment le faire s'auto-détruire, donc on réduit ça taille à 0 pour le faire disparaitre
                 PointModifier pointModifier = new PointModifier(this.parentPane, c);
                 pointModifier.Initialise();
@@ -335,7 +322,7 @@ public class DisplayCanvas extends Pane{
 
                 circle1.setFill(Color.BLACK); 
                 this.parentPane.pointAlreadyExist = false;
-                System.out.println(this.parentPane.pointAlreadyExist);
+                
 
         }); 
 
@@ -391,11 +378,7 @@ public class DisplayCanvas extends Pane{
 
 
                 }
-            }/*else if(parentPane.autoWallState == true){
-                // wallTab.add(new Mur (wallTab.size(), c, coinTab.get(coinTab.size()-1))); //on créér un mur à partir du dernier pt et du pt cliqué
-                // DisplayMur(wallTab.get(wallTab.size()-1), 0, 0);
-
-            }*/
+            }
 
         });
     }
@@ -446,6 +429,7 @@ public class DisplayCanvas extends Pane{
             if(parentPane.toolbar.buttonPorteState == true){ //si on clique sur mur avec outils porte : on créer et affiche porte
                 doorTabList.add(new Porte(doorTabList.size(), m)); 
                 DisplayPorte(doorTabList.get(doorTabList.size()-1));
+                m.door =true;
 
             }
 
@@ -453,12 +437,7 @@ public class DisplayCanvas extends Pane{
                 if(m.isSelected == false){//si le mur n'est pas déjà selectionné, on le selectionne 
 
                     selectSurface(m);
-                   /*  if(parentPane.toolbar.buttonPorteState == true)
-                    {                                       //si on clique sur un mur et qu'on est en mode porte :
-                        System.out.println("portte crée");
-                        doorTabList.add(new Porte(doorTabList.size(), m)); 
-                        DisplayPorte(doorTabList.get(doorTabList.size()-1));
-                    }   */
+
 
                 }
                 
@@ -479,6 +458,8 @@ public class DisplayCanvas extends Pane{
                 setColor(foobar, Color.BLACK);
             } //si on quitte le point de la souris et qu'il n'est pas selectionné, on le met en noir
         }); //on remet la couleur en noir
+
+        if(m.door == true){DisplayPorte(m);}
     }
 
     public void DisplayMur(Mur m){
@@ -528,6 +509,7 @@ public class DisplayCanvas extends Pane{
                 
                 doorTabList.add(new Porte(doorTabList.size(), m)); 
                 DisplayPorte(doorTabList.get(doorTabList.size()-1));
+                m.door = true;
 
             }
 
@@ -535,12 +517,7 @@ public class DisplayCanvas extends Pane{
                 if(m.isSelected == false){//si le mur n'est pas déjà selectionné, on le selectionne 
 
                     selectSurface(m);
-                   /*  if(parentPane.toolbar.buttonPorteState == true)
-                    {                                       //si on clique sur un mur et qu'on est en mode porte :
-                        System.out.println("portte crée");
-                        doorTabList.add(new Porte(doorTabList.size(), m)); 
-                        DisplayPorte(doorTabList.get(doorTabList.size()-1));
-                    }   */
+
 
                 }
                 
@@ -561,6 +538,9 @@ public class DisplayCanvas extends Pane{
                 setColor(foobar, Color.BLACK);
             } //si on quitte le point de la souris et qu'il n'est pas selectionné, on le met en noir
         }); //on remet la couleur en noir
+
+        if(m.door == true){DisplayPorte(m);}
+
     }
 
     public void selectSurface(Mur m)
@@ -644,6 +624,47 @@ public class DisplayCanvas extends Pane{
         rectangle.setFill(Color.WHITESMOKE); //temporaire pour visualiser la porte
         this.getChildren().add(rectangle); // on l'affiche sur le pane 
     }
+
+
+
+    public void DisplayPorte(Mur mur){
+        Polygon rectangle = new Polygon(); //on utilise des polygone pour faire des rectangles blanc et non des rectangles directement, car c'est plus simple pour les aligner avec le mur 
+        double l, L; //pas utiles, juste plus court pour les formules trigo d'après
+
+        double t =0;
+        double x1 = mur.getDebut().getX(); //on récup les coords des 2 pts qui def le mur :
+        double y1 = mur.getDebut().getY();
+        double x2 = mur.getFin().getX();
+        double y2 = mur.getFin().getY();
+        double xp1, xp2,xp3,xp4; //abscisses des 4 points du rectangle qui va servir à afficher la porte
+        double yp1,yp2,yp3,yp4; //idem
+
+        l= 8.0; //a modifier au besoin = épaisseur du trait qui sert à tracer le mur 
+        L = 82.0; //largeur de l'ouverture
+
+        //on va calculer les coords des 4 coins du rectangle qui sera affiché en blanc pour afficher la porte :(bcp de trigo et long....J'Y AI PASSÉ AU MOINS 3H!!!!)
+
+        t = Math.atan((y1-y2)/(x1-x2)); //angle que forme le mur avec l'horizon
+    
+
+        xp1 = -(l/2)*Math.sin(t)+(L/2)*Math.cos(t)+x1-((x1-x2)/2);
+        yp1 = (l/2)*Math.cos(t)+(L/2)*Math.sin(t)+y1-((y1-y2)/2);
+
+        xp2 = (l/2)*Math.sin(t)-(L/2)*Math.cos(t)+x1-((x1-x2)/2);
+        yp2 = -(l/2)*Math.cos(t)-(L/2)*Math.sin(t)+y1-((y1-y2)/2);
+
+        xp3 = (l/2)*Math.sin(t)+(L/2)*Math.cos(t)+x1-((x1-x2)/2);
+        yp3 = -(l/2)*Math.cos(t)+(L/2)*Math.sin(t)+y1-((y1-y2)/2);
+
+        xp4 = -(l/2)*Math.sin(t)-(L/2)*Math.cos(t)+x1-((x1-x2)/2);
+        yp4 = (l/2)*Math.cos(t)-(L/2)*Math.sin(t)+y1-((y1-y2)/2);
+
+        rectangle.getPoints().addAll(new Double[]{xp1,yp1,xp4,yp4,xp2,yp2,xp3,yp3});
+        rectangle.setFill(Color.WHITESMOKE); //temporaire pour visualiser la porte
+        this.getChildren().add(rectangle); // on l'affiche sur le pane 
+    }
+
+
 
     public void HilightRoom(Piece piece, Color couleur){
         //public void HilightRoom(){
@@ -757,6 +778,9 @@ public class DisplayCanvas extends Pane{
         {
             DisplayPiece(appart.pieces.get(i), px, py);
         }
+
+
+
     }
 
     public void DisplayNiveau(Niveau niv)

@@ -53,7 +53,7 @@ public class Menus extends MenuBar{
         this.nouveau = new Menu("Nouveau"); //Sous Menus
         this.importer = new Menu("Importer");
         this.sauver = new MenuItem("Sauvgarder");
-        this.charger = new MenuItem("Charger");
+        this.charger = new MenuItem("Projet");
         this.devisMenu = new Menu("Devis");
        
        
@@ -62,21 +62,19 @@ public class Menus extends MenuBar{
         this.NProjet = new MenuItem("Projet");  //Elements du menu fichier-->Nouveau
         
         this.NPoint = new MenuItem("Point");
-        this.ImportProj = new MenuItem("Projet");
+        this.ImportProj = new MenuItem("Projet (ancien, format txt)");
         this.ImportCatalogue = new MenuItem("Catalogue");
 
-        //this.editeur = new MenuItem("Editeur");     //Elements du menu viewer
-        //this.viewer = new MenuItem("Viewer");
 
         this.getMenus().add(fichier);        //on ajoute les menus principaux à la barre de menu
        
 
-        fichier.getItems().addAll(nouveau, sauver, charger, importer, devisMenu);
+        fichier.getItems().addAll(nouveau, sauver,  importer, devisMenu);
 
         nouveau.getItems().addAll(NProjet, NPoint);
         devisMenu.getItems().add(generate);
 
-        importer.getItems().addAll(ImportProj, ImportCatalogue);
+        importer.getItems().addAll(charger, ImportProj, ImportCatalogue);
           
         NPoint.setOnAction(e -> {
             if(this.parentPane.projectOpened)
